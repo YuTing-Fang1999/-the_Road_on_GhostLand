@@ -19,11 +19,11 @@ void init(){
 }
 
 void idle(){
-	//player ¦Û°Ê²¾°Ê
+	//player è‡ªå‹•ç§»å‹•
 	p1.Progress();
 	printf("pos.z = %f\n",p1.pos[2]);
 
-	//¦pªG¹CÀ¸µ²§ô¡A°±¤î²¾°Ê
+	//å¦‚æœéŠæˆ²çµæŸï¼Œåœæ­¢ç§»å‹•
 	if(p1.status == END){
 		p1.playerStop(myProgressBar.pathLen);
 		printf("stop\n");
@@ -42,18 +42,18 @@ void keyboard(unsigned char key,int x,int y){
 	}
 	if (key == 32 ) {//space
 		if (p1.status == START) {
-			//¸õÂàÂà³õµe­±
-			//¥i¥H©ñ¬K¿Ä­q¥~½æªºµe­±
-			//¨Ï¥ÎªÅ¥ÕÁä¥i¶}©l¹CÀ¸
-
-			//¥ÎªÅ¥ÕÁä¶}©l¹CÀ¸
+			//STARTè·³è½‰é é¢function
+			//ä½¿ç”¨ç©ºç™½éµå¯é–‹å§‹éŠæˆ²
+			
+// 			if(é é¢ç‚ºæœ€å¾Œä¸€é )
+			//ç”¨ç©ºç™½éµé–‹å§‹éŠæˆ²
 			p1.status = GAME;
 		}
 		else if (p1.status != GAME) {
 			restartGame();
 		}
 		if (p1.status == TIMEUP) {
-			//¥i¥H©ñ¬K¿Ä¦Y¤£¨ì¥~½æ¡A®ğ¼P¼Pªºµe­±
+			//TIMEUPè·³è½‰é é¢function
 			
 		}
 	}
