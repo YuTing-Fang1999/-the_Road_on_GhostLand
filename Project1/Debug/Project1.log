@@ -1,0 +1,12 @@
+﻿  basicFunc.cpp
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(68,18): warning C4244: '=': 將 'int' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(81,1): warning C4305: '正在初始化': 從 'double' 轉換為 'float'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(91,40): warning C4244: '引數': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(163,36): warning C4305: '正在初始化': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(164,36): warning C4305: '正在初始化': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(204,14): warning C4244: 'return': 將 'double' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(221,1): warning C4305: '正在初始化': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\classDef.h(229,1): warning C4305: '引數': 從 'double' 轉換為 'GLfloat'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\basicFunc.cpp(95,16): warning C4244: '引數': 將 'int' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Project1\basicFunc.cpp(95,13): warning C4244: '引數': 將 'int' 轉換為 'GLfloat'，由於類型不同，可能導致資料遺失
+  Project1.vcxproj -> C:\Users\s830s\Desktop\gl_final\gl_final_000-master\Debug\Project1.exe
