@@ -5,20 +5,30 @@
 #include<string.h>
 #include<math.h>
 #define _USE_MATH_DEFINES
-
-
 #include"basicFunc.h"
 #include"classDef.h"
+#include"Imagx.h"
 
 extern Player p1=Player();
 extern Timer myTimer(30); //遊戲時長(秒)
 extern ProgressBar myProgressBar(100); //路徑長度
 
+//圖片素材
+extern Imagx helpMenu;
 
 //遊戲開始畫面
 void drawStart() {
 	//可以放春融訂外賣的畫面，使用空白鍵可開始遊戲
 	drawPlayer();
+
+	//helpMenu
+	glPushMatrix();
+	{
+		glTranslatef(0,4,2);
+		glRotatef(-10,1,0,0);
+		helpMenu.drawImg();
+	}
+	glPopMatrix();
 }
 
 //遊戲運行畫面
@@ -94,7 +104,7 @@ void display(){
 int main(int argc,char **argv){
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH |GLUT_MULTISAMPLE);
-	glutInitWindowPosition(0,0);
+	glutInitWindowPosition(500,200);
 	glutInitWindowSize(700,700);
 	glutCreateWindow("TITLE");
 

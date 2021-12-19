@@ -4,21 +4,43 @@
 #include<stdio.h>
 #include<string.h>
 #include"classDef.h"
+#include"Imagx.h"
+//開啟下面這行可以關掉console
+//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 
 extern Player p1;
 Building b1(5, 10, 5);
 extern Timer myTimer;
 extern ProgressBar myProgressBar;
 
+//status flag
+GLboolean isFullScreen=GL_FALSE;
+
+
+//圖片素材
+//external variable需要初始化一個實體
+extern Imagx helpMenu=Imagx();
+
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+
+	//texture
+	//若某模型不須貼圖或透明，要關掉功能
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_RESCALE_NORMAL);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	helpMenu=Imagx("assets/img/board/help.png",4);
 }
 
 void idle(){
+	//圖片素材
+	helpMenu.progress();
+
 	//player 自動移動
 	p1.Progress();
 	printf("pos.z = %f\n",p1.pos[2]);
@@ -59,6 +81,20 @@ void keyboard(unsigned char key,int x,int y){
 	}
 	if (p1.status == GAME) {
 		p1.kb(key,x,y);
+	}
+	if(key=='h'){
+		helpMenu.scaleBig();
+		helpMenu.scaleSmall();
+	}
+	if(key=='f'){
+		if(isFullScreen){
+			glutPositionWindow(500,200);
+			glutReshapeWindow(700, 700);
+		}
+		else{
+			glutFullScreen();
+		}
+		isFullScreen = ~isFullScreen;
 	}
 	
 	glutPostRedisplay();

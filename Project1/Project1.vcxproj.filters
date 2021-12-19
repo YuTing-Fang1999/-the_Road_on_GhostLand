@@ -29,5 +29,8 @@
     <ClInclude Include="classDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Imagx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
