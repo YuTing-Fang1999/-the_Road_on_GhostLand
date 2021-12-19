@@ -2,6 +2,15 @@
 # 總結
 * 美術圖要快點生出來
 
+## 2021/12/19
+* FreeImage.dll 放在 Project1/
+* FreeImage.lib 放在 FreeImage/FILIB/
+	* 在VS2019專案linker>input 設定.lib路徑
+* FreeImage library很大，我只上傳用的到的部分
+	* 在VS2019專案 linker>gernal 設定library路徑
+	* 在VS2019專案 C/C++>gernal 設定include library路徑
+	* libpng,libjpeg
+
 ## 2021/12/18
 * github remote端加入.gitignore，用來忽略編譯的檔案
 * github remote端加入README.md，紀錄開發進度
