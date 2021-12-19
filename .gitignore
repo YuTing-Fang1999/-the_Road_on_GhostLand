@@ -1,7 +1,7 @@
 #project
 .vs/
 Debug/
-#Project1/Debug/
+Project1/Debug/
 
 #freeimage libaray
 FreeImage/LibJXR/
