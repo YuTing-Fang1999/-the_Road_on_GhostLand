@@ -11,12 +11,12 @@
 #define PLAYER_RATE 1 //玩家每次的移動距離
 
 
-enum Status { START, GAME, DEAD, TIMEUP, END };
+enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU};
 
 class Player{
 public:
 	GLfloat pos[3];	//Position
-	Status status = START; //遊戲目前的狀態
+	Status status = MAIN_MENU; //遊戲目前的狀態
 
 	Player(){
 		memset(this->pos, 0, 3);

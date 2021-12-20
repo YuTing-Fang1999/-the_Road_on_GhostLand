@@ -2,17 +2,28 @@
 # 總結
 * 美術圖要快點生出來
 * 按鍵設定
-  * **h** helping
-  * **f** fullscrn
-  * **c** cheating
-  * **esc** exit
-  * **wasd**方向鍵
-  * **space** re/start
+    - [x] **h** helping
+    - [x] **f** fullscrn
+    - [ ] **c** cheating
+    - [X] **r** go back to main_menu
+    - [X] **v** aboutInfo;
+    - [x] **esc** exit
+    - [x] **wasd**方向鍵
+    - [x] **space** re/start
 * **Bugs**
-    1. 圖片透明的地方會蓋住計時器，或許在dstBuffer沒有寫入，導致blending出問題
-    2. 進度條會往負方向長
-       * 最後可以加個往後走的彩蛋
-    3. 外送員移動太僵硬了，必須加入**速度**概念，並交給progress()處理動畫
+    - [ ] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
+        * 或許PNG透明的部分不要留那麼多  
+        * 或是只在`GAME`狀態畫計時器
+    - [ ] 進度條會往負方向長，最後可以加個往後走的彩蛋
+    - [ ] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
+    - [X] ~~遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態~~
+    - [x] ~~在`START`狀態(說故事的狀態)前面應該還要一個`MAIN_MENU`狀態~~
+        * 不需要再把`MAIN_MENU`移掉   
+
+## 2021/12/20
+* `Imagx`裡面新增方法`getTexIndex()` `getMaxScale()` `getScale()`
+* 程式流程新增`MAIN_MENU`狀態
+* 解決流程Bug
 
 ## 2021/12/19
 * *FreeImage.dll* 放在 *Project1/*

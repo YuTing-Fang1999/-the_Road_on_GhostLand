@@ -20,6 +20,8 @@ GLboolean isFullScreen=GL_FALSE;
 //圖片素材
 //external variable需要初始化一個實體
 extern Imagx helpMenu=Imagx();
+extern Imagx mainMenu=Imagx();
+extern Imagx aboutMenu=Imagx();
 
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
@@ -34,21 +36,24 @@ void init(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	helpMenu=Imagx("assets/img/board/help.png",4);
+	helpMenu=Imagx("assets/img/board/menu_help.png",0);helpMenu.setMaxScale(4);
+	aboutMenu=Imagx("assets/img/board/menu_about.png",0);aboutMenu.setMaxScale(4);
+	mainMenu=Imagx("assets/img/board/menu_main.png",2.5);
 }
 
 void idle(){
 	//圖片素材
 	helpMenu.progress();
+	aboutMenu.progress();
 
 	//player 自動移動
 	p1.Progress();
-	printf("pos.z = %f\n",p1.pos[2]);
+	printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
 
 	//如果遊戲結束，停止移動
 	if(p1.status == END){
 		p1.playerStop(myProgressBar.pathLen);
-		printf("stop\n");
+		printf("\r[p1]stop ");
 	}
 	glutPostRedisplay();
 }
@@ -69,24 +74,52 @@ void keyboard(unsigned char key,int x,int y){
 			
 // 			if(頁面為最後一頁)
 			//用空白鍵開始遊戲
+			//skip跳過故事
 			p1.status = GAME;
 		}
 		else if (p1.status != GAME) {
 			restartGame();
 		}
-		if (p1.status == TIMEUP) {
+		if (p1.status == TIMEUP ||
+			p1.status == DEAD   ||
+			p1.status == END) {
 			//TIMEUP跳轉頁面function
-			
+			p1.status = GAME;
+		}
+		if (p1.status == MAIN_MENU){
+			p1.status = START;
 		}
 	}
 	if (p1.status == GAME) {
 		p1.kb(key,x,y);
 	}
+	if (key=='r'){
+		if (p1.status == TIMEUP ||
+			p1.status == DEAD   ||
+			p1.status == END    ){
+			//回到主選單
+			restartGame();
+			p1.status = MAIN_MENU;
+		}
+	}
 	if(key=='h'){
-		helpMenu.scaleBig();
-		helpMenu.scaleSmall();
+		//幫助/遊戲說明
+		if(p1.status==MAIN_MENU){
+			//動畫播放完之後，才能進行下一個動畫
+			if(helpMenu.getScale() == 0)helpMenu.scaleBig();
+			else if(helpMenu.getScale() == helpMenu.getMaxScale())helpMenu.scaleSmall();
+		}
+	}
+	if(key=='v'){
+		//關於遊戲資訊
+		if(p1.status==MAIN_MENU){
+			//動畫播放完之後，才能進行下一個動畫
+			if(aboutMenu.getScale() == 0)aboutMenu.scaleBig();
+			else if(aboutMenu.getScale() == aboutMenu.getMaxScale())aboutMenu.scaleSmall();
+		}
 	}
 	if(key=='f'){
+		//全螢幕
 		if(isFullScreen){
 			glutPositionWindow(500,200);
 			glutReshapeWindow(700, 700);
@@ -96,6 +129,7 @@ void keyboard(unsigned char key,int x,int y){
 		}
 		isFullScreen = ~isFullScreen;
 	}
+	
 	
 	glutPostRedisplay();
 }

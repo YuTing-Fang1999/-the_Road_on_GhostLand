@@ -10,25 +10,49 @@
 #include"Imagx.h"
 
 extern Player p1=Player();
-extern Timer myTimer(30); //遊戲時長(秒)
+extern Timer myTimer(6); //遊戲時長(秒)
 extern ProgressBar myProgressBar(100); //路徑長度
 
 //圖片素材
 extern Imagx helpMenu;
+extern Imagx mainMenu;
+extern Imagx aboutMenu;
 
-//遊戲開始畫面
-void drawStart() {
-	//可以放春融訂外賣的畫面，使用空白鍵可開始遊戲
-	drawPlayer();
-
+//遊戲選單畫面
+void drawMainMenu(){
 	//helpMenu
 	glPushMatrix();
 	{
 		glTranslatef(0,4,2);
 		glRotatef(-10,1,0,0);
+
+		//main
+		glPushMatrix();
+		{
+			glTranslatef(0,-3.5,-0.2);
+			mainMenu.drawImg();
+		}
+		glPopMatrix();
+		
+		//help
 		helpMenu.drawImg();
+
+		//about
+		glPushMatrix();
+		{
+			glTranslatef(0,0,0.1);
+			aboutMenu.drawImg();
+		}
+		glPopMatrix();
 	}
 	glPopMatrix();
+}
+
+//遊戲開始畫面
+void drawStart() {
+	//可以放春融訂外賣的畫面，使用空白鍵可開始遊戲
+	//這裡放故事情節，讓玩家選擇是否跳過(SKIP)
+	drawPlayer();
 }
 
 //遊戲運行畫面
@@ -74,24 +98,26 @@ void display(){
 
 	switch (p1.status)
 	{
-	case START:
-		drawStart();
-		break;
+		case START:
+			drawStart();
+			break;
 
-	case GAME:
-		drawGame();
-		break;
+		case GAME:
+			drawGame();
+			break;
 
-	case END:
-		drawEnd();
-		break;
+		case END:
+			drawEnd();
+			break;
 
-	case TIMEUP:
-		drawTimeUp();
-		break;
-
-	default:
-		break;
+		case TIMEUP:
+			drawTimeUp();
+			break;
+		case MAIN_MENU:
+			drawMainMenu();
+			break;
+		default:
+			break;
 	}
 	drawTimer();
 	//====================================

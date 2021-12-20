@@ -128,9 +128,28 @@ public:
 			isScaling = -1;
 		}
 	}
+	/*
+		取得目前縮放值
+	*/
+	GLfloat getScale(){
+		return scl;
+	}
+	/*
+	取得最大縮放值
+	*/
+	GLfloat getMaxScale(){
+		return max_scl;
+	}
+
+
+	/*
+	得到texture index
+	*/
+	GLuint getTexIndex(){
+		return texIndex;
+	}
 
 	//place in idleFunc
-
 	/*
 	更新每個frame的狀態
 	讓呼叫drawImg()有動畫效果
