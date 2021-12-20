@@ -7,7 +7,13 @@
 #define _USE_MATH_DEFINES
 #include"basicFunc.h"
 #include"classDef.h"
-#include"Imagx.h"
+//開啟下面這行可以關掉console
+//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+
+#include "FreeImage.h"
+#include "glm.h"
+#include "Imagx.h"
+#include "ObjectLoader.h"
 
 extern Player p1=Player();
 extern Timer myTimer(6); //遊戲時長(秒)
@@ -17,9 +23,20 @@ extern ProgressBar myProgressBar(100); //路徑長度
 extern Imagx helpMenu;
 extern Imagx mainMenu;
 extern Imagx aboutMenu;
+extern ObjectLoader stev;
 
 //遊戲選單畫面
 void drawMainMenu(){
+	//stev測試用OBJ
+	glPushMatrix();
+	{
+		glTranslatef(0,3,-5);
+		glRotatef(45,1,0,0);
+		glScalef(2,2,2);
+		stev.drawObj(stev.getDpIndex());
+	}
+	glPopMatrix();
+
 	//helpMenu
 	glPushMatrix();
 	{

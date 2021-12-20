@@ -9,13 +9,17 @@
 
 class Imagx {
 public:
+	Imagx(){}
 	/*
 	imgfile is the name of the image.
 	s is the maxScale of the image.
+	x-------------------------------------
+	isNeedDpIndex
+	GL_TRUE -> make a image board
+	GL_FALSE-> make only image textrue
 	*/
-	Imagx(){}
-	Imagx(char* imgfile, GLfloat s) {
-		genIndex();
+	Imagx(char* imgfile, GLfloat s,GLboolean isNeedDpIndex) {
+		genIndex(isNeedDpIndex);
 		max_scl = s;
 		scl = max_scl;
 
@@ -23,12 +27,14 @@ public:
 		bitmap = FreeImage_Load(image_format, imgfile, BMP_DEFAULT);	//載入圖片
 		if (bitmap) {
 			// bitmap successfully loaded!
-			printf("load %s!\n", imgfile);
+			printf("load %s!\n\n", imgfile);
 
 			getImgInfo();
 			genTexture();
-			setMaterial();
-			genDisplayList();
+			if(isNeedDpIndex){
+				setMaterial();
+				compileDisplayList();
+			}
 
 			FreeImage_Unload(bitmap);
 		}
@@ -43,7 +49,7 @@ public:
 	*/
 	void printImgInfo() {
 		printf("imageInfo:\n");
-		printf("H:%u W:%u imageType:%d colorType:%d scale:%f\n ", height, width, image_type, color_type,scl);
+		printf("H:%u W:%u imageType:%d colorType:%d scale:%f\n\n", height, width, image_type, color_type,scl);
 	}
 
 	/*.
@@ -81,8 +87,7 @@ public:
 		}
 	}
 
-	//animation settings
-
+	// animation settings
 	/*
 	設定圖片最大縮放值
 	*/
@@ -109,7 +114,6 @@ public:
 	}
 
 	//image basic animation
-
 	/*
 	播放變大過場動畫
 	播放期間為互斥狀態，只能有一種縮放動畫
@@ -129,7 +133,7 @@ public:
 		}
 	}
 	/*
-		取得目前縮放值
+	取得目前縮放值
 	*/
 	GLfloat getScale(){
 		return scl;
@@ -140,7 +144,6 @@ public:
 	GLfloat getMaxScale(){
 		return max_scl;
 	}
-
 
 	/*
 	得到texture index
@@ -193,8 +196,8 @@ private:
 	FREE_IMAGE_FORMAT image_format;
 	FREE_IMAGE_COLOR_TYPE color_type;
 	GLfloat v[2];
-	unsigned height;
-	unsigned width;
+	GLuint height;
+	GLuint width;
 	BYTE* bits;
 
 	//display index
@@ -233,14 +236,11 @@ private:
 	void genTexture() {
 		if(texIndex){
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			//glGenTextures(1,&texIndex);
 			glBindTexture(GL_TEXTURE_2D, texIndex);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);*/
 
 			GLenum data_color_format = GL_BGR;
 			if (color_type == FIC_RGB)			data_color_format = GL_BGR;
@@ -263,13 +263,18 @@ private:
 		glMaterialfv(GL_FRONT, GL_EMISSION, mat_nul);
 	}
 
-	void genIndex(){
-		dpIndex=glGenLists(1);
-		if(dpIndex){
-			printf("gen list succ\n");
+	void genIndex(GLboolean isNeedDpIndex){
+		if(isNeedDpIndex){
+			dpIndex=glGenLists(1);
+			if(dpIndex){
+				printf("gen list succ\n");
+			}
+			else{
+				printf("gen list FAIL\n");
+			}
 		}
 		else{
-			printf("gen list fail\n");
+			printf("does not need to gen display list\n");
 		}
 
 		glGenTextures(1,&texIndex);
@@ -279,10 +284,10 @@ private:
 		else{
 			printf("gen tex fail\n");
 		}
-		printf("%d %d\n",dpIndex,texIndex);
+		//printf("imagx index:%d %d\n\n",dpIndex,texIndex);
 	}
 
-	void genDisplayList() {
+	void compileDisplayList() {
 		if(dpIndex){
 			glNewList(dpIndex, GL_COMPILE);
 			{

@@ -5,8 +5,11 @@
 #include<string.h>
 #include"classDef.h"
 #include"Imagx.h"
-//開啟下面這行可以關掉console
-//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+
+#include "FreeImage.h"
+#include "glm.h"
+#include "Imagx.h"
+#include "ObjectLoader.h"
 
 extern Player p1;
 Building b1(5, 10, 5);
@@ -23,6 +26,9 @@ extern Imagx helpMenu=Imagx();
 extern Imagx mainMenu=Imagx();
 extern Imagx aboutMenu=Imagx();
 
+//3D素材
+extern ObjectLoader stev=ObjectLoader();
+
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -36,9 +42,16 @@ void init(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	helpMenu=Imagx("assets/img/board/menu_help.png",0);helpMenu.setMaxScale(4);
-	aboutMenu=Imagx("assets/img/board/menu_about.png",0);aboutMenu.setMaxScale(4);
-	mainMenu=Imagx("assets/img/board/menu_main.png",2.5);
+	//載入圖片素材
+	helpMenu=Imagx("assets/img/board/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
+	aboutMenu=Imagx("assets/img/board/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
+	mainMenu=Imagx("assets/img/board/menu_main.png",2.5,GL_TRUE);
+
+	//載入3D素材
+	stev=ObjectLoader(	"assets/img/stev/stev.obj",
+						"assets/img/stev/stev.jpg",
+						GL_FALSE,
+						GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE);
 }
 
 void idle(){

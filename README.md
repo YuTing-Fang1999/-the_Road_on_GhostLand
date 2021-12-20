@@ -24,6 +24,33 @@
 * `Imagx`裡面新增方法`getTexIndex()` `getMaxScale()` `getScale()`
 * 程式流程新增`MAIN_MENU`狀態
 * 解決流程Bug
+* `ObjectLoader`正式上線
+* 有個測試方塊叫做**stev**
+
+### `Imagx`
+* `Imagx( imgpath, max_scl ,need_dpindex)`
+    * imgpath 圖片路徑
+    * max_scl 最大縮放，0為隱藏
+    * need_dpindex
+        * `GL_TRUE`:會製作3D圖片物件
+        * `GL_FALSE`:只會製作Textrue Index
+
+### `ObjectLoader`
+* `ObjectLoader(objpath,texpath,unit_flag,mode)`
+    * objpath 3D物件路徑
+    * texpath 貼圖路徑，不使用貼圖填`NULL`
+    * unit_flag 統一匯入的尺寸
+    * mode GLM_參數，參數間可以`|`(or)
+    ```C
+    GLM_SMOOTH
+    GLM_FLAT
+
+    GLM_COLOR
+    GLM_MATERIAL
+
+    GLM_TEXTRUE
+    ```
+
 
 ## 2021/12/19
 * *FreeImage.dll* 放在 *Project1/*
@@ -50,8 +77,8 @@
        	2. 外部變數在所有CPP裡，一定要某CPP有初始化:`CLASSNAME varname = CLASSNAME()`
           	1. 在`init()`裡，重新生成新的實體(instance)
     1. VS2019下向相容問題
-       1. _CRT_NO_SECURE_WARNINGS
-       2. _CRT_NO_NONSTDC_WARNINGS
+       1. `_CRT_NO_SECURE_WARNINGS` or `..._DEPRECATE`
+       2. `_CRT_NO_NONSTDC_WARNINGS` or `..._DEPRECATE`
        3. VS2019專案 C/C++>language 設定 (No)permissive
        4. `const char*` to `char*`
 
