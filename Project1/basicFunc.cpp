@@ -18,13 +18,14 @@ extern ProgressBar myProgressBar;
 
 //status flag
 GLboolean isFullScreen=GL_FALSE;
-
+GLboolean isInExitMenu=GL_FALSE;
 
 //圖片素材
 //external variable需要初始化一個實體
 extern Imagx helpMenu=Imagx();
 extern Imagx mainMenu=Imagx();
 extern Imagx aboutMenu=Imagx();
+extern Imagx exitMenu=Imagx();
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
@@ -43,9 +44,10 @@ void init(){
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//載入圖片素材
-	helpMenu=Imagx("assets/img/board/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
-	aboutMenu=Imagx("assets/img/board/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
-	mainMenu=Imagx("assets/img/board/menu_main.png",2.5,GL_TRUE);
+	mainMenu=Imagx("assets/img/menu/menu_main.png",2.5,GL_TRUE);
+	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
+	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
+	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
 
 	//載入3D素材
 	stev=ObjectLoader(	"assets/img/stev/stev.obj",
@@ -57,6 +59,7 @@ void init(){
 void idle(){
 	//圖片素材
 	helpMenu.progress();
+	exitMenu.progress();
 	aboutMenu.progress();
 
 	//player 自動移動
@@ -78,8 +81,22 @@ void restartGame() {
 
 void keyboard(unsigned char key,int x,int y){
 	if(key==27){
-		exit(0);
+		if(isInExitMenu)exitMenu.scaleSmall();
+		else			exitMenu.scaleBig();
+		isInExitMenu = ~isInExitMenu;
 	}
+	if(key=='y'){
+		if(isInExitMenu){
+			exit(0);
+		}
+	}
+	if(key=='n'){
+		if(isInExitMenu && exitMenu.getScale()==exitMenu.getMaxScale()){
+			exitMenu.scaleSmall();
+			isInExitMenu=GL_FALSE;
+		}
+	}
+
 	if (key == 32 ) {//space
 		if (p1.status == START) {
 			//START跳轉頁面function

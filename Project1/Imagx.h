@@ -91,14 +91,14 @@ public:
 	/*
 	設定圖片最大縮放值
 	*/
-	void setMaxScale(GLfloat s) {
+	void setMaxScale(GLuint s) {
 		max_scl = s;
 	}
 	/*
 	設定圖片縮放過場動畫的播放時間
 	播放時間以一個frame為單位
 	*/
-	void setEndTick(GLfloat t) {
+	void setEndTick(GLuint t) {
 		end_tick = t;
 	}
 	/*
@@ -130,6 +130,16 @@ public:
 	void scaleSmall() {
 		if (isScaling == 0 && scl > 0) {
 			isScaling = -1;
+		}
+	}
+	/*
+		彈出效果動畫
+		duration要大於等於0
+	*/
+	void popUpAnim(GLfloat duration){
+		if(duration>=0 && isPopupAnim==GL_FALSE){
+			popUpDuration = duration;
+			isPopupAnim = GL_TRUE;
 		}
 	}
 	/*
@@ -167,11 +177,11 @@ public:
 			//!=0 doing scaling
 			if (isScaling == 1) {
 				//tanh(x);
-				scl = max_scl * tanh(tick / 15);
+				scl = max_scl * tanh((float)tick / 15);
 			}
 			else if (isScaling == -1) {
 				//tanh(-x);
-				scl = max_scl * tanh(-(float)(tick - end_tick) / 15);
+				scl = max_scl * tanh(-((float)tick - (float)end_tick) / 15);
 			}
 
 			tick++;
@@ -184,6 +194,20 @@ public:
 				}
 				tick = 0;
 				isScaling = 0;
+			}
+		}
+
+		if (isPopupAnim){
+			if(scl==0)scaleBig();
+			if(scl==max_scl){
+				if(tick!=popUpDuration){
+					tick++;
+				}
+				else{
+					tick=0;
+					isPopupAnim = GL_FALSE;
+					scaleSmall();
+				}
 			}
 		}
 
@@ -205,14 +229,16 @@ private:
 	GLuint dpIndex;
 
 	//anim parameters
-	GLfloat tick = 0;
+	GLuint popUpDuration=0;
+	GLuint tick = 0;
+	GLuint end_tick = 60;
 	GLfloat max_scl = 1;
 	GLfloat scl = max_scl;
-	GLfloat end_tick = 60;
 	GLfloat tick_ang[3] = { 0,0,0 };
 
 	//anim flags
 	int isScaling = 0;
+	GLboolean isPopupAnim = GL_FALSE;
 	GLboolean isCirleRotateAnim = GL_FALSE;
 
 	//image materials

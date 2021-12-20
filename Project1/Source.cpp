@@ -20,9 +20,12 @@ extern Timer myTimer(6); //遊戲時長(秒)
 extern ProgressBar myProgressBar(100); //路徑長度
 
 //圖片素材
-extern Imagx helpMenu;
-extern Imagx mainMenu;
-extern Imagx aboutMenu;
+extern Imagx helpMenu;//local z = 0
+extern Imagx mainMenu;//local z = -0.1
+extern Imagx exitMenu;//local z = 0.2
+extern Imagx aboutMenu;//local z = 0.1
+
+//3D素材
 extern ObjectLoader stev;
 
 //遊戲選單畫面
@@ -46,7 +49,7 @@ void drawMainMenu(){
 		//main
 		glPushMatrix();
 		{
-			glTranslatef(0,-3.5,-0.2);
+			glTranslatef(0,-3.5,-0.1);
 			mainMenu.drawImg();
 		}
 		glPopMatrix();
@@ -106,12 +109,25 @@ void drawTimeUp() {
 	drawObstacles();
 }
 
+void drawExitMenu(){
+	glPushMatrix();
+	{
+		glTranslatef(0,4,2);
+		glRotatef(-10,1,0,0);
+		glTranslatef(0,0,0.2);
+		exitMenu.drawImg();
+	}
+	glPopMatrix();
+}
+
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
 	p1.lookAt();
+	
 	//====================================
+	drawTimer();
 
 	switch (p1.status)
 	{
@@ -136,7 +152,8 @@ void display(){
 		default:
 			break;
 	}
-	drawTimer();
+
+	drawExitMenu();
 	//====================================
 
 	glutSwapBuffers();
