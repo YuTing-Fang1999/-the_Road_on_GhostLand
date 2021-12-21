@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="basicFunc.cpp" />
     <ClCompile Include="glm.cpp" />
+    <ClCompile Include="Imagx.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>

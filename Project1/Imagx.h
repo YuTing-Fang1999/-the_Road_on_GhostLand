@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include<Windows.h>
 #include<GL/glew.h>
 #include<GL/freeglut.h>
@@ -23,8 +23,8 @@ public:
 		max_scl = s;
 		scl = max_scl;
 
-		image_format = FreeImage_GetFileType(imgfile, 0);				//ÀË¬d¹Ï¤ù®æ¦¡
-		bitmap = FreeImage_Load(image_format, imgfile, BMP_DEFAULT);	//¸ü¤J¹Ï¤ù
+		image_format = FreeImage_GetFileType(imgfile, 0);				//æª¢æŸ¥åœ–ç‰‡æ ¼å¼
+		bitmap = FreeImage_Load(image_format, imgfile, BMP_DEFAULT);	//è¼‰å…¥åœ–ç‰‡
 		if (bitmap) {
 			// bitmap successfully loaded!
 			printf("load %s!\n\n", imgfile);
@@ -89,21 +89,21 @@ public:
 
 	// animation settings
 	/*
-	³]©w¹Ï¤ù³Ì¤jÁY©ñ­È
+	è¨­å®šåœ–ç‰‡æœ€å¤§ç¸®æ”¾å€¼
 	*/
 	void setMaxScale(GLuint s) {
 		max_scl = s;
 	}
 	/*
-	³]©w¹Ï¤ùÁY©ñ¹L³õ°Êµeªº¼½©ñ®É¶¡
-	¼½©ñ®É¶¡¥H¤@­Óframe¬°³æ¦ì
+	è¨­å®šåœ–ç‰‡ç¸®æ”¾éå ´å‹•ç•«çš„æ’­æ”¾æ™‚é–“
+	æ’­æ”¾æ™‚é–“ä»¥ä¸€å€‹frameç‚ºå–®ä½
 	*/
 	void setEndTick(GLuint t) {
 		end_tick = t;
 	}
 	/*
-	Åı¹Ï¤ù¶ê©P®Ì°Ê¡A¬İ°_¨Ó§ó¬¡¼â
-	¥i¥H¶}±Ò(GL_TRUE)¡BÃö³¬(GL_FALSE)
+	è®“åœ–ç‰‡åœ“å‘¨æ™ƒå‹•ï¼Œçœ‹èµ·ä¾†æ›´æ´»æ½‘
+	å¯ä»¥é–‹å•Ÿ(GL_TRUE)ã€é—œé–‰(GL_FALSE)
 	*/
 	void cirleRotateAnim(GLboolean b) {
 		isCirleRotateAnim = b;
@@ -115,8 +115,8 @@ public:
 
 	//image basic animation
 	/*
-	¼½©ñÅÜ¤j¹L³õ°Êµe
-	¼½©ñ´Á¶¡¬°¤¬¥¸ª¬ºA¡A¥u¯à¦³¤@ºØÁY©ñ°Êµe
+	æ’­æ”¾è®Šå¤§éå ´å‹•ç•«
+	æ’­æ”¾æœŸé–“ç‚ºäº’æ–¥ç‹€æ…‹ï¼Œåªèƒ½æœ‰ä¸€ç¨®ç¸®æ”¾å‹•ç•«
 	*/
 	void scaleBig() {
 		if (isScaling == 0 && scl == 0) {
@@ -124,8 +124,8 @@ public:
 		}
 	}
 	/*
-	¼½©ñÅÜ¤p¹L³õ°Êµe
-	¼½©ñ´Á¶¡¬°¤¬¥¸ª¬ºA¡A¥u¯à¦³¤@ºØÁY©ñ°Êµe
+	æ’­æ”¾è®Šå°éå ´å‹•ç•«
+	æ’­æ”¾æœŸé–“ç‚ºäº’æ–¥ç‹€æ…‹ï¼Œåªèƒ½æœ‰ä¸€ç¨®ç¸®æ”¾å‹•ç•«
 	*/
 	void scaleSmall() {
 		if (isScaling == 0 && scl > 0) {
@@ -133,8 +133,8 @@ public:
 		}
 	}
 	/*
-		¼u¥X®ÄªG°Êµe
-		duration­n¤j©óµ¥©ó0
+		å½ˆå‡ºæ•ˆæœå‹•ç•«
+		durationè¦å¤§æ–¼ç­‰æ–¼0
 	*/
 	void popUpAnim(GLfloat duration){
 		if(duration>=0 && isPopupAnim==GL_FALSE){
@@ -143,20 +143,20 @@ public:
 		}
 	}
 	/*
-	¨ú±o¥Ø«eÁY©ñ­È
+	å–å¾—ç›®å‰ç¸®æ”¾å€¼
 	*/
 	GLfloat getScale(){
 		return scl;
 	}
 	/*
-	¨ú±o³Ì¤jÁY©ñ­È
+	å–å¾—æœ€å¤§ç¸®æ”¾å€¼
 	*/
 	GLfloat getMaxScale(){
 		return max_scl;
 	}
 
 	/*
-	±o¨ìtexture index
+	å¾—åˆ°texture index
 	*/
 	GLuint getTexIndex(){
 		return texIndex;
@@ -164,8 +164,8 @@ public:
 
 	//place in idleFunc
 	/*
-	§ó·s¨C­Óframeªºª¬ºA
-	Åı©I¥sdrawImg()¦³°Êµe®ÄªG
+	æ›´æ–°æ¯å€‹frameçš„ç‹€æ…‹
+	è®“å‘¼å«drawImg()æœ‰å‹•ç•«æ•ˆæœ
 	*/
 	void progress() {
 		if (scl != 0 && isCirleRotateAnim) {
@@ -241,11 +241,11 @@ private:
 	GLboolean isPopupAnim = GL_FALSE;
 	GLboolean isCirleRotateAnim = GL_FALSE;
 
-	//image materials
-	GLfloat mat_amb[4] = { 0.1,0.1,0.1,1 };
-	GLfloat mat_dif[4] = { 1,1,1,1 };
-	GLfloat mat_nul[4] = { 0,0,0,1 };
-	GLfloat mat_shn[1] = { 500 };
+	//image materialss
+	static GLfloat mat_amb[4];
+	static GLfloat mat_dif[4];
+	static GLfloat mat_nul[4];
+	static GLfloat mat_shn[1];
 
 	void getImgInfo() {
 		//parameter is a referance
@@ -254,7 +254,7 @@ private:
 		height = FreeImage_GetHeight(bitmap);
 		width = FreeImage_GetWidth(bitmap);
 		bits = FreeImage_GetBits(bitmap);
-		//²Å¦X¹Ï¤ù¤ñ¨Ò
+		//ç¬¦åˆåœ–ç‰‡æ¯”ä¾‹
 		v[0] = (float)width / (float)width;
 		v[1] = (float)height / (float)width;
 	}

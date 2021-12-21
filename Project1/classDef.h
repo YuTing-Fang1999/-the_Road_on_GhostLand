@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include<Windows.h>
 #include<GL/glew.h>
 #include<GL/freeglut.h>
@@ -8,7 +8,7 @@
 #include<math.h>
 #define _USE_MATH_DEFINES
 
-#define PLAYER_RATE 1 //™±Æa®C¶∏™∫≤æ∞ ∂Z¬˜
+#define PLAYER_RATE 1 //Áé©ÂÆ∂ÊØèÊ¨°ÁöÑÁßªÂãïË∑ùÈõ¢
 
 
 enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU};
@@ -16,14 +16,14 @@ enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU};
 class Player{
 public:
 	GLfloat pos[3];	//Position
-	Status status = MAIN_MENU; //πC¿∏•ÿ´e™∫™¨∫A
+	Status status = MAIN_MENU; //ÈÅäÊà≤ÁõÆÂâçÁöÑÁãÄÊÖã
 
 	Player(){
 		memset(this->pos, 0, 3);
 	}
 	~Player(){}
 
-	//√Ë¿Y
+	//Èè°È†≠
 	void lookAt() {
 		gluLookAt(
 			pos[0], pos[1] + 5, pos[2] + 10,
@@ -31,7 +31,7 @@ public:
 			0, 1, 0);
 	}
 
-	//µe•Xplayer
+	//Áï´Âá∫player
 	void drawPlayer(){
 		glPushMatrix();
 		{
@@ -42,7 +42,7 @@ public:
 		glPopMatrix();
 	}
 
-	//player¡‰ΩL•\Ø‡
+	//playerÈçµÁõ§ÂäüËÉΩ
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
 			pos[2] -= PLAYER_RATE;
@@ -58,12 +58,12 @@ public:
 		}
 	}
 
-	//¶€∞ ´e∂i
+	//Ëá™ÂãïÂâçÈÄ≤
 	void Progress() {
 		//pos[2] -= 0.1;
 	}
 
-	//∞±§Ó
+	//ÂÅúÊ≠¢
 	void playerStop(int finalPos) {
 		this->pos[2] = finalPos;
 	}
@@ -71,23 +71,23 @@ public:
 
 class ProgressBar {
 public:
-	int pathLen; //≤◊¬I¶Ï∏m
+	int pathLen; //ÁµÇÈªû‰ΩçÁΩÆ
 
 	ProgressBar(int pathLen) {
 		this->pathLen = -pathLen;
 	}
 	void draw(Player *p) {
-		float x = 0, y = 0; //∂i´◊±¯∞_¬I
+		float x = 0, y = 0; //ÈÄ≤Â∫¶Ê¢ùËµ∑Èªû
 		float width = 8, height = 0.2;
 		
-		//¶p™G®ÏπF≤◊¬I
+		//Â¶ÇÊûúÂà∞ÈÅîÁµÇÈªû
 		if (p->pos[2] <= pathLen) p->status = END;
 		
 		glDisable(GL_LIGHTING);
 		{
 			glPushMatrix();
 			{
-				//¬≈±¯
+				//ËóçÊ¢ù
 				glTranslatef(p->pos[0]-4, p->pos[1]+7.8, p->pos[2]);
 				glColor3f(0, 1, 1);
 				glBegin(GL_QUADS);
@@ -97,7 +97,7 @@ public:
 				glVertex2f(x, y + height);
 				glEnd();
 
-				//•’±¯
+				//ÁôΩÊ¢ù
 				glColor3f(1, 1, 1);
 				glBegin(GL_QUADS);
 				glVertex2f(x, y);

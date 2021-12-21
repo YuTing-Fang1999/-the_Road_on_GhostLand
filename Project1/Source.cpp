@@ -1,4 +1,4 @@
-#include<Windows.h>
+ï»¿#include<Windows.h>
 #include<GL/glew.h>
 #include<GL/freeglut.h>
 #include<stdio.h>
@@ -7,7 +7,7 @@
 #define _USE_MATH_DEFINES
 #include"basicFunc.h"
 #include"classDef.h"
-//¶}±Ò¤U­±³o¦æ¥i¥HÃö±¼console
+//é–‹å•Ÿä¸‹é¢é€™è¡Œå¯ä»¥é—œæ‰console
 //#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 
 #include "FreeImage.h"
@@ -16,21 +16,21 @@
 #include "ObjectLoader.h"
 
 extern Player p1=Player();
-extern Timer myTimer(6); //¹CÀ¸®Éªø(¬í)
-extern ProgressBar myProgressBar(100); //¸ô®|ªø«×
+extern Timer myTimer(6); //éŠæˆ²æ™‚é•·(ç§’)
+extern ProgressBar myProgressBar(100); //è·¯å¾‘é•·åº¦
 
-//¹Ï¤ù¯À§÷
+//åœ–ç‰‡ç´ æ
 extern Imagx helpMenu;//local z = 0
 extern Imagx mainMenu;//local z = -0.1
 extern Imagx exitMenu;//local z = 0.2
 extern Imagx aboutMenu;//local z = 0.1
 
-//3D¯À§÷
+//3Dç´ æ
 extern ObjectLoader stev;
 
-//¹CÀ¸¿ï³æµe­±
+//éŠæˆ²é¸å–®ç•«é¢
 void drawMainMenu(){
-	//stev´ú¸Õ¥ÎOBJ
+	//stevæ¸¬è©¦ç”¨OBJ
 	glPushMatrix();
 	{
 		glTranslatef(0,3,-5);
@@ -68,44 +68,44 @@ void drawMainMenu(){
 	glPopMatrix();
 }
 
-//¹CÀ¸¶}©lµe­±
+//éŠæˆ²é–‹å§‹ç•«é¢
 void drawStart() {
-	//¥i¥H©ñ¬K¿Ä­q¥~½æªºµe­±¡A¨Ï¥ÎªÅ¥ÕÁä¥i¶}©l¹CÀ¸
-	//³o¸Ì©ñ¬G¨Æ±¡¸`¡AÅıª±®a¿ï¾Ü¬O§_¸õ¹L(SKIP)
+	//å¯ä»¥æ”¾æ˜¥èè¨‚å¤–è³£çš„ç•«é¢ï¼Œä½¿ç”¨ç©ºç™½éµå¯é–‹å§‹éŠæˆ²
+	//é€™è£¡æ”¾æ•…äº‹æƒ…ç¯€ï¼Œè®“ç©å®¶é¸æ“‡æ˜¯å¦è·³é(SKIP)
 	drawPlayer();
 }
 
-//¹CÀ¸¹B¦æµe­±
+//éŠæˆ²é‹è¡Œç•«é¢
 void drawGame() {
 	
-	//¦aªO(¼e,°ª)
+	//åœ°æ¿(å¯¬,é«˜)
 	drawGround(6, 600);
 
-	//«Ø¿v
+	//å»ºç¯‰
 	drawBuildings();
 
-	//»ÙÃªª«
+	//éšœç¤™ç‰©
 	drawObstacles();
 
 	//player
 	drawPlayer();
 
-	//¤W¤èªº¶i«×±ø
+	//ä¸Šæ–¹çš„é€²åº¦æ¢
 	drawProgressBar();
 
 	//glTranslated(3, 2, 0);
 	//glutSolidSphere(1, 100, 100);
 }
 
-//¹CÀ¸µ²§ôµe­±
+//éŠæˆ²çµæŸç•«é¢
 void drawEnd() {
-	//¥i¥H©ñ¬K¿Ä¦¬¨ì¥~½æªºµe­±
+	//å¯ä»¥æ”¾æ˜¥èæ”¶åˆ°å¤–è³£çš„ç•«é¢
 	drawProgressBar();
 }
 
-//®É¶¡¨ì¤F
+//æ™‚é–“åˆ°äº†
 void drawTimeUp() {
-	//¥i¥H©ñ¬K¿Ä¦Y¤£¨ì¥~½æ¡A®ğ¼P¼Pªºµe­±
+	//å¯ä»¥æ”¾æ˜¥èåƒä¸åˆ°å¤–è³£ï¼Œæ°£å™—å™—çš„ç•«é¢
 	drawObstacles();
 }
 

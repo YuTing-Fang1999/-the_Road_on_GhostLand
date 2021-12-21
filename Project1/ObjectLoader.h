@@ -1,5 +1,4 @@
-#pragma once
-#pragma once
+ï»¿#pragma once
 #include<Windows.h>
 #include<GL/glew.h>
 #include<GL/freeglut.h>
@@ -11,11 +10,11 @@ class ObjectLoader{
 public:
 	ObjectLoader(){}
 	/*
-	¥u¯à¥Î¤@±i¶K¹Ï
-	objpath : ª«¥ó¸ô®|¦WºÙ
-	texpath : ¶K¹Ï¸ô®|¦WºÙ¡A¤£»İ¶K¹Ï¶ñNULL
-	unit_flag : ¬O§_¶}±ÒglmUnitize()¥\¯à
-	mode : GLM_...ªºrender°Ñ¼Æ¿ï¶µ
+	åªèƒ½ç”¨ä¸€å¼µè²¼åœ–
+	objpath : ç‰©ä»¶è·¯å¾‘åç¨±
+	texpath : è²¼åœ–è·¯å¾‘åç¨±ï¼Œä¸éœ€è²¼åœ–å¡«NULL
+	unit_flag : æ˜¯å¦é–‹å•ŸglmUnitize()åŠŸèƒ½
+	mode : GLM_...çš„renderåƒæ•¸é¸é …
 	textrue,smooth,material...
 	*/
 	ObjectLoader(char* objpath,char* texpath,GLboolean unit_flag,GLuint mode){
