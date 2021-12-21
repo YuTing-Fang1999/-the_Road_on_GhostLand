@@ -80,6 +80,10 @@ void restartGame() {
 }
 
 void keyboard(unsigned char key,int x,int y){
+	//大寫全轉小寫
+	if(65<=key && key<=90) key+=32;
+
+	//與離開遊戲相關
 	if(key==27){
 		if(isInExitMenu)exitMenu.scaleSmall();
 		else			exitMenu.scaleBig();
@@ -97,14 +101,14 @@ void keyboard(unsigned char key,int x,int y){
 		}
 	}
 
+	//主要控制鍵
 	if (key == 32 ) {//space
 		if (p1.status == START) {
 			//START跳轉頁面function
 			//使用空白鍵可開始遊戲
 			
-// 			if(頁面為最後一頁)
-			//用空白鍵開始遊戲
-			//skip跳過故事
+			//if(頁面為最後一頁)
+			//增加skip跳過故事的功能
 			p1.status = GAME;
 		}
 		else if (p1.status != GAME) {
@@ -158,6 +162,16 @@ void keyboard(unsigned char key,int x,int y){
 			glutFullScreen();
 		}
 		isFullScreen = ~isFullScreen;
+	}
+	if(key=='b'){
+		if(p1.status==MAIN_MENU){
+			p1.status = DEBUG;
+			glClearColor(0.5,0.5,0.8,1);
+		}
+		else if(p1.status==DEBUG){
+			p1.status = MAIN_MENU;
+			glClearColor(0.5,0.5,0.5,1);
+		}
 	}
 	
 	

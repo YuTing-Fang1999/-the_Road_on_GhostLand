@@ -28,18 +28,21 @@ extern Imagx aboutMenu;//local z = 0.1
 //3D素材
 extern ObjectLoader stev;
 
-//遊戲選單畫面
-void drawMainMenu(){
+//遊戲除錯空間
+void drawDebugView(){
 	//stev測試用OBJ
 	glPushMatrix();
 	{
-		glTranslatef(0,3,-5);
+		glTranslatef(0,1,-5);
 		glRotatef(45,1,0,0);
 		glScalef(2,2,2);
 		stev.drawObj(stev.getDpIndex());
 	}
 	glPopMatrix();
+}
 
+//遊戲選單畫面
+void drawMainMenu(){
 	//helpMenu
 	glPushMatrix();
 	{
@@ -148,6 +151,9 @@ void display(){
 			break;
 		case MAIN_MENU:
 			drawMainMenu();
+			break;
+		case DEBUG:
+			drawDebugView();
 			break;
 		default:
 			break;

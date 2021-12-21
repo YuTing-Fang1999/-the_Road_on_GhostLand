@@ -11,7 +11,7 @@
 #define PLAYER_RATE 1 //玩家每次的移動距離
 
 
-enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU};
+enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU,DEBUG};
 
 class Player{
 public:
