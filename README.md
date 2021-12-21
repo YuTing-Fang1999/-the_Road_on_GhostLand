@@ -15,6 +15,8 @@
         - [ ] 可能是normal有問題
         - [ ] 或是vertex重疊
         - [ ] 或obj數據精度不高...
+    - [ ] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
+    - [ ] **超大大大BUGS**，如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜
     - [X] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
         - [X] 我(maxspace1024)把drawTimer搬到前面先畫
         - [ ] 或許PNG透明的部分不要留那麼多  
