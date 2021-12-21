@@ -269,12 +269,20 @@ private:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 			GLenum data_color_format = GL_BGR;
-			if (color_type == FIC_RGB)			data_color_format = GL_BGR;
-			else if (color_type == FIC_RGBALPHA)	data_color_format = GL_BGRA;
+			GLenum internal_color_format = GL_RGB;
+			if (color_type == FIC_RGB){
+				data_color_format = GL_BGR;
+				internal_color_format = GL_RGB;
+			}
+			else if (color_type == FIC_RGBALPHA){
+				data_color_format = GL_BGRA;
+				internal_color_format = GL_RGBA;
+			}
 			else { printf("else format"); }
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
+			glTexImage2D(GL_TEXTURE_2D, 0, internal_color_format, width, height,
 				0, data_color_format, GL_UNSIGNED_BYTE,
 				bits);
+			//感覺是這邊造成圖片歪斜，特別是沒有透明度的檔案
 		}
 		else{
 			printf("does not generate texture list\n");

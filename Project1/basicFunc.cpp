@@ -24,11 +24,13 @@ GLboolean isInExitMenu=GL_FALSE;
 //external variable需要初始化一個實體
 extern Imagx helpMenu=Imagx();
 extern Imagx mainMenu=Imagx();
-extern Imagx aboutMenu=Imagx();
 extern Imagx exitMenu=Imagx();
+extern Imagx coverRGL=Imagx();
+extern Imagx aboutMenu=Imagx();
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
+extern ObjectLoader building_test=ObjectLoader();
 
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
@@ -45,21 +47,31 @@ void init(){
 
 	//載入圖片素材
 	mainMenu=Imagx("assets/img/menu/menu_main.png",2.5,GL_TRUE);
+	coverRGL=Imagx("assets/img/cover/cover_RGL_normal.png",2.8,GL_TRUE);coverRGL.cirleRotateAnim(GL_TRUE);
 	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
 
 	//載入3D素材
-	stev=ObjectLoader(	"assets/img/stev/stev.obj",
-						"assets/img/stev/stev.jpg",
-						GL_FALSE,
-						GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE);
+	stev=ObjectLoader(	
+		"assets/obj/stev/stev.obj",
+		"assets/obj/stev/stev.jpg",
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
+	);
+	building_test=ObjectLoader(
+		"assets/obj/building_test/building_test.obj",
+		"assets/obj/building_test/building_tex02.png",
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
+	);
 }
 
 void idle(){
 	//圖片素材
 	helpMenu.progress();
 	exitMenu.progress();
+	coverRGL.progress();
 	aboutMenu.progress();
 
 	//player 自動移動

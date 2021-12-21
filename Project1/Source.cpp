@@ -20,6 +20,7 @@ extern Timer myTimer(6); //遊戲時長(秒)
 extern ProgressBar myProgressBar(100); //路徑長度
 
 //圖片素材
+extern Imagx coverRGL;//local z = -1
 extern Imagx helpMenu;//local z = 0
 extern Imagx mainMenu;//local z = -0.1
 extern Imagx exitMenu;//local z = 0.2
@@ -27,6 +28,7 @@ extern Imagx aboutMenu;//local z = 0.1
 
 //3D素材
 extern ObjectLoader stev;
+extern ObjectLoader building_test;
 
 //遊戲除錯空間
 void drawDebugView(){
@@ -37,6 +39,8 @@ void drawDebugView(){
 		glRotatef(45,1,0,0);
 		glScalef(2,2,2);
 		stev.drawObj(stev.getDpIndex());
+		glTranslatef(-3,-3,0);
+		building_test.drawObj(building_test.getDpIndex());	
 	}
 	glPopMatrix();
 }
@@ -48,6 +52,14 @@ void drawMainMenu(){
 	{
 		glTranslatef(0,4,2);
 		glRotatef(-10,1,0,0);
+
+		//cover
+		glPushMatrix();
+		{
+			glTranslatef(0,0,-1);
+			coverRGL.drawImg();
+		}
+		glPopMatrix();
 
 		//main
 		glPushMatrix();
@@ -69,6 +81,7 @@ void drawMainMenu(){
 		glPopMatrix();
 	}
 	glPopMatrix();
+
 }
 
 //遊戲開始畫面

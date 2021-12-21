@@ -67,15 +67,14 @@ private:
 		if(index){
 			glNewList(index,GL_COMPILE);
 			{
-				glEnable(GL_TEXTURE_2D);
+				glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
 				glPushMatrix();
 				{
-
 					if(GLM_TEXTURE)glBindTexture(GL_TEXTURE_2D, texIndex);
 					glmDraw(model,mode);
 				}
 				glPopMatrix();
-				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
 			}
 			glEndList();
 		}
