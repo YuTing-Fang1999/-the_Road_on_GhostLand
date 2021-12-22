@@ -1,10 +1,14 @@
 # **鬼島馬路**開發紀錄
 # 總結
-* **回覆上一洞**(已經commit但還沒push到remote)```git reset HEAD^ --hard```
+* **回覆上一洞**
+    * (已經commit但還沒push到remote)```git reset HEAD^ --hard```
+    * (已經add但還沒commit)```git reset HEAD```
+    * (還沒add)```git checkout -- <filename>```
 * 按鍵設定
+    - [ ] **c** cheating
+    - [X] **b** DEBUG
     - [x] **h** helping
     - [x] **f** fullscrn
-    - [ ] **c** cheating
     - [X] **r** go back to main_menu
     - [X] **v** aboutInfo;
     - [x] **esc** exit
@@ -15,8 +19,9 @@
         - [ ] 可能是normal有問題
         - [ ] 或是vertex重疊
         - [ ] 或obj數據精度不高...
-    - [ ] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
     - [ ] **超大大大BUGS**，如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜
+    - [X] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
+        - [X] 查到在`Imagx`裡面`setMaterial()`不要使用GL_EMISSION
     - [X] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
         - [X] 我(maxspace1024)把drawTimer搬到前面先畫
         - [ ] 或許PNG透明的部分不要留那麼多  

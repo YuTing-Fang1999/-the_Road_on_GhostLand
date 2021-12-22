@@ -294,7 +294,7 @@ private:
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shn);
-		glMaterialfv(GL_FRONT, GL_EMISSION, mat_nul);
+		//glMaterialfv(GL_FRONT, GL_EMISSION, mat_nul);
 	}
 
 	void genIndex(GLboolean isNeedDpIndex){
