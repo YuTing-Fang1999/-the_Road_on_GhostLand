@@ -4,6 +4,9 @@
     * (已經commit但還沒push到remote)```git reset HEAD^ --hard```
     * (已經add但還沒commit)```git reset HEAD```
     * (還沒add)```git checkout -- <filename>```
+* delete branch
+    * local`git branch -D <branch name>`
+    * remote`git push <remote> :<branch name>`
 * 按鍵設定
     - [ ] **c** cheating
     - [X] **b** DEBUG
@@ -36,6 +39,13 @@
 #### 強迫症患者期望區
 - [ ] 按Y播放結束動畫
 - [ ] 遊戲程式可以有專屬的圖示(Icon)，~~回數票+遺照框~~
+
+## 2021/12/22
+* **出事拉阿北** 大瘋狗的電腦不能跑(maxspace)的程式
+    * (maxspace)表示崩潰 凸T.T凸，肝了三天三夜
+    - [ ] FreeImage沒有全部匯入?
+    - [ ] include header出事?
+* 決定要換掉`Imagx`核心用FreeImage(肥)讀檔，改用stbi(瘦)
 
 ## 2021/12/21
 * 喜歡處理枝微末節的真的~~很棒~~有病，~~使用者體驗也很重要~~
