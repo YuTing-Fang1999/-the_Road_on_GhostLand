@@ -3,7 +3,6 @@
 #include<GL/glew.h>
 #include<GL/freeglut.h>
 #include<stdio.h>
-#include"FreeImage.h"
 #include"Imagx.h"
 #include"glm.h"
 class ObjectLoader{
@@ -79,7 +78,7 @@ private:
 			glEndList();
 		}
 		else{
-			printf("compileDisplayList: dpIndex is 0\n");
+			printf("objloader.compileDisplayList: dpIndex is 0\n");
 		}
 	}
 };

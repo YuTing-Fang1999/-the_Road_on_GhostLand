@@ -5,8 +5,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<math.h>
 #define _USE_MATH_DEFINES
+#include<math.h>
 
 #define PLAYER_RATE 1 //玩家每次的移動距離
 

@@ -10,7 +10,6 @@
 //開啟下面這行可以關掉console
 //#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 
-#include "FreeImage.h"
 #include "glm.h"
 #include "Imagx.h"
 #include "ObjectLoader.h"

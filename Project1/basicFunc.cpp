@@ -4,11 +4,9 @@
 #include<stdio.h>
 #include<string.h>
 #include"classDef.h"
-#include"Imagx.h"
 
-#include "FreeImage.h"
+#include"Imagx.h"
 #include "glm.h"
-#include "Imagx.h"
 #include "ObjectLoader.h"
 
 extern Player p1;

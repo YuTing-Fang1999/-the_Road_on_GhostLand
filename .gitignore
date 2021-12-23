@@ -2,14 +2,3 @@
 .vs/
 Debug/
 Project1/Debug/
-
-#freeimage libaray
-FreeImage/LibJXR/
-FreeImage/LibWebP/
-FreeImage/LibTIFF4/
-FreeImage/LibRawLite/
-FreeImage/LibOpenJPEG/
-FreeImage/OpenEXR/
-FreeImage/FreeImageLib/
-#zip file library
-FreeImage/ZLib/

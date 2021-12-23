@@ -5,7 +5,10 @@
 #include<stdio.h>
 #define _USE_MATH_DEFINES
 #include<math.h>
-#include "FreeImage.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_STATIC
+#include"stbi_image.h"
 
 class Imagx {
 public:
@@ -23,34 +26,42 @@ public:
 		max_scl = s;
 		scl = max_scl;
 
-		image_format = FreeImage_GetFileType(imgfile, 0);				//檢查圖片格式
-		bitmap = FreeImage_Load(image_format, imgfile, BMP_DEFAULT);	//載入圖片
-		if (bitmap) {
-			// bitmap successfully loaded!
-			printf("load %s!\n\n", imgfile);
+		stbi_set_flip_vertically_on_load(true);//翻轉圖片
+		unsigned char* pixels=stbi_load(imgfile,&width,&height,&nCh,0);
+		if(pixels){
+			printf("load %s\nw:%d h:%d ch:%d\n",imgfile,width,height,nCh);
 
-			getImgInfo();
-			genTexture();
-			if(isNeedDpIndex){
-				setMaterial();
-				compileDisplayList();
+			//set unitilize
+			v[0] = (float)width / (float)width;
+			v[1] = (float)height / (float)width;
+
+			if(texIndex){
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+				glBindTexture(GL_TEXTURE_2D, texIndex);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				if(nCh==3)		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,0, GL_RGB, GL_UNSIGNED_BYTE,pixels);
+				else if(nCh==4)	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,0, GL_RGBA, GL_UNSIGNED_BYTE,pixels);
+
+				if(isNeedDpIndex){
+					setMaterial();
+					compileDisplayList();
+				}
+				stbi_image_free(pixels);
 			}
-
-			FreeImage_Unload(bitmap);
+			else{
+				printf("does not generate texture list\n");
+			}
 		}
-		else {
-			printf("no load image!\n");
+		else{
+			printf("does not load Img\n");
 		}
+		printf("\n");
 	}
 	~Imagx() {}
-
-	/*.
-	show the infomation of the image has been loaded
-	*/
-	void printImgInfo() {
-		printf("imageInfo:\n");
-		printf("H:%u W:%u imageType:%d colorType:%d scale:%f\n\n", height, width, image_type, color_type,scl);
-	}
 
 	/*.
 	display the final image object
@@ -215,14 +226,11 @@ public:
 
 private:
 	//image info
-	FIBITMAP* bitmap;
-	FREE_IMAGE_TYPE image_type;
-	FREE_IMAGE_FORMAT image_format;
-	FREE_IMAGE_COLOR_TYPE color_type;
 	GLfloat v[2];
-	GLuint height;
-	GLuint width;
-	BYTE* bits;
+	GLint nCh;
+	GLint height;
+	GLint width;
+	unsigned char* pixels;
 
 	//display index
 	GLuint texIndex;
@@ -246,48 +254,6 @@ private:
 	static GLfloat mat_dif[4];
 	static GLfloat mat_nul[4];
 	static GLfloat mat_shn[1];
-
-	void getImgInfo() {
-		//parameter is a referance
-		image_type = FreeImage_GetImageType(bitmap);
-		color_type = FreeImage_GetColorType(bitmap);
-		height = FreeImage_GetHeight(bitmap);
-		width = FreeImage_GetWidth(bitmap);
-		bits = FreeImage_GetBits(bitmap);
-		//符合圖片比例
-		v[0] = (float)width / (float)width;
-		v[1] = (float)height / (float)width;
-	}
-
-	void genTexture() {
-		if(texIndex){
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glBindTexture(GL_TEXTURE_2D, texIndex);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-			GLenum data_color_format = GL_BGR;
-			GLenum internal_color_format = GL_RGB;
-			if (color_type == FIC_RGB){
-				data_color_format = GL_BGR;
-				internal_color_format = GL_RGB;
-			}
-			else if (color_type == FIC_RGBALPHA){
-				data_color_format = GL_BGRA;
-				internal_color_format = GL_RGBA;
-			}
-			else { printf("else format"); }
-			glTexImage2D(GL_TEXTURE_2D, 0, internal_color_format, width, height,
-				0, data_color_format, GL_UNSIGNED_BYTE,
-				bits);
-			//感覺是這邊造成圖片歪斜，特別是沒有透明度的檔案
-		}
-		else{
-			printf("does not generate texture list\n");
-		}
-	}
 
 	void setMaterial(){
 		glMaterialfv(GL_FRONT, GL_AMBIENT, mat_amb);

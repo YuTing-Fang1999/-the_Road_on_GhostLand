@@ -40,11 +40,40 @@
 - [ ] 按Y播放結束動畫
 - [ ] 遊戲程式可以有專屬的圖示(Icon)，~~回數票+遺照框~~
 
+## 2021/12/24
+### 更換`Imagx`核心為`stbi`函式庫，減肥成功
+* <https://github.com/nothings/stb/blob/master/stb_image.h>
+    * 吹爆、真好用
+```C
+#define STB_IMAGE_IMPLEMENTATION
+#include"stbi_image.h"
+
+//0 代表默認圖片channel
+unsigned char* pixels=stbi_load(filename,&width,&hight,&nchannel,0);
+```
+* 瓶頸
+    - [x] 記得vertex要設定normal`glNormal*()`
+    - [x] 沒有透明度
+        * `glBlendFunc()` `GL_BLEND` 記得打開  
+    - [x] 讀圖片顛倒過來了 
+        * `stbi_set_flip_vertically_on_load(true);//翻轉圖片`
+    - [x] library header 重複定義
+        * `#define STB_IMAGE_STATIC        //防止multiple definetioe`
+* `glTexImage2D()`
+    * 依照channel的數量，pixel格式為`GL_RGB` or `GL_RGBA`
+    * `glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,0, GL_RGB, GL_UNSIGNED_BYTE,pixels);`
+* 參考資料
+    * <http://blog.roy4801.tw/2020/07/09/opengl/opengl-note-4/>
+    * <https://ithelp.ithome.com.tw/m/articles/10264685>
+    * <https://www.gushiciku.cn/pl/p1mL/zh-tw>
+
+
 ## 2021/12/22
 * **出事拉阿北** 大瘋狗的電腦不能跑(maxspace)的程式
     * (maxspace)表示崩潰 凸T.T凸，肝了三天三夜
-    - [ ] FreeImage沒有全部匯入?
-    - [ ] include header出事?
+    - [ ] ~~FreeImage沒有全部匯入?~~
+    - [ ] ~~include header出事?~~
+    - [x] 沒有把*.git*目錄下載下來
 * 決定要換掉`Imagx`核心用FreeImage(肥)讀檔，改用stbi(瘦)
 
 ## 2021/12/21
