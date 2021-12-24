@@ -18,21 +18,26 @@ extern Player p1=Player();
 extern Timer myTimer(6); //遊戲時長(秒)
 extern ProgressBar myProgressBar(100); //路徑長度
 
+//flag
+extern GLboolean listExchange;
+
 //圖片素材
 extern Imagx coverRGL;//local z = -1
 extern Imagx helpMenu;//local z = 0
 extern Imagx mainMenu;//local z = -0.1
 extern Imagx exitMenu;//local z = 0.2
 extern Imagx aboutMenu;//local z = 0.1
+extern ImagxList imlist;
 
 //3D素材
 extern ObjectLoader stev;
 extern ObjectLoader building_test;
+extern ObjList objlist;
 
 //遊戲除錯空間
 void drawDebugView(){
 	//stev測試用OBJ
-	glPushMatrix();
+	/*glPushMatrix();
 	{
 		glTranslatef(0,1,-5);
 		glRotatef(45,1,0,0);
@@ -40,6 +45,21 @@ void drawDebugView(){
 		stev.drawObj(stev.getDpIndex());
 		glTranslatef(-3,-3,0);
 		building_test.drawObj(building_test.getDpIndex());	
+	}
+	glPopMatrix();*/
+
+	//預覽
+	glPushMatrix();
+	{
+		glTranslatef(0,3,0);
+		
+		if(listExchange){
+			glScalef(3,3,3);
+			imlist.draw();
+		}
+		else{
+			objlist.draw();
+		}
 	}
 	glPopMatrix();
 }
@@ -195,6 +215,7 @@ int main(int argc,char **argv){
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(specialKb);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
 	glutTimerFunc(1000,timer,0);

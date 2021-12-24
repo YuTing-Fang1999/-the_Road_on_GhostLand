@@ -82,3 +82,30 @@ private:
 		}
 	}
 };
+
+class ObjList{
+public:
+	std::vector<unsigned int> list;
+	int index=0;
+	ObjList(){};
+	~ObjList(){};
+
+	void push(unsigned id){
+		list.push_back(id);
+	}
+	void draw(){
+		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
+		glCallList(list[index]);
+		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
+	}
+	void specialKb(int key,int x,int y){
+		if(key==100){
+			//left arrow
+			index = (index+1)%list.size();
+		}
+		if(key==102){
+			//right arrow
+			index = (index+list.size()-1)%list.size();
+		}
+	}
+};

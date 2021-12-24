@@ -7,10 +7,12 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 
+//glFunc
 void init();
 void idle();
 void reshape(int w,int h);
 void keyboard(unsigned char key,int x,int y);
+void specialKb(int,int,int);
 
 //draw
 void drawGround(int w, int h);

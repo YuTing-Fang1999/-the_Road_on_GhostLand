@@ -5,6 +5,7 @@
 #include<stdio.h>
 #define _USE_MATH_DEFINES
 #include<math.h>
+#include<vector>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
@@ -38,6 +39,8 @@ public:
 			if(texIndex){
 				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 				glBindTexture(GL_TEXTURE_2D, texIndex);
+				//glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texIndex);
+				//glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, width, height, GL_TRUE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -99,10 +102,14 @@ public:
 	}
 
 	// animation settings
+	void setScale(){
+		scl = max_scl;
+	}
+
 	/*
 	設定圖片最大縮放值
 	*/
-	void setMaxScale(GLuint s) {
+	void setMaxScale(float s) {
 		max_scl = s;
 	}
 	/*
@@ -165,7 +172,12 @@ public:
 	GLfloat getMaxScale(){
 		return max_scl;
 	}
-
+	/*
+	得到Display index
+	*/
+	GLuint getDpIndex(){
+		return dpIndex;
+	}
 	/*
 	得到texture index
 	*/
@@ -260,7 +272,7 @@ private:
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shn);
-		//glMaterialfv(GL_FRONT, GL_EMISSION, mat_nul);
+		//glMaterialfv(GL_FRONT, GL_EMISSION, mat_dif);
 	}
 
 	void genIndex(GLboolean isNeedDpIndex){
@@ -307,6 +319,33 @@ private:
 		}
 		else{
 			printf("does not generate display list\n");
+		}
+	}
+};
+
+class ImagxList{
+public:
+	std::vector<unsigned int> list;
+	int index=0;
+	ImagxList(){};
+	~ImagxList(){};
+
+	void push(unsigned id){
+		list.push_back(id);
+	}
+	void draw(){
+		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
+		glCallList(list[index]);
+		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
+	}
+	void specialKb(int key,int x,int y){
+		if(key==100){
+			//left arrow
+			index = (index+1)%list.size();
+		}
+		if(key==102){
+			//right arrow
+			index = (index+list.size()-1)%list.size();
 		}
 	}
 };

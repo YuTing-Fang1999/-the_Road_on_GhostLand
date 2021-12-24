@@ -17,6 +17,7 @@ extern ProgressBar myProgressBar;
 //status flag
 GLboolean isFullScreen=GL_FALSE;
 GLboolean isInExitMenu=GL_FALSE;
+extern GLboolean listExchange=GL_FALSE;
 
 //圖片素材
 //external variable需要初始化一個實體
@@ -29,6 +30,10 @@ extern Imagx aboutMenu=Imagx();
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
 extern ObjectLoader building_test=ObjectLoader();
+
+//list
+extern ImagxList imlist=ImagxList();
+extern ObjList objlist=ObjList();
 
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
@@ -49,6 +54,11 @@ void init(){
 	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
+	imlist.push(mainMenu.getDpIndex());
+	imlist.push(coverRGL.getDpIndex());
+	imlist.push(exitMenu.getDpIndex());
+	imlist.push(helpMenu.getDpIndex());
+	imlist.push(aboutMenu.getDpIndex());
 
 	//載入3D素材
 	stev=ObjectLoader(	
@@ -63,6 +73,8 @@ void init(){
 		GL_FALSE,
 		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
 	);
+	objlist.push(stev.getDpIndex());
+	objlist.push(building_test.getDpIndex());
 }
 
 void idle(){
@@ -186,6 +198,18 @@ void keyboard(unsigned char key,int x,int y){
 	
 	
 	glutPostRedisplay();
+}
+
+void specialKb(int key,int x,int y){
+	if(listExchange){
+		imlist.specialKb(key,x,y);
+	}
+	else{
+		objlist.specialKb(key,x,y);
+	}
+
+	if(key==101 || key==103) listExchange = ~listExchange;
+
 }
 
 void timer(int id) {
