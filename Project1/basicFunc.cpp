@@ -27,6 +27,12 @@ extern Imagx exitMenu=Imagx();
 extern Imagx coverRGL=Imagx();
 extern Imagx aboutMenu=Imagx();
 
+extern Imagx callingMan=Imagx();
+extern Imagx callingWoman=Imagx();
+extern Imagx callingOldMan=Imagx();
+extern Imagx callingOldWoman=Imagx();
+extern Imagx textInit_normal=Imagx();
+
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
 extern ObjectLoader building_test=ObjectLoader();
@@ -58,6 +64,17 @@ void init(){
 	imlist.push(exitMenu.getDpIndex());
 	imlist.push(helpMenu.getDpIndex());
 	imlist.push(aboutMenu.getDpIndex());
+
+	callingMan=Imagx("assets/img/phone_call/talking_man.png",1,GL_TRUE);
+	callingWoman=Imagx("assets/img/phone_call/talking_woman.png",1,GL_TRUE);
+	callingOldMan=Imagx("assets/img/phone_call/talking_ojiisan.png",1,GL_TRUE);
+	callingOldWoman=Imagx("assets/img/phone_call/talking_obaasan.png",1,GL_TRUE);
+	textInit_normal=Imagx("assets/img/text_init/text_init_normal.png",4,GL_TRUE);
+	imlist.push(callingMan.getDpIndex());
+	imlist.push(callingWoman.getDpIndex());
+	imlist.push(callingOldMan.getDpIndex());
+	imlist.push(callingOldWoman.getDpIndex());
+	imlist.push(textInit_normal.getDpIndex());
 
 	//載入3D素材
 	stev=ObjectLoader(	
