@@ -205,13 +205,12 @@ int main(int argc,char **argv){
 	glutInitWindowPosition(500,200);
 	glutInitWindowSize(700,700);
 	glutCreateWindow("TITLE");
-
-	init();
-
 	GLenum err = glewInit();
 	if( err != GLEW_OK){
 		printf("GLEW_ERROR\n");
 	}
+
+	init();
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
