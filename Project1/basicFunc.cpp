@@ -40,7 +40,6 @@ void init(){
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-
 	//texture
 	//若某模型不須貼圖或透明，要關掉功能
 	glEnable(GL_TEXTURE_2D);

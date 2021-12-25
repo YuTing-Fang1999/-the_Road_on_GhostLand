@@ -19,12 +19,14 @@
     - [x] **space** re/start
 * **Bugs**
     - [ ] **超大大大BUGS**，讀3D模型的面上會有許多三角形陰影
-        - [ ] 可能是normal有問題
+        - [ ] 可能是normal有問題，`GL_RESCALE_NORMAL` `GL_NORMALIZE`
         - [ ] 或是vertex重疊
         - [ ] 或obj數據精度不高...
     - [ ] **超大大大BUGS**，如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜
-    - [X] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
-        - [X] 查到在`Imagx`裡面`setMaterial()`不要使用GL_EMISSION
+    - [ ] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
+        - [X] ~~查到在`Imagx`裡面`setMaterial()`不要使用`GL_EMISSION`~~
+        * 應該跟`GL_EMISSION`有關 
+        * 物件`GL_EMISSION`設為(1,1,1,1)就解決了，但還想找問題
     - [X] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
         - [X] 我(maxspace1024)把drawTimer搬到前面先畫
         - [ ] 或許PNG透明的部分不要留那麼多  
@@ -32,13 +34,21 @@
     - [ ] 在`GAME`狀態，`exitMenu`不會跟著鏡頭移動，~~誰會在遊戲中途跳gmae阿~~
     - [ ] 進度條會往負方向長，最後可以加個往後走的彩蛋
     - [ ] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
-    - [X] 遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態
-    - [x] 在`START`狀態(說故事的狀態)前面應該還要一個`MAIN_MENU`狀態
-        * 不需要再把`MAIN_MENU`移掉   
+    - [X] ~~遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態~~
+    - [x] ~~在`START`狀態(說故事的狀態)前面應該還要一個`MAIN_MENU`狀態~~
+        * ~~不需要再把`MAIN_MENU`移掉~~  
 
 #### 強迫症患者期望區
 - [ ] 按Y播放結束動畫
 - [ ] 遊戲程式可以有專屬的圖示(Icon)，~~回數票+遺照框~~
+
+## 2021/12/25
+* 終於解決glew library exception的問題
+    * 在`glutCreateWindow()`之後就要呼叫`glewInit()`
+* Texture新功能
+    * texture mipmaps
+    * texture multisampling
+
 
 ## 2021/12/24
 ### 更換`Imagx`核心為`stbi`函式庫，減肥成功

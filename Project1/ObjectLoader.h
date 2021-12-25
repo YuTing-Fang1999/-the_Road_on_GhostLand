@@ -14,11 +14,11 @@ public:
 	texpath : 貼圖路徑名稱，不需貼圖填NULL
 	unit_flag : 是否開啟glmUnitize()功能
 	mode : GLM_...的render參數選項
-	textrue,smooth,material...
+	texture,smooth,material...
 	*/
 	ObjectLoader(char* objpath,char* texpath,GLboolean unit_flag,GLuint mode){
 		genIndex(1);
-		//GL_FALSE menas load image as only a textrue
+		//GL_FALSE menas load image as only a texture
 		if(texpath!=NULL){
 			Imagx texImg = Imagx(texpath,1,GL_FALSE);
 			texIndex = texImg.getTexIndex();

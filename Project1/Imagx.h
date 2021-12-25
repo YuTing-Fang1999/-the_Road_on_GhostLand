@@ -20,7 +20,7 @@ public:
 	x-------------------------------------
 	isNeedDpIndex
 	GL_TRUE -> make a image board
-	GL_FALSE-> make only image textrue
+	GL_FALSE-> make only image texture
 	*/
 	Imagx(char* imgfile, GLfloat s,GLboolean isNeedDpIndex) {
 		genIndex(isNeedDpIndex);
@@ -39,8 +39,8 @@ public:
 			if(texIndex){
 				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 				glBindTexture(GL_TEXTURE_2D, texIndex);
-				//glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texIndex);
-				//glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA8, width, height, GL_TRUE);
+				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texIndex);
+				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA, width, height, GL_TRUE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -48,6 +48,8 @@ public:
 
 				if(nCh==3)		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,0, GL_RGB, GL_UNSIGNED_BYTE,pixels);
 				else if(nCh==4)	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,0, GL_RGBA, GL_UNSIGNED_BYTE,pixels);
+				glGenerateMipmap(GL_TEXTURE_2D);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 				if(isNeedDpIndex){
 					setMaterial();
