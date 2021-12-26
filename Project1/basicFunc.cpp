@@ -2,6 +2,7 @@
 #include<GL/glew.h>
 #include<GL/freeglut.h>
 #include<stdio.h>
+#include <time.h>   /* 時間相關函數 */
 #include<string.h>
 #include"classDef.h"
 
@@ -13,6 +14,7 @@ extern Player p1;
 Building b1(5, 10, 5);
 extern Timer myTimer;
 extern ProgressBar myProgressBar;
+extern RandomGenObStacles myRandGenObstacles;
 
 //status flag
 GLboolean isFullScreen=GL_FALSE;
@@ -26,6 +28,10 @@ extern Imagx mainMenu=Imagx();
 extern Imagx exitMenu=Imagx();
 extern Imagx coverRGL=Imagx();
 extern Imagx aboutMenu=Imagx();
+//倒數3秒
+extern Imagx three = Imagx();
+extern Imagx two = Imagx();
+extern Imagx one = Imagx();
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
@@ -74,6 +80,9 @@ void init(){
 	);
 	objlist.push(stev.getDpIndex());
 	objlist.push(building_test.getDpIndex());
+
+	/* 對隨機產生障礙物設定亂數種子 */
+	srand(time(NULL));
 }
 
 void idle(){
@@ -84,20 +93,35 @@ void idle(){
 	aboutMenu.progress();
 
 	//player 自動移動
-	p1.Progress();
-	printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
+	if (p1.status == GAME) {
+		p1.Progress();
+		//printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
+	}
+	
 
 	//如果遊戲結束，停止移動
 	if(p1.status == END){
 		p1.playerStop(myProgressBar.pathLen);
-		printf("\r[p1]stop ");
 	}
 	glutPostRedisplay();
 }
 
-void restartGame() {
+void initGame() {
 	myTimer.nowTime = myTimer.time;
 	memset(p1.pos, 0, sizeof(p1.pos));
+	p1.v = 0.01;
+	p1.shift = 0;
+	//停止播放音樂
+	PlaySound(NULL, NULL, SND_FILENAME);
+	/* 設定亂數種子 */
+	srand(time(NULL));
+
+	myRandGenObstacles.init();
+
+	//倒數動畫
+
+	//音樂
+	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
 }
 
 void keyboard(unsigned char key,int x,int y){
@@ -131,15 +155,14 @@ void keyboard(unsigned char key,int x,int y){
 			//if(頁面為最後一頁)
 			//增加skip跳過故事的功能
 			p1.status = GAME;
-		}
-		else if (p1.status != GAME) {
-			restartGame();
+			initGame();
 		}
 		if (p1.status == TIMEUP ||
 			p1.status == DEAD   ||
 			p1.status == END) {
 			//TIMEUP跳轉頁面function
 			p1.status = GAME;
+			initGame();
 		}
 		if (p1.status == MAIN_MENU){
 			p1.status = START;
@@ -153,7 +176,7 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == DEAD   ||
 			p1.status == END    ){
 			//回到主選單
-			restartGame();
+			initGame();
 			p1.status = MAIN_MENU;
 		}
 	}
@@ -194,8 +217,7 @@ void keyboard(unsigned char key,int x,int y){
 			glClearColor(0.5,0.5,0.5,1);
 		}
 	}
-	
-	
+
 	glutPostRedisplay();
 }
 
@@ -216,9 +238,13 @@ void timer(int id) {
 		--myTimer.nowTime;
 		if (myTimer.nowTime <= 0) {
 			p1.status = TIMEUP;
-			restartGame();
+			initGame();
 		}
 	}
+
+	//player的速度會因摩擦力慢慢減少
+	if (p1.v - 0.001 > 0.01) p1.v -= 0.001;
+
 	glutTimerFunc(1000, timer, 0);
 }
 
@@ -248,16 +274,7 @@ void drawGround(int w, int h) {
 }
 
 void drawObstacles() {
-	//static method ,don't need instance
-	Obstacles::drawObstacle(-2, 1, -5, 1.4, &p1);
-	Obstacles::drawObstacle(3, 1, -10, 1.4, &p1);
-	//Obstacles::drawObstacle(4, 1, -20);
-	//Obstacles::drawObstacle(-4, 1, -50);
-	//Obstacles::drawObstacle(4, 1, -70);
-	//Obstacles::drawObstacle(-2.5, 1, -90);
-	//Obstacles::drawObstacle(4, 1, -100);
-	//Obstacles::drawObstacle(4, 1, -130);
-	//Obstacles::drawObstacle(4, 1, -200);
+	myRandGenObstacles.drawObstacle(&p1);
 }
 
 void drawBuildings() {
@@ -275,4 +292,19 @@ void drawProgressBar() {
 
 void drawTimer() {
 	myTimer.drawTimer(&p1);
+}
+
+void drawstr(GLfloat x, GLfloat y, char* format, ...)
+{
+	GLvoid* font_style = GLUT_BITMAP_HELVETICA_18;
+	va_list args;
+	char buffer[255], * s;
+
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
+
+	glRasterPos2f(x, y);
+	for (s = buffer; *s; s++)
+		glutBitmapCharacter(font_style, *s);
 }

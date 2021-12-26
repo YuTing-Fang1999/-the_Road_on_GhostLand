@@ -21,5 +21,6 @@ void drawBuildings();
 void drawPlayer();
 void drawProgressBar();
 void drawTimer();
-//void restartGame();
+//void initGame();
 void timer(int id);
+void drawstr(GLfloat x, GLfloat y, char* format, ...);

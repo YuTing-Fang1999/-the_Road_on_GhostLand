@@ -7,15 +7,19 @@
 #include<string.h>
 #define _USE_MATH_DEFINES
 #include<math.h>
+#include"basicFunc.h"
+#include <vector>
+#include <set>
+using namespace std;
 
-#define PLAYER_RATE 1 //玩家每次的移動距離
-
-
-enum Status { START, GAME, DEAD, TIMEUP, END ,MAIN_MENU,DEBUG};
+enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
 
 class Player{
 public:
 	GLfloat pos[3];	//Position
+	GLfloat LR_MOVE = 1; //玩家每次移動左右的距離
+	GLfloat v = 0.01; //玩家移動速度
+	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
 
 	Player(){
@@ -35,7 +39,7 @@ public:
 	void drawPlayer(){
 		glPushMatrix();
 		{
-			glTranslatef(pos[0], pos[1], pos[2]);
+			glTranslatef(pos[0], pos[1], pos[2] - this->shift);
 			glScalef(1,2,1);
 			glutSolidCube(1);
 		}
@@ -45,22 +49,38 @@ public:
 	//player鍵盤功能
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
-			pos[2] -= PLAYER_RATE;
+			//速度
+			if (this->v + 0.005 < 4) this->v += 0.005;
+			else this->v = 4;
+			//相機位移
+			if (this->shift + 0.3 < 3) this->shift += 0.3;
+			else this->shift = 3;
 		}
 		else if (key == 's') {
-			pos[2] += PLAYER_RATE;
+			if (this->v - 0.005 > 0.01) this->v -= 0.005;
+			else this->v = 0.01;
+
+			if (v > 0) {
+				if (this->shift - 0.1 > 0) this->shift -= 0.1;
+				else this->shift = 0;
+			}
+			
 		}
 		else if (key == 'a') {
-			pos[0] -= PLAYER_RATE;
+			pos[0] -= LR_MOVE;
 		}
 		else if (key == 'd') {
-			pos[0] += PLAYER_RATE;
+			pos[0] += LR_MOVE;
 		}
 	}
 
 	//自動前進
 	void Progress() {
-		//pos[2] -= 0.1;
+		pos[2] -= v;
+
+		if (this->shift - 0.03 > 0) this->shift -= 0.03;
+		else this->shift = 0;
+		
 	}
 
 	//停止
@@ -115,29 +135,13 @@ public:
 	}
 };
 
-
 class Timer {
 public:
-	GLvoid* font_style = GLUT_BITMAP_HELVETICA_18;
 	int nowTime;
 	int time;
 	Timer(int t) {
 		this->time = t;
 		this->nowTime = t;
-	}
-
-	void drawstr(GLfloat x, GLfloat y, char* format, ...)
-	{
-		va_list args;
-		char buffer[255], * s;
-
-		va_start(args, format);
-		vsprintf(buffer, format, args);
-		va_end(args);
-
-		glRasterPos2f(x, y);
-		for (s = buffer; *s; s++)
-			glutBitmapCharacter(font_style, *s);
 	}
 
 	void drawTimer(Player *p) {
@@ -149,13 +153,14 @@ public:
 				glColor3f(1, 1, 1);
 				char timer[15];
 				sprintf(timer, "TIME: %3d", this->nowTime);
-				drawstr(-4.5, 7, timer);
+				drawstr(-4, 7.5, timer);
 			}
 			glPopMatrix();
 		}
 		glEnable(GL_LIGHTING);
 	}
 };
+
 class Building{
 public:
 	GLfloat scl[3];
@@ -211,13 +216,14 @@ public:
 		return dist(pos) < r;
 	}
 };
+
 class Obstacles{
 public:
 	//draw a test object in scene
 	Obstacles(){}
 	~Obstacles(){}
 
-	static void drawObstacle(GLfloat x,GLfloat y,GLfloat z, GLfloat r, Player *p/*, int displayId*/){
+	static void drawObstacle(GLfloat x,GLfloat y,GLfloat z, GLfloat r, Player *p, GLuint displayId){
 		GLfloat mat_dif_yellow[4] = { 0.8,0.7,0,1 };
 		GLfloat mat_dif_white[4] = { 1,1,1,1 };
 		GLfloat mat_dif_red[4] = { 1,0,0,1 };
@@ -230,10 +236,85 @@ public:
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
 			}
 			glTranslatef(x, y, z);
-			glutSolidCube(1);
-			//glCallList(displayID);
+			glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+			{
+				glCallList(displayId);
+			}
+			glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_white);
 		}
 		glPopMatrix();
+	}
+};
+
+typedef enum { ELDER, OTHER } TYPE;
+
+struct Pos {
+	float x, y, z;
+	TYPE type;
+	Pos(float a, float b, float c, TYPE type) {
+		x = a, y = b, z = c;
+		this->type = type;
+	}
+};
+
+class RandomGenObStacles {
+public:
+	int minX = -6, maxX = 6;/* 指定X範圍 */
+	int intialPosZ = -15; //障礙物的初始z座標
+	int genNum = 4; //每次生成幾個障礙物
+	int posZ_Shift = 10; //每次生成完後Z位移的範圍
+	int headIdx = 0; //從一個障礙物開始畫
+	vector<Pos> ObStaclesPos;
+
+	RandomGenObStacles(int minX, int maxX,
+				int genNum,
+				int intialPosZ,
+				int posZ_Shift)
+	{
+		this->minX = minX;
+		this->maxX = maxX;
+		this->genNum = genNum;
+		this->intialPosZ = intialPosZ;
+		this->posZ_Shift = posZ_Shift;
+	}
+
+	void init() {
+		headIdx = 0;
+		ObStaclesPos.clear();
+	}
+	void genObstaclePos() {
+		intialPosZ -= (rand() % 10);
+
+		set<int> X;
+		int num = rand() % genNum;
+		if (num == 1) {
+			int x = rand() % (maxX - minX + 1) + minX;
+			Pos pos((float)x, 1, (float)intialPosZ,ELDER);
+			ObStaclesPos.push_back(pos);
+		}
+		else {
+			for (int i = 0; i < num; ++i) {
+				/* 產生亂數 */
+				int x = rand() % (maxX - minX + 1) + minX;
+				while (X.find(x) != X.end()) {
+					x = rand() % (maxX - minX + 1) + minX;
+				}
+				//printf("%d\n", x);
+				X.insert(x);
+				Pos pos((float)x, 1, (float)intialPosZ, OTHER);
+				ObStaclesPos.push_back(pos);
+			}
+		}
+		
+	}
+
+	void drawObstacle(Player *p) {
+		genObstaclePos();
+		//printf("head = %d\n", headIdx);
+		for (int i = headIdx; i < ObStaclesPos.size(); ++i) {
+			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p,10);
+			if (ObStaclesPos[i].z - p->pos[2] > 5) headIdx = i;
+		}
 	}
 };

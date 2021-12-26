@@ -15,8 +15,11 @@
 #include "ObjectLoader.h"
 
 extern Player p1=Player();
-extern Timer myTimer(6); //遊戲時長(秒)
-extern ProgressBar myProgressBar(100); //路徑長度
+extern Timer myTimer(50); //遊戲時長(秒)
+extern ProgressBar myProgressBar(1000); //路徑長度
+//隨機產生障礙物
+//minX, maxX, genNum, intialPosZ, , posZ_Shift
+extern RandomGenObStacles myRandGenObstacles(-6, 6, 4, -10, 5);
 
 //flag
 extern GLboolean listExchange;
@@ -112,9 +115,12 @@ void drawStart() {
 
 //遊戲運行畫面
 void drawGame() {
+
+	//倒數計時器
+	drawTimer();
 	
 	//地板(寬,高)
-	drawGround(6, 600);
+	drawGround(6, -myProgressBar.pathLen);
 
 	//建築
 	drawBuildings();
@@ -162,7 +168,6 @@ void display(){
 	p1.lookAt();
 	
 	//====================================
-	drawTimer();
 
 	switch (p1.status)
 	{
@@ -202,7 +207,7 @@ void display(){
 int main(int argc,char **argv){
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH |GLUT_MULTISAMPLE);
-	glutInitWindowPosition(500,200);
+	glutInitWindowPosition(0,0);
 	glutInitWindowSize(700,700);
 	glutCreateWindow("TITLE");
 	GLenum err = glewInit();

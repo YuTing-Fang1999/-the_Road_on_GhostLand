@@ -99,6 +99,7 @@ public:
 		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
 	}
 	void specialKb(int key,int x,int y){
+		printf("index:%d\n",list[index]);
 		if(key==100){
 			//left arrow
 			index = (index+1)%list.size();
