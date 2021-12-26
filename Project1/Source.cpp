@@ -30,7 +30,15 @@ extern Imagx helpMenu;//local z = 0
 extern Imagx mainMenu;//local z = -0.1
 extern Imagx exitMenu;//local z = 0.2
 extern Imagx aboutMenu;//local z = 0.1
+extern Imagx restartMenu;
 extern ImagxList imlist;
+
+extern Imagx callingMan;
+extern Imagx callingWoman;
+extern Imagx callingOldMan;
+extern Imagx callingOldWoman;
+extern Imagx textInit_normal;
+extern Imagx zebraStripe;
 
 //3D素材
 extern ObjectLoader stev;
@@ -106,11 +114,36 @@ void drawMainMenu(){
 
 }
 
+void drawTextInit(int id){
+	Imagx* im=NULL;
+	if(id==0)		im=&callingMan;
+	else if(id==1)	im=&callingWoman;
+	else if(id==2)	im=&callingOldMan;
+	else if(id==3)	im=&callingOldWoman;
+
+	glPushMatrix();
+	{
+		//draw Text
+		glTranslatef(0,3,2);
+		glRotatef(-10,1,0,0);
+		textInit_normal.drawImg();
+
+		//draw calling person
+		glTranslatef(-2.4,-2,0.1);
+		glScalef(0.8,0.8,0.8);
+		im->drawImg();
+	}
+	glPopMatrix();
+}
+
+
 //遊戲開始畫面
 void drawStart() {
 	//可以放春融訂外賣的畫面，使用空白鍵可開始遊戲
 	//這裡放故事情節，讓玩家選擇是否跳過(SKIP)
 	drawPlayer();
+
+	drawTextInit(3);
 }
 
 //遊戲運行畫面

@@ -336,18 +336,19 @@ public:
 		list.push_back(id);
 	}
 	void draw(){
+		//printf("index:%d\n",list[index]);
 		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
 		glCallList(list[index]);
 		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
 	}
 	void specialKb(int key,int x,int y){
 		if(key==100){
-			//left arrow
-			index = (index+1)%list.size();
+			//left arrow(dec index)
+			index = (index+list.size()-1)%list.size();
 		}
 		if(key==102){
-			//right arrow
-			index = (index+list.size()-1)%list.size();
+			//right arrow(inc index)
+			index = (index+1)%list.size();
 		}
 	}
 };
