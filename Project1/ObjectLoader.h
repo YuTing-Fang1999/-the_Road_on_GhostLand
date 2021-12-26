@@ -100,12 +100,12 @@ public:
 	}
 	void specialKb(int key,int x,int y){
 		if(key==100){
-			//left arrow
-			index = (index+1)%list.size();
+			//left arrow(dec index)
+			index = (index+list.size()-1)%list.size();
 		}
 		if(key==102){
-			//right arrow
-			index = (index+list.size()-1)%list.size();
+			//right arrow(inc index)
+			index = (index+1)%list.size();
 		}
 	}
 };

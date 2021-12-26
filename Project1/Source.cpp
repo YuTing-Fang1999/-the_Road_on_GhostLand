@@ -27,6 +27,7 @@ extern Imagx helpMenu;//local z = 0
 extern Imagx mainMenu;//local z = -0.1
 extern Imagx exitMenu;//local z = 0.2
 extern Imagx aboutMenu;//local z = 0.1
+extern Imagx restartMenu;
 extern ImagxList imlist;
 
 extern Imagx callingMan;
@@ -34,6 +35,7 @@ extern Imagx callingWoman;
 extern Imagx callingOldMan;
 extern Imagx callingOldWoman;
 extern Imagx textInit_normal;
+extern Imagx zebraStripe;
 
 //3D素材
 extern ObjectLoader stev;

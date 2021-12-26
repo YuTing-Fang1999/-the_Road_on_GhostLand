@@ -32,6 +32,8 @@ extern Imagx callingWoman=Imagx();
 extern Imagx callingOldMan=Imagx();
 extern Imagx callingOldWoman=Imagx();
 extern Imagx textInit_normal=Imagx();
+extern Imagx zebraStripe=Imagx();
+extern Imagx restartMenu=Imagx();
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
@@ -59,11 +61,13 @@ void init(){
 	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
+	restartMenu=Imagx("assets/img/menu/menu_restart.png",2,GL_TRUE);
 	imlist.push(mainMenu.getDpIndex());
 	imlist.push(coverRGL.getDpIndex());
 	imlist.push(exitMenu.getDpIndex());
 	imlist.push(helpMenu.getDpIndex());
 	imlist.push(aboutMenu.getDpIndex());
+	imlist.push(restartMenu.getDpIndex());
 
 	callingMan=Imagx("assets/img/phone_call/talking_man.png",1,GL_TRUE);
 	callingWoman=Imagx("assets/img/phone_call/talking_woman.png",1,GL_TRUE);
@@ -75,6 +79,10 @@ void init(){
 	imlist.push(callingOldMan.getDpIndex());
 	imlist.push(callingOldWoman.getDpIndex());
 	imlist.push(textInit_normal.getDpIndex());
+
+	zebraStripe=Imagx("assets/img/traffic/zebraStripe.png",1,GL_TRUE);
+	imlist.push(zebraStripe.getDpIndex());
+
 
 	//載入3D素材
 	stev=ObjectLoader(	
