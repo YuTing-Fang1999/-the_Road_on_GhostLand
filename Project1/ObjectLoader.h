@@ -5,6 +5,7 @@
 #include<stdio.h>
 #include"Imagx.h"
 #include"glm.h"
+#include"basicFunc.h"
 class ObjectLoader{
 public:
 	ObjectLoader(){}
@@ -86,7 +87,7 @@ private:
 class ObjList{
 public:
 	std::vector<unsigned int> list;
-	int index=0;
+	int i=0;
 	ObjList(){};
 	~ObjList(){};
 
@@ -94,19 +95,22 @@ public:
 		list.push_back(id);
 	}
 	void draw(){
+		glColor3ub(255, 255, 255);
+		drawstr(-1, -3, "[OBJ]DpIndex:%d", list[i]);
+
 		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
-		glCallList(list[index]);
+		glCallList(list[i]);
 		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
 	}
 	void specialKb(int key,int x,int y){
-		printf("index:%d\n",list[index]);
+		//printf("index:%d\n",list[index]);
 		if(key==100){
 			//left arrow(dec index)
-			index = (index+list.size()-1)%list.size();
+			i = (i+list.size()-1)%list.size();
 		}
 		if(key==102){
 			//right arrow(inc index)
-			index = (index+1)%list.size();
+			i = (i+1)%list.size();
 		}
 	}
 };

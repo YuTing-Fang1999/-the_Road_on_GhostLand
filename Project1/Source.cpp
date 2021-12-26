@@ -143,7 +143,7 @@ void drawStart() {
 	//這裡放故事情節，讓玩家選擇是否跳過(SKIP)
 	drawPlayer();
 
-	drawTextInit(3);
+	drawTextInit(2);
 }
 
 //遊戲運行畫面
@@ -158,11 +158,11 @@ void drawGame() {
 	//建築
 	drawBuildings();
 
-	//障礙物
-	drawObstacles();
-
 	//player
 	drawPlayer();
+
+	//障礙物
+	drawObstacles();
 
 	//上方的進度條
 	drawProgressBar();

@@ -19,6 +19,8 @@ public:
 	GLfloat pos[3];	//Position
 	GLfloat LR_MOVE = 1; //玩家每次移動左右的距離
 	GLfloat v = 0.01; //玩家移動速度
+	GLfloat maxV = 0.1; //玩家移動速度
+	GLfloat minV = 0.01; //玩家移動速度
 	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
 
@@ -50,15 +52,15 @@ public:
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
 			//速度
-			if (this->v + 0.005 < 4) this->v += 0.005;
-			else this->v = 4;
+			if (v + 0.005 < maxV) v += 0.005;
+			else v = maxV;
 			//相機位移
 			if (this->shift + 0.3 < 3) this->shift += 0.3;
 			else this->shift = 3;
 		}
 		else if (key == 's') {
-			if (this->v - 0.005 > 0.01) this->v -= 0.005;
-			else this->v = 0.01;
+			if (v - 0.005 > minV) v -= 0.005;
+			else v = minV;
 
 			if (v > 0) {
 				if (this->shift - 0.1 > 0) this->shift -= 0.1;
@@ -231,7 +233,7 @@ public:
 		CollisionBall clision(x, y, z);
 		glPushMatrix();
 		{
-			glMaterialfv(GL_FRONT,GL_DIFFUSE, mat_dif_yellow);
+			//glMaterialfv(GL_FRONT,GL_DIFFUSE, mat_dif_yellow);
 			if (clision.isColision(r, p->pos)) {
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
 			}
@@ -262,9 +264,11 @@ class RandomGenObStacles {
 public:
 	int minX = -6, maxX = 6;/* 指定X範圍 */
 	int intialPosZ = -15; //障礙物的初始z座標
+	int nowZ = -15;
 	int genNum = 4; //每次生成幾個障礙物
 	int posZ_Shift = 10; //每次生成完後Z位移的範圍
 	int headIdx = 0; //從一個障礙物開始畫
+	bool gen = true;
 	vector<Pos> ObStaclesPos;
 
 	RandomGenObStacles(int minX, int maxX,
@@ -276,21 +280,24 @@ public:
 		this->maxX = maxX;
 		this->genNum = genNum;
 		this->intialPosZ = intialPosZ;
+		this->nowZ = intialPosZ;
 		this->posZ_Shift = posZ_Shift;
 	}
 
 	void init() {
 		headIdx = 0;
+		nowZ = intialPosZ;
 		ObStaclesPos.clear();
+		gen = true;
 	}
 	void genObstaclePos() {
-		intialPosZ -= (rand() % 10);
+		nowZ -= (rand() % 10);
 
 		set<int> X;
 		int num = rand() % genNum;
 		if (num == 1) {
 			int x = rand() % (maxX - minX + 1) + minX;
-			Pos pos((float)x, 1, (float)intialPosZ,ELDER);
+			Pos pos((float)x, 1, (float)nowZ,ELDER);
 			ObStaclesPos.push_back(pos);
 		}
 		else {
@@ -302,19 +309,21 @@ public:
 				}
 				//printf("%d\n", x);
 				X.insert(x);
-				Pos pos((float)x, 1, (float)intialPosZ, OTHER);
+				Pos pos((float)x, 1, (float)nowZ, OTHER);
 				ObStaclesPos.push_back(pos);
 			}
 		}
 		
 	}
 
-	void drawObstacle(Player *p) {
-		genObstaclePos();
-		//printf("head = %d\n", headIdx);
-		for (int i = headIdx; i < ObStaclesPos.size(); ++i) {
+	void drawObstacle(Player *p, int pathLen) {
+		if(gen) genObstaclePos();
+		/*printf("size = %d\n", ObStaclesPos.size());*/
+		//for (int i = headIdx; i < ObStaclesPos.size(); ++i) {
+		for (int i = ObStaclesPos.size()-1; i >= headIdx; --i) {
 			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p,10);
 			if (ObStaclesPos[i].z - p->pos[2] > 5) headIdx = i;
+			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}
 	}
 };

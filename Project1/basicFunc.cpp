@@ -299,7 +299,7 @@ void drawGround(int w, int h) {
 }
 
 void drawObstacles() {
-	myRandGenObstacles.drawObstacle(&p1);
+	myRandGenObstacles.drawObstacle(&p1,myProgressBar.pathLen);
 }
 
 void drawBuildings() {

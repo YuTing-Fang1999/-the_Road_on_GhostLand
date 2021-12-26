@@ -10,6 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_STATIC
 #include"stbi_image.h"
+#include"basicFunc.h"
 
 class Imagx {
 public:
@@ -274,7 +275,7 @@ private:
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_dif);
 		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shn);
-		//glMaterialfv(GL_FRONT, GL_EMISSION, mat_dif);
+		glMaterialfv(GL_FRONT, GL_EMISSION, mat_dif);
 	}
 
 	void genIndex(GLboolean isNeedDpIndex){
@@ -328,7 +329,7 @@ private:
 class ImagxList{
 public:
 	std::vector<unsigned int> list;
-	int index=0;
+	int i=0;
 	ImagxList(){};
 	~ImagxList(){};
 
@@ -336,19 +337,22 @@ public:
 		list.push_back(id);
 	}
 	void draw(){
-		//printf("index:%d\n",list[index]);
+		glColor3ub(255, 255, 255);
+		drawstr(-0.5, -1.5, "[IMG]DpIndex:%d", list[i]);
+		
+
 		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
-		glCallList(list[index]);
+		glCallList(list[i]);
 		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
 	}
 	void specialKb(int key,int x,int y){
 		if(key==100){
 			//left arrow(dec index)
-			index = (index+list.size()-1)%list.size();
+			i = (i+list.size()-1)%list.size();
 		}
 		if(key==102){
 			//right arrow(inc index)
-			index = (index+1)%list.size();
+			i = (i+1)%list.size();
 		}
 	}
 };
