@@ -115,14 +115,13 @@ void idle(){
 	helpMenu.progress();
 	exitMenu.progress();
 	coverRGL.progress();
-	aboutMenu.progress();
+	aboutMenu.progress();	
 
 	//player 自動移動
 	if (p1.status == GAME) {
 		p1.Progress();
 		//printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
 	}
-	
 
 	//如果遊戲結束，停止移動
 	if(p1.status == END){
@@ -258,7 +257,7 @@ void specialKb(int key,int x,int y){
 
 }
 
-void timer(int id) {
+void timer1000() {
 	if (p1.status == GAME) {
 		--myTimer.nowTime;
 		if (myTimer.nowTime <= 0) {
@@ -266,11 +265,28 @@ void timer(int id) {
 			initGame();
 		}
 	}
-
+	
+}
+void timer200() {
 	//player的速度會因摩擦力慢慢減少
-	if (p1.v - 0.001 > 0.01) p1.v -= 0.001;
-
-	glutTimerFunc(1000, timer, 0);
+	if (p1.v - 0.01 > p1.maxV) p1.v -= 0.01;
+	if (p1.shift - 0.03 > 0) p1.shift -= 0.03;
+	else p1.shift = 0;
+}
+void timer(int id) {
+	switch (id)
+	{
+	case 0:
+		timer1000();
+		glutTimerFunc(1000, timer, 0);
+		break;
+	case 1:
+		timer200();
+		glutTimerFunc(10, timer, 1);
+		break;
+	default:
+		break;
+	}
 }
 
 void reshape(int w,int h){

@@ -52,7 +52,7 @@ public:
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
 			//速度
-			if (v + 0.005 < maxV) v += 0.005;
+			if (v + 0.001 < maxV) v += 0.001;
 			else v = maxV;
 			//相機位移
 			if (this->shift + 0.3 < 3) this->shift += 0.3;
@@ -79,10 +79,6 @@ public:
 	//自動前進
 	void Progress() {
 		pos[2] -= v;
-
-		if (this->shift - 0.03 > 0) this->shift -= 0.03;
-		else this->shift = 0;
-		
 	}
 
 	//停止
@@ -249,11 +245,12 @@ public:
 	}
 };
 
-typedef enum { ELDER, OTHER } TYPE;
+typedef enum { ELDER, CAR, OTHER } TYPE;
 
 struct Pos {
 	float x, y, z;
 	TYPE type;
+	bool moveR = false;
 	Pos(float a, float b, float c, TYPE type) {
 		x = a, y = b, z = c;
 		this->type = type;
@@ -267,9 +264,16 @@ public:
 	int nowZ = -15;
 	int genNum = 4; //每次生成幾個障礙物
 	int posZ_Shift = 10; //每次生成完後Z位移的範圍
-	int headIdx = 0; //從一個障礙物開始畫
+	int endIdx = 0; //畫到endIdx
 	bool gen = true;
 	vector<Pos> ObStaclesPos;
+
+	void init() {
+		endIdx = 0;
+		nowZ = intialPosZ;
+		ObStaclesPos.clear();
+		gen = true;
+	}
 
 	RandomGenObStacles(int minX, int maxX,
 				int genNum,
@@ -284,20 +288,18 @@ public:
 		this->posZ_Shift = posZ_Shift;
 	}
 
-	void init() {
-		headIdx = 0;
-		nowZ = intialPosZ;
-		ObStaclesPos.clear();
-		gen = true;
-	}
+	
 	void genObstaclePos() {
 		nowZ -= (rand() % 10);
 
 		set<int> X;
 		int num = rand() % genNum;
-		if (num == 1) {
-			int x = rand() % (maxX - minX + 1) + minX;
-			Pos pos((float)x, 1, (float)nowZ,ELDER);
+		int older = rand() % 4; //控制老奶奶出現的機率
+		int car = rand() % 10; //控制逆向車出現的機率
+
+		if (num == 1 && older==0) { //老奶奶過馬路
+			Pos pos((float)maxX, 1, (float)nowZ, ELDER);
+			pos.moveR = true;
 			ObStaclesPos.push_back(pos);
 		}
 		else {
@@ -306,11 +308,19 @@ public:
 				int x = rand() % (maxX - minX + 1) + minX;
 				while (X.find(x) != X.end()) {
 					x = rand() % (maxX - minX + 1) + minX;
+					x = (x / 3) * 3; //出現的間隔
 				}
-				//printf("%d\n", x);
+				
 				X.insert(x);
-				Pos pos((float)x, 1, (float)nowZ, OTHER);
-				ObStaclesPos.push_back(pos);
+				if (i == 0 && car==0) { //逆向車
+					Pos pos((float)x, 1, (float)nowZ, CAR);
+					ObStaclesPos.push_back(pos);
+				}
+				else {
+					Pos pos((float)x, 1, (float)nowZ, OTHER);
+					ObStaclesPos.push_back(pos);
+				}
+				
 			}
 		}
 		
@@ -319,10 +329,23 @@ public:
 	void drawObstacle(Player *p, int pathLen) {
 		if(gen) genObstaclePos();
 		/*printf("size = %d\n", ObStaclesPos.size());*/
-		//for (int i = headIdx; i < ObStaclesPos.size(); ++i) {
-		for (int i = ObStaclesPos.size()-1; i >= headIdx; --i) {
-			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p,10);
-			if (ObStaclesPos[i].z - p->pos[2] > 5) headIdx = i;
+		//for (int i = endIdx; i < ObStaclesPos.size(); ++i) {
+		for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
+			
+			if (ObStaclesPos[i].type == ELDER && i-endIdx <= 10) { //老奶奶左右移動
+				if (ObStaclesPos[i].x >= maxX) ObStaclesPos[i].moveR = false;
+				if (ObStaclesPos[i].x <= minX) ObStaclesPos[i].moveR = true;
+				if (ObStaclesPos[i].moveR) ObStaclesPos[i].x += 0.01;
+				else ObStaclesPos[i].x -= 0.01;
+			}
+
+			if (ObStaclesPos[i].type == CAR && i - endIdx <= 50) { //逆向車
+				ObStaclesPos[i].z += 0.05;
+			}
+
+			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, 10);
+			if (ObStaclesPos[i].z - p->pos[2] > 5 && ObStaclesPos[i].z - p->pos[2] < 10) endIdx = i;
+			//printf("endIdx=%d\n", endIdx);
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}
 	}
