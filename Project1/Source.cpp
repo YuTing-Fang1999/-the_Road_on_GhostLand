@@ -19,7 +19,7 @@ extern Timer myTimer(50); //遊戲時長(秒)
 extern ProgressBar myProgressBar(1000); //路徑長度
 //隨機產生障礙物
 //minX, maxX, genNum, intialPosZ, , posZ_Shift
-extern RandomGenObStacles myRandGenObstacles(-6, 6, 3, -10, 5);
+extern RandomGenObStacles myRandGenObstacles(-6, 4, 3, -10, 3);
 
 //flag
 extern GLboolean listExchange;
@@ -256,7 +256,8 @@ int main(int argc,char **argv){
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
 	glutTimerFunc(1000,timer,0);
-	glutTimerFunc(10, timer, 1);
+	glutTimerFunc(20, timer, 1);
+	glutTimerFunc(5, timer, 2);
 	glutMainLoop();
 	return 0;
 }

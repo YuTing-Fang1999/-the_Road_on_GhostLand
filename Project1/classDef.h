@@ -19,7 +19,7 @@ public:
 	GLfloat pos[3];	//Position
 	GLfloat LR_MOVE = 1; //玩家每次移動左右的距離
 	GLfloat v = 0.01; //玩家移動速度
-	GLfloat maxV = 0.1; //玩家移動速度
+	GLfloat maxV = 1; //玩家移動速度
 	GLfloat minV = 0.01; //玩家移動速度
 	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
@@ -52,7 +52,7 @@ public:
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
 			//速度
-			if (v + 0.001 < maxV) v += 0.001;
+			if (v + 0.002 < maxV) v += 0.002;
 			else v = maxV;
 			//相機位移
 			if (this->shift + 0.3 < 3) this->shift += 0.3;
@@ -290,7 +290,7 @@ public:
 
 	
 	void genObstaclePos() {
-		nowZ -= (rand() % 10);
+		nowZ -= (rand() % posZ_Shift) + 6;
 
 		set<int> X;
 		int num = rand() % genNum;
@@ -306,11 +306,12 @@ public:
 			for (int i = 0; i < num; ++i) {
 				/* 產生亂數 */
 				int x = rand() % (maxX - minX + 1) + minX;
+				x = (int)x / 2 * 2;
 				while (X.find(x) != X.end()) {
 					x = rand() % (maxX - minX + 1) + minX;
-					x = (x / 3) * 3; //出現的間隔
+					x = (int)x / 2 * 2; //出現的間隔
 				}
-				
+				printf("x=%d\n", x);
 				X.insert(x);
 				if (i == 0 && car==0) { //逆向車
 					Pos pos((float)x, 1, (float)nowZ, CAR);
@@ -329,8 +330,8 @@ public:
 	void drawObstacle(Player *p, int pathLen) {
 		if(gen) genObstaclePos();
 		/*printf("size = %d\n", ObStaclesPos.size());*/
-		//for (int i = endIdx; i < ObStaclesPos.size(); ++i) {
 		for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
+		//for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
 			
 			if (ObStaclesPos[i].type == ELDER && i-endIdx <= 10) { //老奶奶左右移動
 				if (ObStaclesPos[i].x >= maxX) ObStaclesPos[i].moveR = false;
@@ -344,7 +345,7 @@ public:
 			}
 
 			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, 10);
-			if (ObStaclesPos[i].z - p->pos[2] > 5 && ObStaclesPos[i].z - p->pos[2] < 10) endIdx = i;
+			//if (ObStaclesPos[i].z - p->pos[2] > 5) endIdx = i;
 			//printf("endIdx=%d\n", endIdx);
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}

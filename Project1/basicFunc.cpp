@@ -28,10 +28,6 @@ extern Imagx mainMenu=Imagx();
 extern Imagx exitMenu=Imagx();
 extern Imagx coverRGL=Imagx();
 extern Imagx aboutMenu=Imagx();
-//倒數3秒
-extern Imagx three = Imagx();
-extern Imagx two = Imagx();
-extern Imagx one = Imagx();
 
 extern Imagx callingMan=Imagx();
 extern Imagx callingWoman=Imagx();
@@ -110,23 +106,7 @@ void init(){
 	srand(time(NULL));
 }
 
-void idle(){
-	//圖片素材
-	helpMenu.progress();
-	exitMenu.progress();
-	coverRGL.progress();
-	aboutMenu.progress();	
-
-	//player 自動移動
-	if (p1.status == GAME) {
-		p1.Progress();
-		//printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
-	}
-
-	//如果遊戲結束，停止移動
-	if(p1.status == END){
-		p1.playerStop(myProgressBar.pathLen);
-	}
+void idle(){	
 	glutPostRedisplay();
 }
 
@@ -267,11 +247,30 @@ void timer1000() {
 	}
 	
 }
-void timer200() {
+void timer20() {
 	//player的速度會因摩擦力慢慢減少
 	if (p1.v - 0.01 > p1.maxV) p1.v -= 0.01;
-	if (p1.shift - 0.03 > 0) p1.shift -= 0.03;
+	if (p1.shift - 0.05 > 0) p1.shift -= 0.05;
 	else p1.shift = 0;
+}
+
+void timer5() {
+	//圖片素材
+	helpMenu.progress();
+	exitMenu.progress();
+	coverRGL.progress();
+	aboutMenu.progress();
+
+	//player 自動移動
+	if (p1.status == GAME) {
+		p1.Progress();
+		//printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
+	}
+
+	//如果遊戲結束，停止移動
+	if (p1.status == END) {
+		p1.playerStop(myProgressBar.pathLen);
+	}
 }
 void timer(int id) {
 	switch (id)
@@ -281,12 +280,18 @@ void timer(int id) {
 		glutTimerFunc(1000, timer, 0);
 		break;
 	case 1:
-		timer200();
-		glutTimerFunc(10, timer, 1);
+		timer20();
+		glutTimerFunc(20, timer, 1);
+		break;
+
+	case 2:
+		timer5();
+		glutTimerFunc(5, timer, 2);
 		break;
 	default:
 		break;
 	}
+	glutPostRedisplay();
 }
 
 void reshape(int w,int h){
