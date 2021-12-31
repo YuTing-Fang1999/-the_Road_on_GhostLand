@@ -18,29 +18,31 @@
     - [x] **wasd**方向鍵
     - [x] **space** re/start
 * **Bugs**
-    - [ ] **超大大大BUGS**，讀3D模型的面上會有許多三角形陰影
+    - [ ] **小BUGS**：如果按下W前進，再左右移動，加速的效果會消失
+        - [ ] 考慮使用keyboardUpFunc偵測按鍵是否放開  
+    - [ ] **超大大大BUGS**：讀3D模型的面上會有許多三角形陰影
         - [ ] 可能是normal有問題，`GL_RESCALE_NORMAL` `GL_NORMALIZE`
         - [ ] 或是vertex重疊
         - [ ] 或obj數據精度不高...
-    - [ ] **超大大大BUGS**，如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜
-    - [ ] **超大大大BUGS**，使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
+    - [X] ~~**超大大大BUGS**：如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜~~
+        * 換了image library就沒啥問題了  
+    - [X] **超大大大BUGS**：使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
         - [X] ~~查到在`Imagx`裡面`setMaterial()`不要使用`GL_EMISSION`~~
-        * 應該跟`GL_EMISSION`有關 
-        * 物件`GL_EMISSION`設為(1,1,1,1)就解決了，但還想找問題
+        * 應該跟`GL_EMISSION`有關，物件`GL_EMISSION`設為(1,1,1,1)就解決了，~~但還想找問題~~
     - [X] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
         - [X] 我(maxspace1024)把drawTimer搬到前面先畫
         - [ ] 或許PNG透明的部分不要留那麼多  
         - [ ] 或是只在`GAME`狀態畫計時器
     - [ ] 在`GAME`狀態，`exitMenu`不會跟著鏡頭移動，~~誰會在遊戲中途跳gmae阿~~
-    - [ ] 進度條會往負方向長，最後可以加個往後走的彩蛋
-    - [ ] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
+    - [X] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
     - [X] ~~遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態~~
     - [x] ~~在`START`狀態(說故事的狀態)前面應該還要一個`MAIN_MENU`狀態~~
         * ~~不需要再把`MAIN_MENU`移掉~~  
 
 #### 強迫症患者期望區
-- [ ] 按Y播放結束動畫
+- [ ] 當有exitMenu按Y播放結束動畫
 - [ ] 遊戲程式可以有專屬的圖示(Icon)，~~回數票+遺照框~~
+- [ ] ~~進度條會往負方向長，最後可以加個往後走的彩蛋~~
 
 ## 2021/12/25
 * 終於解決glew library exception的問題
@@ -179,4 +181,3 @@ unsigned char* pixels=stbi_load(filename,&width,&hight,&nchannel,0);
 	* 飛來橫禍
 	* 地府火焰(氣爆)
 	* 老奶奶過馬路(機車一些，不走斑馬線)
-
