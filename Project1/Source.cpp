@@ -39,6 +39,7 @@ extern Imagx callingOldMan;
 extern Imagx callingOldWoman;
 extern Imagx textInit_normal;
 extern Imagx zebraStripe;
+extern Imagx laneStripe;
 
 //3D素材
 extern ObjectLoader stev;

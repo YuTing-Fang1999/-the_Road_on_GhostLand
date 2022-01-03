@@ -28,6 +28,7 @@ extern Imagx mainMenu=Imagx();
 extern Imagx exitMenu=Imagx();
 extern Imagx coverRGL=Imagx();
 extern Imagx aboutMenu=Imagx();
+extern Imagx restartMenu=Imagx();
 
 extern Imagx callingMan=Imagx();
 extern Imagx callingWoman=Imagx();
@@ -35,7 +36,8 @@ extern Imagx callingOldMan=Imagx();
 extern Imagx callingOldWoman=Imagx();
 extern Imagx textInit_normal=Imagx();
 extern Imagx zebraStripe=Imagx();
-extern Imagx restartMenu=Imagx();
+extern Imagx laneStripe=Imagx();
+
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
@@ -83,7 +85,9 @@ void init(){
 	imlist.push(textInit_normal.getDpIndex());
 
 	zebraStripe=Imagx("assets/img/traffic/zebraStripe.png",1,GL_TRUE);
+	laneStripe=Imagx("assets/img/traffic/lane.png",1,GL_TRUE);
 	imlist.push(zebraStripe.getDpIndex());
+	imlist.push(laneStripe.getDpIndex());
 
 
 	//載入3D素材
@@ -298,7 +302,7 @@ void reshape(int w,int h){
 	glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60,(GLfloat)w/(GLfloat)h,1,50);
+	gluPerspective(60,(GLfloat)w/(GLfloat)h,1,80);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -306,15 +310,36 @@ void reshape(int w,int h){
 void drawGround(int w, int h) {
 	glPushMatrix();
 	{
+		//glColor3ub(80, 127, 80);
+		glColor3ub(90,95,90);
+		glTranslatef(0, 0, -100);
+		glRotatef(90, 1, 0, 0);
+		glScalef(w, h, 0);
+
 		glDisable(GL_LIGHTING);
 		{
-			glColor3ub(80, 127, 80);
-			glTranslatef(0, 0, -100);
-			glRotatef(90, 1, 0, 0);
-			glScalef(w, h, 0);
 			glRectf(-1, 1, 1, -1);
 		}
 		glEnable(GL_LIGHTING);
+	}
+	glPopMatrix();
+
+	//車道
+	glPushMatrix();
+	{
+		glTranslatef(0, 0.001, -100);
+		glRotatef(90, 1, 0, 0);
+		glScalef(w, h, 0);
+
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
+		{
+			glLoadIdentity();
+			glScalef(1,h/w,0);
+			laneStripe.drawImg();
+		}
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 	}
 	glPopMatrix();
 }
