@@ -59,7 +59,7 @@ public:
 			else this->shift = 3;
 		}
 		else if (key == 's') {
-			if (v - 0.005 > minV) v -= 0.005;
+			if (v - 0.07 > minV) v -= 0.07;
 			else v = minV;
 
 			if (v > 0) {
@@ -245,7 +245,7 @@ public:
 	}
 };
 
-typedef enum { ELDER, CAR, OTHER } TYPE;
+typedef enum { ELDER_R, ELDER_L, CAR, OTHER } TYPE;
 
 struct Pos {
 	float x, y, z;
@@ -298,7 +298,7 @@ public:
 		int car = rand() % 10; //控制逆向車出現的機率
 
 		if (num == 1 && older==0) { //老奶奶過馬路
-			Pos pos((float)maxX, 1, (float)nowZ, ELDER);
+			Pos pos((float)maxX, 1, (float)nowZ, ELDER_R);
 			pos.moveR = true;
 			ObStaclesPos.push_back(pos);
 		}
@@ -311,7 +311,7 @@ public:
 					x = rand() % (maxX - minX + 1) + minX;
 					x = (int)x / 2 * 2; //出現的間隔
 				}
-				printf("x=%d\n", x);
+				//printf("x=%d\n", x);
 				X.insert(x);
 				if (i == 0 && car==0) { //逆向車
 					Pos pos((float)x, 1, (float)nowZ, CAR);
@@ -333,11 +333,16 @@ public:
 		for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
 		//for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
 			
-			if (ObStaclesPos[i].type == ELDER && i-endIdx <= 10) { //老奶奶左右移動
+			if (ObStaclesPos[i].type == ELDER_R && i-endIdx <= 10) { //老奶奶左右移動
 				if (ObStaclesPos[i].x >= maxX) ObStaclesPos[i].moveR = false;
 				if (ObStaclesPos[i].x <= minX) ObStaclesPos[i].moveR = true;
-				if (ObStaclesPos[i].moveR) ObStaclesPos[i].x += 0.01;
-				else ObStaclesPos[i].x -= 0.01;
+
+				if (ObStaclesPos[i].moveR) {
+					ObStaclesPos[i].x += 0.01;
+				}
+				else {
+					ObStaclesPos[i].x -= 0.01;
+				}
 			}
 
 			if (ObStaclesPos[i].type == CAR && i - endIdx <= 50) { //逆向車
