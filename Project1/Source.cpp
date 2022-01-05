@@ -16,10 +16,11 @@
 
 extern Player p1=Player();
 extern Timer myTimer(50); //遊戲時長(秒)
-extern ProgressBar myProgressBar(1000); //路徑長度
+extern Ground myGround(-2, 2, 1000); //minX, maxX, 路徑長度
+extern ProgressBar myProgressBar(myGround.pathLen); 
 //隨機產生障礙物
 //minX, maxX, genNum, intialPosZ, , posZ_Shift
-extern RandomGenObStacles myRandGenObstacles(-6, 4, 2, -10, 3);
+extern RandomGenObStacles myRandGenObstacles(myGround.minX, myGround.maxX, 2, -10, 3);
 
 //flag
 extern GLboolean listExchange;

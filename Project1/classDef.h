@@ -10,6 +10,8 @@
 #include"basicFunc.h"
 #include <vector>
 #include <set>
+
+#include"Imagx.h"
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
@@ -259,21 +261,14 @@ struct Pos {
 
 class RandomGenObStacles {
 public:
-	int minX = -6, maxX = 6;/* 指定X範圍 */
-	int intialPosZ = -15; //障礙物的初始z座標
-	int nowZ = -15;
+	int minX, maxX;/* 指定X範圍 */
+	int intialPosZ; //障礙物的初始z座標
+	int nowZ; //目前的z座標
 	int genNum = 4; //每次生成幾個障礙物
 	int posZ_Shift = 10; //每次生成完後Z位移的範圍
-	int endIdx = 0; //畫到endIdx
 	bool gen = true;
+	int endIdx = 0; //畫到endIdx
 	vector<Pos> ObStaclesPos;
-
-	void init() {
-		endIdx = 0;
-		nowZ = intialPosZ;
-		ObStaclesPos.clear();
-		gen = true;
-	}
 
 	RandomGenObStacles(int minX, int maxX,
 				int genNum,
@@ -286,6 +281,13 @@ public:
 		this->intialPosZ = intialPosZ;
 		this->nowZ = intialPosZ;
 		this->posZ_Shift = posZ_Shift;
+	}
+
+	void init() {
+		endIdx = 0;
+		nowZ = intialPosZ;
+		ObStaclesPos.clear();
+		gen = true;
 	}
 
 	
@@ -330,10 +332,10 @@ public:
 	void drawObstacle(Player *p, int pathLen) {
 		if(gen) genObstaclePos();
 		/*printf("size = %d\n", ObStaclesPos.size());*/
-		for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
-		//for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
+		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
+		for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
 			
-			if (ObStaclesPos[i].type == ELDER_R && i-endIdx <= 10) { //老奶奶左右移動
+			if (ObStaclesPos[i].type == ELDER_R && i-endIdx <= 30) { //老奶奶左右移動
 				if (ObStaclesPos[i].x >= maxX) ObStaclesPos[i].moveR = false;
 				if (ObStaclesPos[i].x <= minX) ObStaclesPos[i].moveR = true;
 
@@ -348,11 +350,67 @@ public:
 			if (ObStaclesPos[i].type == CAR && i - endIdx <= 50) { //逆向車
 				ObStaclesPos[i].z += 0.05;
 			}
-
+			else {
+				//避免被逆向車的座標影響
+				if (ObStaclesPos[i].z - p->pos[2] > 5) {
+					endIdx = i;
+					//printf("endIdx=%d\n", endIdx);
+					break;
+				}
+			}
 			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, 10);
-			//if (ObStaclesPos[i].z - p->pos[2] > 5) endIdx = i;
-			//printf("endIdx=%d\n", endIdx);
+
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}
+	}
+};
+
+class Ground {
+public:
+	float minX, maxX;
+	int pathLen;
+	Ground(float minX, float maxX, int pathLen) {
+		this->minX = minX;
+		this->maxX = maxX;
+		this->pathLen = pathLen;
+	}
+
+	void draw(Imagx laneStripe) {
+		int w = maxX - minX;
+		int h = pathLen;
+		glPushMatrix();
+		{
+			//glColor3ub(80, 127, 80);
+			glColor3ub(90, 95, 90);
+			glTranslatef(0, 0, -100);
+			glRotatef(90, 1, 0, 0);
+			glScalef(w, h, 0);
+
+			glDisable(GL_LIGHTING);
+			{
+				glRectf(-1, 1, 1, -1);
+			}
+			glEnable(GL_LIGHTING);
+		}
+		glPopMatrix();
+
+		//車道
+		glPushMatrix();
+		{
+			glTranslatef(0, 0.001, -100);
+			glRotatef(90, 1, 0, 0);
+			glScalef(w, h, 0);
+
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+			{
+				glLoadIdentity();
+				glScalef(1, h / w, 0);
+				laneStripe.drawImg();
+			}
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
 	}
 };

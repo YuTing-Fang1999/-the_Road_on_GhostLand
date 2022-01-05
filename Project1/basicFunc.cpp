@@ -13,6 +13,7 @@
 extern Player p1;
 Building b1(5, 10, 5);
 extern Timer myTimer;
+extern Ground myGround;
 extern ProgressBar myProgressBar;
 extern RandomGenObStacles myRandGenObstacles;
 
@@ -308,40 +309,7 @@ void reshape(int w,int h){
 
 //====================================draw====================================
 void drawGround(int w, int h) {
-	glPushMatrix();
-	{
-		//glColor3ub(80, 127, 80);
-		glColor3ub(90,95,90);
-		glTranslatef(0, 0, -100);
-		glRotatef(90, 1, 0, 0);
-		glScalef(w, h, 0);
-
-		glDisable(GL_LIGHTING);
-		{
-			glRectf(-1, 1, 1, -1);
-		}
-		glEnable(GL_LIGHTING);
-	}
-	glPopMatrix();
-
-	//車道
-	glPushMatrix();
-	{
-		glTranslatef(0, 0.001, -100);
-		glRotatef(90, 1, 0, 0);
-		glScalef(w, h, 0);
-
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		{
-			glLoadIdentity();
-			glScalef(1,h/w,0);
-			laneStripe.drawImg();
-		}
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-	}
-	glPopMatrix();
+	myGround.draw(laneStripe);
 }
 
 void drawObstacles() {
