@@ -231,6 +231,7 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == DEAD   ||
 			p1.status == END    ){
 			//回到主選單
+			memset(p1.pos, 0, sizeof(p1.pos));
 			p1.status = MAIN_MENU;
 		}
 	}
