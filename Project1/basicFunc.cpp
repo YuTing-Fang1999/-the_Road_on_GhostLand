@@ -39,9 +39,13 @@ extern Imagx callingOldWoman=Imagx();
 //對話框
 extern Imagx textInit_normal=Imagx();
 
-//馬路貼圖
+//道路素材貼圖
 extern Imagx zebraStripe=Imagx();
 extern Imagx laneStripe=Imagx();
+extern Imagx traffic_light=Imagx();
+//障礙物貼圖
+extern Imagx event_fire=Imagx();
+extern Imagx event_hole=Imagx();
 
 //成就
 extern Imagx archiv_ad_board=Imagx();
@@ -57,6 +61,8 @@ extern ObjectLoader stev=ObjectLoader();
 extern ObjectLoader building_test=ObjectLoader();
 extern ObjectLoader board_small_cup=ObjectLoader();
 extern ObjectLoader board_pawnshop=ObjectLoader();
+extern ObjectLoader playerObj=ObjectLoader();
+extern ObjectLoader car=ObjectLoader();
 
 //list
 extern ImagxList imlist=ImagxList();
@@ -103,8 +109,15 @@ void init(){
 	//道路素材貼圖
 	zebraStripe=Imagx("assets/img/traffic/zebraStripe.png",1,GL_TRUE);
 	laneStripe=Imagx("assets/img/traffic/lane.png",1,GL_TRUE);
+	traffic_light=Imagx("assets/img/traffic/traffic_light.png",1,GL_TRUE);
 	imlist.push(zebraStripe.getDpIndex());
 	imlist.push(laneStripe.getDpIndex());
+	imlist.push(traffic_light.getDpIndex());
+	//障礙物貼圖
+	event_fire=Imagx("assets/img/event/event_fire.png",1,GL_TRUE);
+	event_hole=Imagx("assets/img/event/event_hole.png",1,GL_TRUE);
+	imlist.push(event_fire.getDpIndex());
+	imlist.push(event_hole.getDpIndex());
 
 	//成就
 	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",1,GL_TRUE);
@@ -148,11 +161,25 @@ void init(){
 		GL_FALSE,
 		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
 	);
+	playerObj=ObjectLoader(
+		"assets/obj/player/player.obj",
+		"assets/obj/player/player.png",
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
+	);
+	car=ObjectLoader(
+		"assets/obj/car/porsche.obj",
+		NULL,
+		GL_TRUE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
 
 	objlist.push(stev.getDpIndex());
 	objlist.push(building_test.getDpIndex());
 	objlist.push(board_small_cup.getDpIndex());
 	objlist.push(board_pawnshop.getDpIndex());
+	objlist.push(playerObj.getDpIndex());
+	objlist.push(car.getDpIndex());
 
 	/* 對隨機產生障礙物設定亂數種子 */
 	srand(time(NULL));
