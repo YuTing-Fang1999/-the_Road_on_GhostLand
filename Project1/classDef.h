@@ -398,7 +398,7 @@ public:
 
 			if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { //逆向車
 				ObStaclesPos[i].z += 0.05;
-				if(ObStaclesPos[i].z - p->pos[2] > -50 && ObStaclesPos[i].z - p->pos[2] < -49)
+				if(ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
 					mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
 			}
 			else {
