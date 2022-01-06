@@ -25,6 +25,8 @@ public:
 	GLfloat minV = 0.01; //玩家移動速度
 	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
+	GLfloat event;
+	bool cheat = true;
 
 	Player(){
 		memset(this->pos, 0, 3);
@@ -231,9 +233,16 @@ public:
 		CollisionBall clision(x, y, z);
 		glPushMatrix();
 		{
-			//glMaterialfv(GL_FRONT,GL_DIFFUSE, mat_dif_yellow);
+			glMaterialfv(GL_FRONT,GL_DIFFUSE, mat_dif_yellow);
 			if (clision.isColision(r, p->pos)) {
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
+				if (!p->cheat) {
+					p->event = displayId;
+					p->status = DEAD;
+					PlaySound(NULL, NULL, SND_ASYNC);
+					PlaySound(TEXT("assets/music/湯姆貓慘叫聲.wav"), NULL, SND_ASYNC);
+				}
+				
 			}
 			glTranslatef(x, y, z);
 			glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
@@ -241,18 +250,20 @@ public:
 				glCallList(displayId);
 			}
 			glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
+			//glutSolidCube(1);
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_white);
 		}
 		glPopMatrix();
 	}
 };
 
-typedef enum { ELDER_R, ELDER_L, CAR, OTHER } TYPE;
+typedef enum { ELDER_R=7, ELDER_L=8, CAR=9, OTHER=10 } TYPE;
 
 struct Pos {
 	float x, y, z;
 	TYPE type;
 	bool moveR = false;
+
 	Pos(float a, float b, float c, TYPE type) {
 		x = a, y = b, z = c;
 		this->type = type;
@@ -261,26 +272,32 @@ struct Pos {
 
 class RandomGenObStacles {
 public:
-	int minX, maxX;/* 指定X範圍 */
+	float minX, maxX;/* 指定X範圍 */
 	int intialPosZ; //障礙物的初始z座標
 	int nowZ; //目前的z座標
 	int genNum = 4; //每次生成幾個障礙物
 	int posZ_Shift = 10; //每次生成完後Z位移的範圍
 	bool gen = true;
 	int endIdx = 0; //畫到endIdx
+	int roadNum = 3;
+	float gap;
 	vector<Pos> ObStaclesPos;
 
-	RandomGenObStacles(int minX, int maxX,
+	RandomGenObStacles(float minX, float maxX,
 				int genNum,
 				int intialPosZ,
 				int posZ_Shift)
 	{
-		this->minX = minX;
-		this->maxX = maxX;
+		float shift = 2.3;
+		this->minX = minX - shift;
+		this->maxX = maxX + shift;
 		this->genNum = genNum;
 		this->intialPosZ = intialPosZ;
 		this->nowZ = intialPosZ;
 		this->posZ_Shift = posZ_Shift;
+		this->gap = (this->maxX - this->minX) / (this->roadNum * 2);
+		printf("gap=%f\n", (this->maxX - this->minX) / (this->roadNum * 2));
+		printf("minX=%f,maxX=%f\n", this->minX,this->maxX);
 	}
 
 	void init() {
@@ -296,31 +313,45 @@ public:
 
 		set<int> X;
 		int num = rand() % genNum;
-		int older = rand() % 4; //控制老奶奶出現的機率
+		int older = rand() % 10; //控制老奶奶出現的機率
 		int car = rand() % 10; //控制逆向車出現的機率
 
 		if (num == 1 && older==0) { //老奶奶過馬路
-			Pos pos((float)maxX, 1, (float)nowZ, ELDER_R);
-			pos.moveR = true;
-			ObStaclesPos.push_back(pos);
+			int R = rand() % 2;
+			if (R) {
+				Pos pos((float)maxX, 1, (float)nowZ, ELDER_R);
+				pos.moveR = false;
+				ObStaclesPos.push_back(pos);
+
+			}
+			else {
+				Pos pos((float)minX, 1, (float)nowZ, ELDER_L);
+				pos.moveR = true;
+				ObStaclesPos.push_back(pos);
+
+			}
+			
+			
 		}
 		else {
 			for (int i = 0; i < num; ++i) {
-				/* 產生亂數 */
-				int x = rand() % (maxX - minX + 1) + minX;
-				x = (int)x / 2 * 2;
+
+				/* 產生亂數，隨機到某個道路*/
+				int n = rand() % roadNum; 
+				float x = minX + (2*n + 1) * gap; //gap=出現的間隔
 				while (X.find(x) != X.end()) {
-					x = rand() % (maxX - minX + 1) + minX;
-					x = (int)x / 2 * 2; //出現的間隔
+					n = rand() % roadNum;
+					x = minX + (2 * n + 1) * gap;
 				}
-				//printf("x=%d\n", x);
+				//printf("x=%f\n", x);
 				X.insert(x);
+
 				if (i == 0 && car==0) { //逆向車
-					Pos pos((float)x, 1, (float)nowZ, CAR);
+					Pos pos(x, 1, (float)nowZ, CAR);
 					ObStaclesPos.push_back(pos);
 				}
 				else {
-					Pos pos((float)x, 1, (float)nowZ, OTHER);
+					Pos pos(x, 1, (float)nowZ, OTHER);
 					ObStaclesPos.push_back(pos);
 				}
 				
@@ -335,9 +366,15 @@ public:
 		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
 		for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
 			
-			if (ObStaclesPos[i].type == ELDER_R && i-endIdx <= 30) { //老奶奶左右移動
-				if (ObStaclesPos[i].x >= maxX) ObStaclesPos[i].moveR = false;
-				if (ObStaclesPos[i].x <= minX) ObStaclesPos[i].moveR = true;
+			if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i-endIdx <= 30) { //老奶奶左右移動
+				if (ObStaclesPos[i].x >= maxX) {
+					ObStaclesPos[i].moveR = false;
+					ObStaclesPos[i].type = ELDER_L;
+				}
+				if (ObStaclesPos[i].x <= minX) {
+					ObStaclesPos[i].moveR = true;
+					ObStaclesPos[i].type = ELDER_R;
+				}
 
 				if (ObStaclesPos[i].moveR) {
 					ObStaclesPos[i].x += 0.01;
@@ -358,7 +395,7 @@ public:
 					break;
 				}
 			}
-			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, 10);
+			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}

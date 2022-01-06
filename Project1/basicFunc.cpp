@@ -127,8 +127,6 @@ void initGame() {
 
 	myRandGenObstacles.init();
 
-	//倒數動畫
-
 	//音樂
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
 }
@@ -185,7 +183,6 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == DEAD   ||
 			p1.status == END    ){
 			//回到主選單
-			initGame();
 			p1.status = MAIN_MENU;
 		}
 	}
@@ -247,7 +244,8 @@ void timer1000() {
 		--myTimer.nowTime;
 		if (myTimer.nowTime <= 0) {
 			p1.status = TIMEUP;
-			initGame();
+			//關掉音樂
+			PlaySound(NULL, NULL, NULL);
 		}
 	}
 	
@@ -269,7 +267,7 @@ void timer5() {
 	//player 自動移動
 	if (p1.status == GAME) {
 		p1.Progress();
-		//printf("\rpos.z = %f ,STATUS:%d \t",p1.pos[2],p1.status);
+		//printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
 	}
 
 	//如果遊戲結束，停止移動

@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 extern Player p1=Player();
-extern Timer myTimer(50); //遊戲時長(秒)
+extern Timer myTimer(100); //遊戲時長(秒)
 extern Ground myGround(-2, 2, 1000); //minX, maxX, 路徑長度
 extern ProgressBar myProgressBar(myGround.pathLen); 
 //隨機產生障礙物
@@ -182,7 +182,6 @@ void drawEnd() {
 //時間到了
 void drawTimeUp() {
 	//可以放春融吃不到外賣，氣噗噗的畫面
-	drawObstacles();
 }
 
 void drawExitMenu(){
@@ -194,6 +193,16 @@ void drawExitMenu(){
 		exitMenu.drawImg();
 	}
 	glPopMatrix();
+}
+
+void drawEvent(Player* p) {
+	if (p->event == 10) {
+
+	}
+	else if (p->event == 10) {
+
+
+	}
 }
 
 void display(){
@@ -214,6 +223,10 @@ void display(){
 			drawGame();
 			break;
 
+		case DEAD:
+			drawEvent(&p1);
+			break;
+
 		case END:
 			drawEnd();
 			break;
@@ -221,9 +234,11 @@ void display(){
 		case TIMEUP:
 			drawTimeUp();
 			break;
+
 		case MAIN_MENU:
 			drawMainMenu();
 			break;
+
 		case DEBUG:
 			drawDebugView();
 			break;
