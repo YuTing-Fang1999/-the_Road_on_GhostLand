@@ -85,7 +85,7 @@ void init(){
 	//載入圖片素材
 	mainMenu=Imagx("assets/img/menu/menu_main.png",2.5,GL_TRUE);
 	coverRGL=Imagx("assets/img/cover/cover_RGL_normal.png",2.8,GL_TRUE);coverRGL.cirleRotateAnim(GL_TRUE);
-	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
+	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(2);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
 	restartMenu=Imagx("assets/img/menu/menu_restart.png",2,GL_TRUE);
@@ -127,12 +127,12 @@ void init(){
 	imlist.push(event_xross_to_L.getDpIndex());
 
 	//成就
-	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",1,GL_TRUE);
-	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",1,GL_TRUE);
-	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",1,GL_TRUE);
-	archiv_xross_road=Imagx("assets/img/archiv/archiv_xross_road.png",1,GL_TRUE);
-	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",1,GL_TRUE);
-	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",1,GL_TRUE);
+	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",4,GL_TRUE);
+	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",4,GL_TRUE);
+	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",4,GL_TRUE);
+	archiv_xross_road=Imagx("assets/img/archiv/archiv_xross_road.png",4,GL_TRUE);
+	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",4,GL_TRUE);
+	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",4,GL_TRUE);
 	imlist.push(archiv_fire.getDpIndex());
 	imlist.push(archiv_ad_board.getDpIndex());
 	imlist.push(archiv_road_hole.getDpIndex());

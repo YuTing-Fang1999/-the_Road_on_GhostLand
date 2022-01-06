@@ -221,10 +221,11 @@ void drawExitMenu(GLfloat pos[]){
 	glPopMatrix();
 }
 
-void drawRestartMenu(){
+void drawRestartMenu(GLfloat pos[]){
 	glPushMatrix();
 	{
 		glDisable(GL_DEPTH_TEST);
+		glTranslatef(pos[0],pos[1],pos[2]);
 		glTranslatef(4,-2,0);
 		glRotatef(-10,1,0,0);
 		restartMenu.drawImg();
@@ -241,7 +242,26 @@ void drawEvent(Player* p) {
 		{
 			glTranslated(p->pos[0],p->pos[1],p->pos[2]);
 			//printf("event=%d\n", p->event);
-			glCallList(p->event);
+			//glCallList(p->event);
+			glTranslatef(0,3.5,0);
+			glRotatef(-10,1,0,0);
+			glDisable(GL_DEPTH_TEST);
+			switch (p->event)
+			{
+				case CAR:
+					archiv_reverse_car.drawImg();
+					break;
+				case FIRE:
+					archiv_fire.drawImg();
+					break;
+				case HOLE:
+					archiv_road_hole.drawImg();
+					break;
+				default:
+					printf("event:%d\n",p->event);
+					break;
+			}
+			glEnable(GL_DEPTH_TEST);
 		}
 		glPopMatrix();
 	}
@@ -269,19 +289,16 @@ void display(){
 		case DEAD:
 			drawGame();
 			drawEvent(&p1);
-			drawRestartMenu();
 			break;
 
 		case END:
 			drawGame();
 			drawEnd();
-			drawRestartMenu();
 			break;
 
 		case TIMEUP:
 			drawGame();
 			drawTimeUp();
-			drawRestartMenu();
 			break;
 
 		case MAIN_MENU:
@@ -290,6 +307,17 @@ void display(){
 
 		case DEBUG:
 			drawDebugView();
+			break;
+		default:
+			break;
+	}
+
+	switch (p1.status)
+	{
+		case END:
+		case DEAD:
+		case TIMEUP:
+			drawRestartMenu(p1.pos);
 			break;
 		default:
 			break;
