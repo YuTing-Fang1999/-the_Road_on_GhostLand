@@ -46,12 +46,14 @@ extern Imagx traffic_light=Imagx();
 //障礙物貼圖
 extern Imagx event_fire=Imagx();
 extern Imagx event_hole=Imagx();
+extern Imagx event_xross_to_R=Imagx();
+extern Imagx event_xross_to_L=Imagx();
 
 //成就
 extern Imagx archiv_ad_board=Imagx();
 extern Imagx archiv_fire=Imagx();
 extern Imagx archiv_intersection_car=Imagx();
-extern Imagx archiv_old_woman=Imagx();
+extern Imagx archiv_xross_road=Imagx();
 extern Imagx archiv_reverse_car=Imagx();
 extern Imagx archiv_road_hole=Imagx();
 
@@ -100,6 +102,7 @@ void init(){
 	callingOldMan=Imagx("assets/img/phone_call/talking_ojiisan.png",1,GL_TRUE);
 	callingOldWoman=Imagx("assets/img/phone_call/talking_obaasan.png",1,GL_TRUE);
 	textInit_normal=Imagx("assets/img/text_init/text_init_normal.png",4,GL_TRUE);
+	
 	imlist.push(callingMan.getDpIndex());
 	imlist.push(callingWoman.getDpIndex());
 	imlist.push(callingOldMan.getDpIndex());
@@ -116,20 +119,24 @@ void init(){
 	//障礙物貼圖
 	event_fire=Imagx("assets/img/event/event_fire.png",1,GL_TRUE);
 	event_hole=Imagx("assets/img/event/event_hole.png",1,GL_TRUE);
+	event_xross_to_R=Imagx("assets/img/event/event_xross_to_R.png",1,GL_TRUE);
+	event_xross_to_L=Imagx("assets/img/event/event_xross_to_L.png",1,GL_TRUE);
 	imlist.push(event_fire.getDpIndex());
 	imlist.push(event_hole.getDpIndex());
+	imlist.push(event_xross_to_R.getDpIndex());
+	imlist.push(event_xross_to_L.getDpIndex());
 
 	//成就
 	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",1,GL_TRUE);
 	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",1,GL_TRUE);
-	archiv_old_woman=Imagx("assets/img/archiv/archiv_old_woman.png",1,GL_TRUE);
 	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",1,GL_TRUE);
+	archiv_xross_road=Imagx("assets/img/archiv/archiv_xross_road.png",1,GL_TRUE);
 	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",1,GL_TRUE);
 	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",1,GL_TRUE);
 	imlist.push(archiv_fire.getDpIndex());
 	imlist.push(archiv_ad_board.getDpIndex());
-	imlist.push(archiv_old_woman.getDpIndex());
 	imlist.push(archiv_road_hole.getDpIndex());
+	imlist.push(archiv_xross_road.getDpIndex());
 	imlist.push(archiv_reverse_car.getDpIndex());
 	imlist.push(archiv_intersection_car.getDpIndex());
 
