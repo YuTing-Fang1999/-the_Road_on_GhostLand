@@ -218,6 +218,18 @@ void drawExitMenu(GLfloat pos[]){
 	glPopMatrix();
 }
 
+void drawRestartMenu(){
+	glPushMatrix();
+	{
+		glTranslatef(4,-2,0);
+		glRotatef(-10,1,0,0);
+		glTranslatef(0,0,0.2);
+		restartMenu.drawImg();
+	}
+	glPopMatrix();
+}
+
+
 void drawEvent(Player* p) {
 	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 	{
@@ -270,6 +282,15 @@ void display(){
 			drawDebugView();
 			break;
 		default:
+			break;
+	}
+
+	switch (p1.status)
+	{
+		case END:
+		case DEAD:
+		case TIMEUP:
+			drawRestartMenu();
 			break;
 	}
 
