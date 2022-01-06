@@ -206,9 +206,10 @@ void drawTimeUp() {
 	//可以放春融吃不到外賣，氣噗噗的畫面
 }
 
-void drawExitMenu(){
+void drawExitMenu(GLfloat pos[]){
 	glPushMatrix();
 	{
+		glTranslatef(pos[0],pos[1],pos[2]);
 		glTranslatef(0,4,2);
 		glRotatef(-10,1,0,0);
 		glTranslatef(0,0,0.2);
@@ -269,7 +270,7 @@ void display(){
 			break;
 	}
 
-	drawExitMenu();
+	drawExitMenu(p1.pos);
 	//====================================
 
 	glutSwapBuffers();
