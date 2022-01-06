@@ -252,7 +252,7 @@ public:
 
 			if (clision.isColision(r, p->pos)) {
 				if(p->bone) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
-				if (!p->cheat && !p->bone) {
+				if (!p->cheat && !p->bone && p->status==GAME) {
 					p->event = displayId;
 					p->status = DEAD;
 					PlaySound(NULL, NULL, SND_ASYNC);
