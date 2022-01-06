@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(3); 
+extern Timer myTimer(40); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 1000); 
 //進度條
@@ -209,11 +209,12 @@ void drawTimeUp() {
 void drawExitMenu(GLfloat pos[]){
 	glPushMatrix();
 	{
+		glDisable(GL_DEPTH_TEST);
 		glTranslatef(pos[0],pos[1],pos[2]);
 		glTranslatef(0,4,2);
 		glRotatef(-10,1,0,0);
-		glTranslatef(0,0,0.2);
 		exitMenu.drawImg();
+		glEnable(GL_DEPTH_TEST);
 	}
 	glPopMatrix();
 }
@@ -221,10 +222,11 @@ void drawExitMenu(GLfloat pos[]){
 void drawRestartMenu(){
 	glPushMatrix();
 	{
+		glDisable(GL_DEPTH_TEST);
 		glTranslatef(4,-2,0);
 		glRotatef(-10,1,0,0);
-		glTranslatef(0,0,0.2);
 		restartMenu.drawImg();
+		glEnable(GL_DEPTH_TEST);
 	}
 	glPopMatrix();
 }
@@ -262,16 +264,19 @@ void display(){
 			drawGame();
 			glutSolidCube(1);
 			drawEvent(&p1);
+			drawRestartMenu();
 			break;
 
 		case END:
 			drawGame();
 			drawEnd();
+			drawRestartMenu();
 			break;
 
 		case TIMEUP:
 			drawGame();
 			drawTimeUp();
+			drawRestartMenu();
 			break;
 
 		case MAIN_MENU:
@@ -282,15 +287,6 @@ void display(){
 			drawDebugView();
 			break;
 		default:
-			break;
-	}
-
-	switch (p1.status)
-	{
-		case END:
-		case DEAD:
-		case TIMEUP:
-			drawRestartMenu();
 			break;
 	}
 
