@@ -298,6 +298,9 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status = MAIN_MENU;
 			glClearColor(0.5,0.5,0.5,1);
 		}
+		else if (p1.status == GAME) {
+			p1.bone = !p1.bone;
+		}
 	}
 
 	if (key == 'c') { //無敵模式

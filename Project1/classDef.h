@@ -28,12 +28,13 @@ public:
 	Status status = MAIN_MENU; //遊戲目前的狀態
 	TYPE event;
 	bool cheat = false;
+	bool bone = false;
 	float minX, maxX;
 
 	Player(float minX,float maxX){
 		memset(this->pos, 0, 3);
-		this->minX = minX-1;
-		this->maxX = maxX+1;
+		this->minX = minX-1.5;
+		this->maxX = maxX+1.5;
 	}
 	~Player(){}
 
@@ -245,10 +246,13 @@ public:
 		CollisionBall clision(x, y, z);
 		glPushMatrix();
 		{
-			glMaterialfv(GL_FRONT,GL_DIFFUSE, mat_dif_yellow);
+			if (p->bone) {
+				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_yellow);
+			}
+
 			if (clision.isColision(r, p->pos)) {
-				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
-				if (!p->cheat) {
+				if(p->bone) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
+				if (!p->cheat && !p->bone) {
 					p->event = displayId;
 					p->status = DEAD;
 					PlaySound(NULL, NULL, SND_ASYNC);
@@ -257,12 +261,18 @@ public:
 				
 			}
 			glTranslatef(x, y, z);
-			glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
-			{
-				glCallList((GLuint)displayId);
+			if (p->bone) {
+				glutSolidCube(1);
 			}
-			glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
-			//glutSolidCube(1);
+			else {
+				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+				{
+					glCallList((GLuint)displayId);
+				}
+				glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
+			}
+			
+			
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_white);
 		}
 		glPopMatrix();
