@@ -42,9 +42,18 @@ extern Imagx textInit_normal;
 extern Imagx zebraStripe;
 extern Imagx laneStripe;
 
+extern Imagx archiv_ad_board;
+extern Imagx archiv_fire;
+extern Imagx archiv_intersection_car;
+extern Imagx archiv_old_woman;
+extern Imagx archiv_reverse_car;
+extern Imagx archiv_road_hole;
+
 //3D素材
 extern ObjectLoader stev;
 extern ObjectLoader building_test;
+extern ObjectLoader board_small_cup;
+extern ObjectLoader board_pawnshop;
 extern ObjList objlist;
 
 //遊戲除錯空間
