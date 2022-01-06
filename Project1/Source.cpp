@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(40); 
+extern Timer myTimer(3); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 1000); 
 //進度條
@@ -51,12 +51,14 @@ extern Imagx traffic_light;
 //道路障礙
 extern Imagx event_fire;
 extern Imagx event_hole;
+extern Imagx event_xross_to_R;
+extern Imagx event_xross_to_L;
 
 //成就
 extern Imagx archiv_ad_board;
 extern Imagx archiv_fire;
 extern Imagx archiv_intersection_car;
-extern Imagx archiv_old_woman;
+extern Imagx archiv_xross_road;
 extern Imagx archiv_reverse_car;
 extern Imagx archiv_road_hole;
 
