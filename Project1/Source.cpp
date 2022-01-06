@@ -235,9 +235,13 @@ void drawRestartMenu(){
 void drawEvent(Player* p) {
 	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 	{
-		glTranslated(p->pos[0],p->pos[1],p->pos[2]);
-		//printf("event=%d\n", p->event);
-		glCallList(p->event);
+		glPushMatrix();
+		{
+			glTranslated(p->pos[0],p->pos[1],p->pos[2]);
+			//printf("event=%d\n", p->event);
+			glCallList(p->event);
+		}
+		glPopMatrix();
 	}
 	glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 }
@@ -262,8 +266,8 @@ void display(){
 
 		case DEAD:
 			drawGame();
-			glutSolidCube(1);
-			drawEvent(&p1);
+			//glutSolidCube(1);
+			//drawEvent(&p1);
 			drawRestartMenu();
 			break;
 

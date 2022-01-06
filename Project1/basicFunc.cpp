@@ -350,7 +350,7 @@ void timer5() {
 	//player 自動移動
 	if (p1.status == GAME) {
 		p1.Progress();
-		//printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
+		printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
 	}
 
 	//如果遊戲結束，停止移動
