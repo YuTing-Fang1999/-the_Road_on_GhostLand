@@ -195,7 +195,7 @@ void initGame() {
 	p1.v = 0.01;
 	p1.shift = 0;
 	//停止播放音樂
-	//PlaySound(NULL, NULL, SND_FILENAME);
+	PlaySound(NULL, NULL, SND_FILENAME);
 	/* 設定亂數種子 */
 	srand(time(NULL));
 

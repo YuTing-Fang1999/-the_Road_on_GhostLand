@@ -267,7 +267,7 @@ void display(){
 		case DEAD:
 			drawGame();
 			//glutSolidCube(1);
-			//drawEvent(&p1);
+			drawEvent(&p1);
 			drawRestartMenu();
 			break;
 

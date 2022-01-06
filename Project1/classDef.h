@@ -15,7 +15,7 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-typedef enum { ELDER_R = 7, ELDER_L = 8, CAR = 9, OTHER = 10 } TYPE;
+typedef enum { ELDER_R = 7, ELDER_L = 8, CAR = 28, FIRE = 15, HOLE = 16 } TYPE;
 
 class Player{
 public:
@@ -285,6 +285,7 @@ struct Pos {
 	float x, y, z;
 	TYPE type;
 	bool moveR = false;
+	bool moveUp = true;
 
 	Pos(float a, float b, float c, TYPE type) {
 		x = a, y = b, z = c;
@@ -340,13 +341,13 @@ public:
 
 		if (num == 1 && older==0) { //老奶奶過馬路
 			int R = rand() % 2;
-			if (R) {
+			if (R) { //隨機為右
 				Pos pos((float)maxX, 1, (float)nowZ, ELDER_R);
 				pos.moveR = false;
 				ObStaclesPos.push_back(pos);
 
 			}
-			else {
+			else { //隨機為左
 				Pos pos((float)minX, 1, (float)nowZ, ELDER_L);
 				pos.moveR = true;
 				ObStaclesPos.push_back(pos);
@@ -355,12 +356,12 @@ public:
 			
 			
 		}
-		else {
+		else { //產生其他的障礙物
 			for (int i = 0; i < num; ++i) {
 
 				/* 產生亂數，隨機到某個道路*/
 				int n = rand() % roadNum; 
-				float x = minX + (2*n + 1) * gap; //gap=出現的間隔
+				float x = minX + (2*n + 1) * gap; //gap=間隔
 				while (X.find(x) != X.end()) {
 					n = rand() % roadNum;
 					x = minX + (2 * n + 1) * gap;
@@ -373,8 +374,17 @@ public:
 					ObStaclesPos.push_back(pos);
 				}
 				else {
-					Pos pos(x, 1, (float)nowZ, OTHER);
-					ObStaclesPos.push_back(pos);
+					int fire = rand() % 2;
+					if (fire) {
+						Pos pos(x, 1, (float)nowZ, FIRE);
+						pos.moveUp = rand() % 2;
+						ObStaclesPos.push_back(pos);
+					}
+					else {
+						Pos pos(x, 1, (float)nowZ, HOLE);
+						ObStaclesPos.push_back(pos);
+					}
+					
 				}
 				
 			}
@@ -389,6 +399,7 @@ public:
 		for (int i = ObStaclesPos.size()-1; i >= endIdx ; --i) {
 			
 			if (p->status == GAME) {
+				//老奶奶移動
 				if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i - endIdx <= 30) { //老奶奶左右移動
 					if (ObStaclesPos[i].x >= maxX) {
 						ObStaclesPos[i].moveR = false;
@@ -407,7 +418,8 @@ public:
 					}
 				}
 
-				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { //逆向車
+				//逆向車移動
+				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { 
 					ObStaclesPos[i].z += 0.05;
 					if (ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
 						mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
@@ -420,8 +432,25 @@ public:
 						break;
 					}
 				}
+
+				//火焰的移動
+				if (ObStaclesPos[i].type == FIRE && i - endIdx <= 30) {
+					if (ObStaclesPos[i].y >= 1.5) {
+						ObStaclesPos[i].moveUp = false;
+					}
+					if (ObStaclesPos[i].y <= 0.6) {
+						ObStaclesPos[i].moveUp = true;
+					}
+
+					if (ObStaclesPos[i].moveUp) {
+						ObStaclesPos[i].y += 0.005;
+					}
+					else {
+						ObStaclesPos[i].y -= 0.005;
+					}
+				}
 			}
-			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.6, p, ObStaclesPos[i].type);
+			Obstacles::drawObstacle(ObStaclesPos[i].x, ObStaclesPos[i].y, ObStaclesPos[i].z, 1.6, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 			if (p->status != GAME) gen = false;
