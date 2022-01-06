@@ -31,18 +31,32 @@ extern Imagx coverRGL=Imagx();
 extern Imagx aboutMenu=Imagx();
 extern Imagx restartMenu=Imagx();
 
+//客戶
 extern Imagx callingMan=Imagx();
 extern Imagx callingWoman=Imagx();
 extern Imagx callingOldMan=Imagx();
 extern Imagx callingOldWoman=Imagx();
+//對話框
 extern Imagx textInit_normal=Imagx();
+
+//馬路貼圖
 extern Imagx zebraStripe=Imagx();
 extern Imagx laneStripe=Imagx();
+
+//成就
+extern Imagx archiv_ad_board=Imagx();
+extern Imagx archiv_fire=Imagx();
+extern Imagx archiv_intersection_car=Imagx();
+extern Imagx archiv_old_woman=Imagx();
+extern Imagx archiv_reverse_car=Imagx();
+extern Imagx archiv_road_hole=Imagx();
 
 
 //3D素材
 extern ObjectLoader stev=ObjectLoader();
 extern ObjectLoader building_test=ObjectLoader();
+extern ObjectLoader board_small_cup=ObjectLoader();
+extern ObjectLoader board_pawnshop=ObjectLoader();
 
 //list
 extern ImagxList imlist=ImagxList();
@@ -74,6 +88,7 @@ void init(){
 	imlist.push(aboutMenu.getDpIndex());
 	imlist.push(restartMenu.getDpIndex());
 
+	//人物
 	callingMan=Imagx("assets/img/phone_call/talking_man.png",1,GL_TRUE);
 	callingWoman=Imagx("assets/img/phone_call/talking_woman.png",1,GL_TRUE);
 	callingOldMan=Imagx("assets/img/phone_call/talking_ojiisan.png",1,GL_TRUE);
@@ -85,10 +100,25 @@ void init(){
 	imlist.push(callingOldWoman.getDpIndex());
 	imlist.push(textInit_normal.getDpIndex());
 
+	//道路素材貼圖
 	zebraStripe=Imagx("assets/img/traffic/zebraStripe.png",1,GL_TRUE);
 	laneStripe=Imagx("assets/img/traffic/lane.png",1,GL_TRUE);
 	imlist.push(zebraStripe.getDpIndex());
 	imlist.push(laneStripe.getDpIndex());
+
+	//成就
+	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",1,GL_TRUE);
+	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",1,GL_TRUE);
+	archiv_old_woman=Imagx("assets/img/archiv/archiv_old_woman.png",1,GL_TRUE);
+	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",1,GL_TRUE);
+	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",1,GL_TRUE);
+	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",1,GL_TRUE);
+	imlist.push(archiv_fire.getDpIndex());
+	imlist.push(archiv_ad_board.getDpIndex());
+	imlist.push(archiv_old_woman.getDpIndex());
+	imlist.push(archiv_road_hole.getDpIndex());
+	imlist.push(archiv_reverse_car.getDpIndex());
+	imlist.push(archiv_intersection_car.getDpIndex());
 
 
 	//載入3D素材
@@ -100,12 +130,29 @@ void init(){
 	);
 	building_test=ObjectLoader(
 		"assets/obj/building_test/building_test.obj",
-		"assets/obj/building_test/building_tex02.png",
+		"assets/obj/building_test/building_tex01.png",
 		GL_FALSE,
 		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
 	);
+
+	//招牌
+	board_small_cup=ObjectLoader(
+		"assets/obj/board/small_cup/board_small_cup.obj",
+		"assets/obj/board/small_cup/board_small_cup.png",
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
+	);
+	board_pawnshop=ObjectLoader(
+		"assets/obj/board/pawnshop/board_pawnshop.obj",
+		"assets/obj/board/pawnshop/board_pawnshop.png",
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL|GLM_TEXTURE
+	);
+
 	objlist.push(stev.getDpIndex());
 	objlist.push(building_test.getDpIndex());
+	objlist.push(board_small_cup.getDpIndex());
+	objlist.push(board_pawnshop.getDpIndex());
 
 	/* 對隨機產生障礙物設定亂數種子 */
 	srand(time(NULL));
