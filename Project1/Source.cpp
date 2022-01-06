@@ -37,15 +37,22 @@ extern Imagx exitMenu;//local z = 0.2
 extern Imagx aboutMenu;//local z = 0.1
 extern Imagx restartMenu;
 extern ImagxList imlist;
-
+//人物
 extern Imagx callingMan;
 extern Imagx callingWoman;
 extern Imagx callingOldMan;
 extern Imagx callingOldWoman;
 extern Imagx textInit_normal;
+
+//道路
 extern Imagx zebraStripe;
 extern Imagx laneStripe;
+extern Imagx traffic_light;
+//道路障礙
+extern Imagx event_fire;
+extern Imagx event_hole;
 
+//成就
 extern Imagx archiv_ad_board;
 extern Imagx archiv_fire;
 extern Imagx archiv_intersection_car;
@@ -58,6 +65,8 @@ extern ObjectLoader stev;
 extern ObjectLoader building_test;
 extern ObjectLoader board_small_cup;
 extern ObjectLoader board_pawnshop;
+extern ObjectLoader playerObj;
+extern ObjectLoader car;
 extern ObjList objlist;
 
 //遊戲除錯空間
