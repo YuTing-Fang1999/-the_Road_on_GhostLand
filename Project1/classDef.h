@@ -28,9 +28,12 @@ public:
 	Status status = MAIN_MENU; //遊戲目前的狀態
 	TYPE event;
 	bool cheat = false;
+	float minX, maxX;
 
-	Player(){
+	Player(float minX,float maxX){
 		memset(this->pos, 0, 3);
+		this->minX = minX-1;
+		this->maxX = maxX+1;
 	}
 	~Player(){}
 
@@ -75,10 +78,14 @@ public:
 			
 		}
 		else if (key == 'a') {
-			pos[0] -= LR_MOVE;
+			if (this->pos[0] - LR_MOVE > this->minX)
+				pos[0] -= LR_MOVE;
+			else pos[0] = minX;
 		}
 		else if (key == 'd') {
-			pos[0] += LR_MOVE;
+			if (this->pos[0] + LR_MOVE < this->maxX)
+				pos[0] += LR_MOVE;
+			else pos[0] = maxX;
 		}
 	}
 
@@ -389,10 +396,10 @@ public:
 				}
 			}
 
-			if (ObStaclesPos[i].type == CAR && i - endIdx <= 50) { //逆向車
+			if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { //逆向車
 				ObStaclesPos[i].z += 0.05;
-				if(ObStaclesPos[i].z - p->pos[2] > -30 && ObStaclesPos[i].z - p->pos[2] < -29)
-					printf("played = %d\n", mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL));
+				if(ObStaclesPos[i].z - p->pos[2] > -50 && ObStaclesPos[i].z - p->pos[2] < -49)
+					mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
 			}
 			else {
 				//避免被逆向車的座標影響
@@ -402,7 +409,7 @@ public:
 					break;
 				}
 			}
-			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 2, p, ObStaclesPos[i].type);
+			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.6, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}
