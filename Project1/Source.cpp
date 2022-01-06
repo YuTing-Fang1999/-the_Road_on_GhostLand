@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 extern Player p1=Player();
-extern Timer myTimer(100); //遊戲時長(秒)
+extern Timer myTimer(100); //遊戲時長(秒)m
 extern Ground myGround(-2, 2, 1000); //minX, maxX, 路徑長度
 extern ProgressBar myProgressBar(myGround.pathLen); 
 //隨機產生障礙物
@@ -205,13 +205,13 @@ void drawExitMenu(){
 }
 
 void drawEvent(Player* p) {
-	if (p->event == 10) {
-
+	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+	{
+		glTranslated(p->pos[0],p->pos[1],p->pos[2]);
+		//printf("event=%d\n", p->event);
+		glCallList(p->event);
 	}
-	else if (p->event == 10) {
-
-
-	}
+	glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 }
 
 void display(){
@@ -233,6 +233,7 @@ void display(){
 			break;
 
 		case DEAD:
+			glutSolidCube(1);
 			drawEvent(&p1);
 			break;
 

@@ -15,6 +15,7 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
+typedef enum { ELDER_R = 7, ELDER_L = 8, CAR = 9, OTHER = 10 } TYPE;
 
 class Player{
 public:
@@ -25,8 +26,8 @@ public:
 	GLfloat minV = 0.01; //玩家移動速度
 	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
-	GLfloat event;
-	bool cheat = true;
+	TYPE event;
+	bool cheat = false;
 
 	Player(){
 		memset(this->pos, 0, 3);
@@ -55,6 +56,7 @@ public:
 	//player鍵盤功能
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
+
 			//速度
 			if (v + 0.002 < maxV) v += 0.002;
 			else v = maxV;
@@ -153,8 +155,11 @@ public:
 			{
 				glTranslatef(p->pos[0], p->pos[1], p->pos[2]);
 				glColor3f(1, 1, 1);
-				char timer[15];
-				sprintf(timer, "TIME: %3d", this->nowTime);
+				char timer[50];
+				int i = sprintf(timer, "TIME: %3d", this->nowTime);
+				if (p->cheat) {
+					sprintf(&timer[i], "\n\ncheat", NULL);
+				}
 				drawstr(-4, 7.5, timer);
 			}
 			glPopMatrix();
@@ -225,7 +230,7 @@ public:
 	Obstacles(){}
 	~Obstacles(){}
 
-	static void drawObstacle(GLfloat x,GLfloat y,GLfloat z, GLfloat r, Player *p, GLuint displayId){
+	static void drawObstacle(GLfloat x,GLfloat y,GLfloat z, GLfloat r, Player *p, TYPE displayId){
 		GLfloat mat_dif_yellow[4] = { 0.8,0.7,0,1 };
 		GLfloat mat_dif_white[4] = { 1,1,1,1 };
 		GLfloat mat_dif_red[4] = { 1,0,0,1 };
@@ -247,7 +252,7 @@ public:
 			glTranslatef(x, y, z);
 			glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 			{
-				glCallList(displayId);
+				glCallList((GLuint)displayId);
 			}
 			glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 			//glutSolidCube(1);
@@ -257,7 +262,7 @@ public:
 	}
 };
 
-typedef enum { ELDER_R=7, ELDER_L=8, CAR=9, OTHER=10 } TYPE;
+
 
 struct Pos {
 	float x, y, z;
@@ -386,6 +391,8 @@ public:
 
 			if (ObStaclesPos[i].type == CAR && i - endIdx <= 50) { //逆向車
 				ObStaclesPos[i].z += 0.05;
+				if(ObStaclesPos[i].z - p->pos[2] > -30 && ObStaclesPos[i].z - p->pos[2] < -29)
+					printf("played = %d\n", mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL));
 			}
 			else {
 				//避免被逆向車的座標影響
@@ -395,7 +402,7 @@ public:
 					break;
 				}
 			}
-			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.4, p, ObStaclesPos[i].type);
+			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 2, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
 		}
@@ -414,7 +421,10 @@ public:
 
 	void draw(Imagx laneStripe) {
 		int w = maxX - minX;
-		int h = pathLen;
+		int h;
+		if (pathLen < 200) h = 200;
+		else h = pathLen;
+
 		glPushMatrix();
 		{
 			//glColor3ub(80, 127, 80);

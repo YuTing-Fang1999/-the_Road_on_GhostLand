@@ -176,6 +176,7 @@ void initGame() {
 
 	//音樂
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
+	//mciSendString(TEXT("play \"assets/music/逆向車.mp3 repeat\" "), NULL, 0, NULL);
 }
 
 void keyboard(unsigned char key,int x,int y){
@@ -269,6 +270,10 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status = MAIN_MENU;
 			glClearColor(0.5,0.5,0.5,1);
 		}
+	}
+
+	if (key == 'c') { //無敵模式
+		p1.cheat = !p1.cheat;
 	}
 
 	glutPostRedisplay();
