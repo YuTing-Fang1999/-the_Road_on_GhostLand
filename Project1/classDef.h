@@ -335,8 +335,8 @@ public:
 
 		set<int> X;
 		int num = rand() % genNum;
-		int older = rand() % 10; //控制老奶奶出現的機率
-		int car = rand() % 10; //控制逆向車出現的機率
+		int older = rand() % 30; //控制老奶奶出現的機率
+		int car = rand() % 30; //控制逆向車出現的機率
 
 		if (num == 1 && older==0) { //老奶奶過馬路
 			int R = rand() % 2;
@@ -386,42 +386,45 @@ public:
 		if(gen) genObstaclePos();
 		/*printf("size = %d\n", ObStaclesPos.size());*/
 		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
-		for (int i = ObStaclesPos.size()-1; i >= endIdx; --i) {
+		for (int i = ObStaclesPos.size()-1; i >= endIdx ; --i) {
 			
-			if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i-endIdx <= 30) { //老奶奶左右移動
-				if (ObStaclesPos[i].x >= maxX) {
-					ObStaclesPos[i].moveR = false;
-					ObStaclesPos[i].type = ELDER_L;
-				}
-				if (ObStaclesPos[i].x <= minX) {
-					ObStaclesPos[i].moveR = true;
-					ObStaclesPos[i].type = ELDER_R;
+			if (p->status == GAME) {
+				if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i - endIdx <= 30) { //老奶奶左右移動
+					if (ObStaclesPos[i].x >= maxX) {
+						ObStaclesPos[i].moveR = false;
+						ObStaclesPos[i].type = ELDER_L;
+					}
+					if (ObStaclesPos[i].x <= minX) {
+						ObStaclesPos[i].moveR = true;
+						ObStaclesPos[i].type = ELDER_R;
+					}
+
+					if (ObStaclesPos[i].moveR) {
+						ObStaclesPos[i].x += 0.01;
+					}
+					else {
+						ObStaclesPos[i].x -= 0.01;
+					}
 				}
 
-				if (ObStaclesPos[i].moveR) {
-					ObStaclesPos[i].x += 0.01;
+				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { //逆向車
+					ObStaclesPos[i].z += 0.05;
+					if (ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
+						mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
 				}
 				else {
-					ObStaclesPos[i].x -= 0.01;
-				}
-			}
-
-			if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { //逆向車
-				ObStaclesPos[i].z += 0.05;
-				if(ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
-					mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
-			}
-			else {
-				//避免被逆向車的座標影響
-				if (ObStaclesPos[i].z - p->pos[2] > 5) {
-					endIdx = i;
-					//printf("endIdx=%d\n", endIdx);
-					break;
+					//避免被逆向車的座標影響
+					if (ObStaclesPos[i].z - p->pos[2] > 5) {
+						endIdx = i;
+						//printf("endIdx=%d\n", endIdx);
+						break;
+					}
 				}
 			}
 			Obstacles::drawObstacle(ObStaclesPos[i].x, 1, ObStaclesPos[i].z, 1.6, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
+			if (p->status != GAME) gen = false;
 		}
 	}
 };

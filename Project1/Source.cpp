@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(100); 
+extern Timer myTimer(3); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 1000); 
 //進度條
@@ -247,15 +247,18 @@ void display(){
 			break;
 
 		case DEAD:
+			drawGame();
 			glutSolidCube(1);
 			drawEvent(&p1);
 			break;
 
 		case END:
+			drawGame();
 			drawEnd();
 			break;
 
 		case TIMEUP:
+			drawGame();
 			drawTimeUp();
 			break;
 
