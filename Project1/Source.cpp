@@ -28,6 +28,8 @@ extern Player p1=Player(myGround.minX, myGround.maxX);
 
 //flag
 extern GLboolean listExchange;
+extern GLboolean hasShownArchiv;
+Imagx* archiv_tmp;
 
 //圖片素材
 extern Imagx coverRGL;//local z = -1
@@ -234,6 +236,9 @@ void drawRestartMenu(GLfloat pos[]){
 	glPopMatrix();
 }
 
+void drawArchiv(Imagx* archiv){
+	archiv->drawImg();
+}
 
 void drawEvent(Player* p) {
 	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
@@ -241,25 +246,36 @@ void drawEvent(Player* p) {
 		glPushMatrix();
 		{
 			glTranslated(p->pos[0],p->pos[1],p->pos[2]);
-			//printf("event=%d\n", p->event);
-			//glCallList(p->event);
 			glTranslatef(0,3.5,0);
 			glRotatef(-10,1,0,0);
 			glDisable(GL_DEPTH_TEST);
-			switch (p->event)
-			{
-				case CAR:
-					archiv_reverse_car.drawImg();
-					break;
-				case FIRE:
-					archiv_fire.drawImg();
-					break;
-				case HOLE:
-					archiv_road_hole.drawImg();
-					break;
-				default:
-					printf("event:%d\n",p->event);
-					break;
+			if(hasShownArchiv){
+				//has shown
+				drawArchiv(archiv_tmp);
+			}
+			else{
+				//does not show
+				hasShownArchiv = GL_TRUE;
+				switch (p->event)
+				{
+					case CAR:
+						archiv_tmp=&archiv_reverse_car;
+						break;
+					case FIRE:
+						archiv_tmp=&archiv_fire;
+						break;
+					case HOLE:
+						archiv_tmp=&archiv_road_hole;
+						break;
+					case ELDER_L:
+					case ELDER_R:
+						archiv_tmp=&archiv_xross_road;
+						break;
+					default:
+						printf("event:%d\n",p->event);
+						break;
+				}
+				archiv_tmp->popUpAnim(180);
 			}
 			glEnable(GL_DEPTH_TEST);
 		}

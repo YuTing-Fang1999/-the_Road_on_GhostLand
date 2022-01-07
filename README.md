@@ -1,26 +1,33 @@
 # **鬼島馬路**開發紀錄
 # 總結
 ### 迫切開發區
-- [ ] 背景貼圖
+- [ ] **背景貼圖**
 - [ ] 劇情線
     - [ ] 時間到
     - [ ] 死亡
     - [ ] 成功
     - [ ] 額外老師的劇情
 - [ ] 模型(或許可加入顏色系統)
-    - [ ] 招牌
-    - [ ] 路洞
-    - [ ] 老奶奶
-    - [ ] 外送員
-    - [ ] 建築物
-    - [ ] 汽車:逆向車
+    - [x] 招牌
+    - [x] 路洞
+    - [x] 老奶奶
+    - [x] 外送員
+    - [ ] **建築物**
+    - [x] 地府火焰
+    - [x] 汽車:逆向車
     - [ ] 汽車:十字路口
-    - [ ] ~~火車平交道~~
-- [ ] 限制玩家的左右範圍侷限於馬路上
+    - [ ] 作弊:逆向玩家
+    - [ ] 作弊:超速罰單
+    - [ ] 作弊:火車平交道
+- [x] ~~限制玩家的左右範圍侷限於馬路上~~
 ### 迫切修正區
-- [ ] **超大大大BUGS**：按S煞車會來不及
+- [x] **超大大大BUGS**：按S煞車會來不及
 - [ ] **超大大大BUGS**：如果按下W前進，再左右移動，加速的效果會消失
     - [ ] 考慮使用keyboardUpFunc偵測按鍵是否放開
+
+### 新計畫
+- [ ] 新增`GameConfig`來讀取遊戲設定
+- [ ] 新增`GameArchiv`計數遊戲成就
 
 * **回覆上一洞**
     * (已經commit但還沒push到remote)```git reset HEAD^ --hard```
@@ -30,39 +37,45 @@
     * local`git branch -D <branch name>`
     * remote`git push <remote> :<branch name>`
 * 按鍵設定
-    - [ ] **c** cheating
-    - [X] **b** DEBUG
-    - [x] **h** helping
-    - [x] **f** fullscrn
-    - [X] **r** go back to main_menu
-    - [X] **v** aboutInfo;
-    - [x] **esc** exit
-    - [x] **wasd**方向鍵
-    - [x] **space** re/start
+    - [x] **C** cheating
+    - [x] **B** DEBUG
+    - [x] **H** helping
+    - [ ] **L** Log of game
+    - [x] **F** fullscrn
+    - [x] **R** go back to main_menu
+    - [x] **V** aboutInfo;
+    - [x] **Esc** exit game
+    - [x] **WASD**方向鍵
+    - [x] **Space** re/start
 * **Bugs**
     - [ ] **超大大大BUGS**：讀3D模型的面上會有許多三角形陰影
         - [ ] 可能是normal有問題，`GL_RESCALE_NORMAL` `GL_NORMALIZE`
         - [ ] 或是vertex重疊
         - [ ] 或obj數據精度不高...
-    - [X] ~~**超大大大BUGS**：如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜~~
-        * 換了image library就沒啥問題了  
-    - [X] **超大大大BUGS**：使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
-        - [X] ~~查到在`Imagx`裡面`setMaterial()`不要使用`GL_EMISSION`~~
-        * 應該跟`GL_EMISSION`有關，物件`GL_EMISSION`設為(1,1,1,1)就解決了，~~但還想找問題~~
-    - [X] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
-        - [X] 我(maxspace1024)把drawTimer搬到前面先畫
-        - [X] 或是只在`GAME`狀態畫計時器
-        - [ ] ~~或許PNG透明的部分不要留那麼多~~
     - [ ] 在`GAME`狀態，`exitMenu`不會跟著鏡頭移動，~~誰會在遊戲中途跳gmae阿~~
-    - [X] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
-    - [X] ~~遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態~~
+    - [x] ~~**超大大大BUGS**：如果圖片匯入格式是RGB(沒有A)，圖片可能會歪斜~~
+        * 換了image library就沒啥問題了  
+    - [x] **超大大大BUGS**：使用`ObjectLoader`之後使用`Imagx`，亮度會變暗
+        - [x] ~~查到在`Imagx`裡面`setMaterial()`不要使用`GL_EMISSION`~~
+        * 應該跟`GL_EMISSION`有關，物件`GL_EMISSION`設為(1,1,1,1)就解決了，~~但還想找問題~~
+    - [x] 圖片透明的地方會蓋住計時器的時間，可能在dstBuffer沒有寫入，導致blending出問題
+        - [x] 我(maxspace1024)把drawTimer搬到前面先畫
+        - [x] 或是只在`GAME`狀態畫計時器
+        - [ ] ~~或許PNG透明的部分不要留那麼多~~
+    - [x] 外送員移動太僵硬了，必須加入**速度**概念，並交給`progress()`處理動畫
+    - [x] ~~遊戲在`END`狀態按空白鍵，不會回到`GAME`狀態~~
     - [x] ~~在`START`狀態(說故事的狀態)前面應該還要一個`MAIN_MENU`狀態~~
         * ~~不需要再把`MAIN_MENU`移掉~~  
 
 ##### 強迫症患者期望區
-- [ ] 當有exitMenu按Y播放結束動畫
+- [ ] 修正速度系統計算
 - [ ] 遊戲程式可以有專屬的圖示(Icon)，~~回數票+遺照框~~
+- [ ] ~~當有exitMenu按Y播放結束動畫~~
 - [ ] ~~進度條會往負方向長，最後可以加個往後走的彩蛋~~
+
+## 2022/01/07
+* 優化成就動畫
+    * 調整event物件大小以及旋轉至正確位置
 
 ## 2022/01/06
 * 加入招牌物件
