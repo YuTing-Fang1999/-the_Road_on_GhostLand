@@ -38,7 +38,14 @@ extern Imagx callingWoman=Imagx();
 extern Imagx callingOldMan=Imagx();
 extern Imagx callingOldWoman=Imagx();
 //對話框
-extern Imagx textInit_normal=Imagx();
+extern Imagx text_succ=Imagx();
+extern Imagx text_dead=Imagx();
+extern Imagx text_begin=Imagx();
+extern Imagx text_timeup=Imagx();
+extern Imagx text_succ_teacher=Imagx();
+extern Imagx text_dead_teacher=Imagx();
+extern Imagx text_begin_teacher=Imagx();
+extern Imagx text_timeup_teacher=Imagx();
 
 //道路素材貼圖
 extern Imagx zebraStripe=Imagx();
@@ -92,7 +99,7 @@ void init(){
 	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(2);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
-	restartMenu=Imagx("assets/img/menu/menu_restart.png",2,GL_TRUE);
+	restartMenu=Imagx("assets/img/menu/menu_restart.png",1.8,GL_TRUE);
 	imlist.push(mainMenu.getDpIndex());
 	imlist.push(coverRGL.getDpIndex());
 	imlist.push(exitMenu.getDpIndex());
@@ -105,13 +112,13 @@ void init(){
 	callingWoman=Imagx("assets/img/phone_call/talking_woman.png",1,GL_TRUE);
 	callingOldMan=Imagx("assets/img/phone_call/talking_ojiisan.png",1,GL_TRUE);
 	callingOldWoman=Imagx("assets/img/phone_call/talking_obaasan.png",1,GL_TRUE);
-	textInit_normal=Imagx("assets/img/text_init/text_init_normal.png",4,GL_TRUE);
+	text_begin=Imagx("assets/img/text/text_begin.png",4,GL_TRUE);
 	
 	imlist.push(callingMan.getDpIndex());
 	imlist.push(callingWoman.getDpIndex());
 	imlist.push(callingOldMan.getDpIndex());
 	imlist.push(callingOldWoman.getDpIndex());
-	imlist.push(textInit_normal.getDpIndex());
+	imlist.push(text_begin.getDpIndex());
 
 	//道路素材貼圖
 	zebraStripe=Imagx("assets/img/traffic/zebraStripe.png",1,GL_TRUE);
@@ -196,7 +203,6 @@ void init(){
 		GL_TRUE,
 		GLM_SMOOTH|GLM_MATERIAL
 	);
-
 	objlist.push(stev.getDpIndex());
 	objlist.push(building_test.getDpIndex());
 	objlist.push(board_small_cup.getDpIndex());
@@ -204,9 +210,30 @@ void init(){
 	objlist.push(playerObj.getDpIndex());
 	objlist.push(car.getDpIndex());
 
+
+	// 以下兩個要搬到前面排dpindex順序
 	//背景
 	bg_001=Imagx("assets/img/BG/background001.png",1,GL_TRUE);
 	imlist.push(bg_001.getDpIndex());
+	//text
+	text_succ=Imagx("assets/img/text/text_succ.png",4,GL_TRUE);
+	text_dead=Imagx("assets/img/text/text_dead.png",4,GL_TRUE);
+	text_begin=Imagx("assets/img/text/text_begin.png",4,GL_TRUE);
+	text_timeup=Imagx("assets/img/text/text_timeup.png",4,GL_TRUE);
+	text_succ_teacher=Imagx("assets/img/text/text_succ_teacher.png",4,GL_TRUE);
+	text_dead_teacher=Imagx("assets/img/text/text_dead_teacher.png",4,GL_TRUE);
+	text_begin_teacher=Imagx("assets/img/text/text_begin_teacher.png",4,GL_TRUE);
+	text_timeup_teacher=Imagx("assets/img/text/text_timeup_teacher.png",4,GL_TRUE);
+	imlist.push(text_succ.getDpIndex());
+	imlist.push(text_dead.getDpIndex());
+	imlist.push(text_begin.getDpIndex());
+	imlist.push(text_timeup.getDpIndex());
+	imlist.push(text_succ_teacher.getDpIndex());
+	imlist.push(text_dead_teacher.getDpIndex());
+	imlist.push(text_begin_teacher.getDpIndex());
+	imlist.push(text_timeup_teacher.getDpIndex());
+
+
 
 	/* 對隨機產生障礙物設定亂數種子 */
 	srand(time(NULL));

@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(300); 
+extern Timer myTimer(3); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 1000); 
 //進度條
@@ -43,7 +43,14 @@ extern Imagx callingMan;
 extern Imagx callingWoman;
 extern Imagx callingOldMan;
 extern Imagx callingOldWoman;
-extern Imagx textInit_normal;
+extern Imagx text_succ;
+extern Imagx text_dead;
+extern Imagx text_begin;
+extern Imagx text_timeup;
+extern Imagx text_succ_teacher;
+extern Imagx text_dead_teacher;
+extern Imagx text_begin_teacher;
+extern Imagx text_timeup_teacher;
 
 //道路
 extern Imagx zebraStripe;
@@ -144,26 +151,71 @@ void drawMainMenu(){
 
 }
 
-void drawTextInit(int id){
+void drawDialog(Status s, GLfloat pos[],int id){
 	Imagx* im=NULL;
+	Imagx* dialog=NULL;
 	if(id==0)		im=&callingMan;
 	else if(id==1)	im=&callingWoman;
 	else if(id==2)	im=&callingOldMan;
 	else if(id==3)	im=&callingOldWoman;
 
-	glPushMatrix();
-	{
-		//draw Text
-		glTranslatef(0,3,2);
-		glRotatef(-10,1,0,0);
-		textInit_normal.drawImg();
+	switch(s){
+		case START:
+		{
+			if(id==4)	dialog = &text_begin_teacher;
+			else		dialog = &text_begin;
+		}	
+		break;
 
-		//draw calling person
-		glTranslatef(-2.4,-2,0.1);
-		glScalef(0.8,0.8,0.8);
-		im->drawImg();
+		case END:
+		{
+			if(id==4)	dialog = &text_succ_teacher;
+			else		dialog = &text_succ;
+		}
+		break;
+
+		case DEAD:
+		{
+			if(id==4)	dialog = &text_dead_teacher;
+			else		dialog = &text_dead;
+		}
+		break;
+
+		case TIMEUP:
+		{
+			if(id==4)	dialog = &text_timeup_teacher;
+			else		dialog = &text_timeup;
+		}
+		break;
+
+		default:
+		break;
 	}
-	glPopMatrix();
+
+	if(dialog!=NULL){
+		glPushMatrix();
+		{
+			glTranslatef(pos[0],pos[1],pos[2]);
+			glTranslatef(0,2,2);
+			glRotatef(-10,1,0,0);
+
+			glDisable(GL_DEPTH_TEST);
+			if(im!=NULL){
+				//draw Text
+				dialog->drawImg();
+
+				//draw calling person
+				glTranslatef(-2.4,-2,0.1);
+				glScalef(0.7,0.7,0.7);
+				im->drawImg();
+			}
+			else{
+				dialog->drawImg();
+			}
+			glEnable(GL_DEPTH_TEST);
+		}
+		glPopMatrix();
+	}
 }
 
 
@@ -172,8 +224,12 @@ void drawStart() {
 	//可以放春融訂外賣的畫面，使用空白鍵可開始遊戲
 	//這裡放故事情節，讓玩家選擇是否跳過(SKIP)
 	drawPlayer();
-
-	drawTextInit(2);
+	glPushMatrix();
+	{
+		glTranslatef(0,-5,0);
+		building_test.drawObj(building_test.getDpIndex());//為了亮度
+	}
+	glPopMatrix();
 }
 
 //遊戲運行畫面
@@ -225,65 +281,80 @@ void drawExitMenu(GLfloat pos[]){
 	glPopMatrix();
 }
 
-void drawRestartMenu(GLfloat pos[]){
-	glPushMatrix();
+void drawRestartMenu(Status s,GLfloat pos[]){
+	switch (p1.status)
 	{
-		glDisable(GL_DEPTH_TEST);
-		glTranslatef(pos[0],pos[1],pos[2]);
-		glTranslatef(4,-2,0);
-		glRotatef(-10,1,0,0);
-		restartMenu.drawImg();
-		glEnable(GL_DEPTH_TEST);
+		case END:
+		case DEAD:
+		case TIMEUP:
+		{
+			glPushMatrix();
+			{
+				glDisable(GL_DEPTH_TEST);
+				glTranslatef(pos[0],pos[1],pos[2]);
+				glTranslatef(10,-2.8,0);
+				glRotatef(-10,1,0,0);
+				restartMenu.drawImg();
+				glEnable(GL_DEPTH_TEST);
+			}
+			glPopMatrix();
+			
+		}
+		break;
+		default:
+			break;
 	}
-	glPopMatrix();
-}
-
-void drawArchiv(Imagx* archiv){
-	archiv->drawImg();
 }
 
 void drawEvent(Player* p) {
-	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+	switch(p->status)
 	{
-		glPushMatrix();
+		case END:
+		case DEAD:
+		case TIMEUP:
 		{
-			glTranslated(p->pos[0],p->pos[1],p->pos[2]);
-			glTranslatef(0,3.5,0);
-			glRotatef(-10,1,0,0);
-			glDisable(GL_DEPTH_TEST);
-			if(hasShownArchiv){
-				//has shown
-				drawArchiv(archiv_tmp);
-			}
-			else{
-				//does not show
-				hasShownArchiv = GL_TRUE;
-				switch (p->event)
-				{
-					case CAR:
-						archiv_tmp=&archiv_reverse_car;
-						break;
-					case FIRE:
-						archiv_tmp=&archiv_fire;
-						break;
-					case HOLE:
-						archiv_tmp=&archiv_road_hole;
-						break;
-					case ELDER_L:
-					case ELDER_R:
-						archiv_tmp=&archiv_xross_road;
-						break;
-					default:
-						printf("event:%d\n",p->event);
-						break;
+			glPushMatrix();
+			{
+				glTranslated(p->pos[0],p->pos[1],p->pos[2]);
+				glTranslatef(0,3.3,0);
+				glRotatef(-10,1,0,0);
+				glDisable(GL_DEPTH_TEST);
+				if(hasShownArchiv){
+					//has shown
+					if(archiv_tmp!=NULL)	archiv_tmp->drawImg();
 				}
-				archiv_tmp->popUpAnim(180);
+				else{
+					//does not show
+					hasShownArchiv = GL_TRUE;
+					switch (p->event){
+						case CAR:
+							archiv_tmp=&archiv_reverse_car;
+							break;
+						case FIRE:
+							archiv_tmp=&archiv_fire;
+							break;
+						case HOLE:
+							archiv_tmp=&archiv_road_hole;
+							break;
+						case ELDER_L:
+						case ELDER_R:
+							archiv_tmp=&archiv_xross_road;
+							break;
+						default:
+							printf("event:%d\n",p->event);
+							break;
+					}
+
+					if(archiv_tmp!=NULL)	archiv_tmp->popUpAnim(180);
+				}
+				glEnable(GL_DEPTH_TEST);
 			}
-			glEnable(GL_DEPTH_TEST);
+			glPopMatrix();
 		}
-		glPopMatrix();
+		break;
+		default:
+			break;
 	}
-	glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 }
 
 void drawBackground(GLfloat pos[]){
@@ -320,17 +391,17 @@ void display(){
 
 		case DEAD:
 			drawGame();
-			drawEvent(&p1);
+			//drawEvent(p1.status,&p1);
 			break;
 
 		case END:
 			drawGame();
-			drawEnd();
+			//drawEnd();
 			break;
 
 		case TIMEUP:
 			drawGame();
-			drawTimeUp();
+			//drawTimeUp();
 			break;
 
 		case MAIN_MENU:
@@ -343,17 +414,10 @@ void display(){
 		default:
 			break;
 	}
-	switch (p1.status)
-	{
-		case END:
-		case DEAD:
-		case TIMEUP:
-			drawRestartMenu(p1.pos);
-			break;
-		default:
-			break;
-	}
 
+	drawDialog(p1.status,p1.pos,1);
+	drawRestartMenu(p1.status,p1.pos);
+	drawEvent(&p1);
 	drawExitMenu(p1.pos);
 	//====================================
 
