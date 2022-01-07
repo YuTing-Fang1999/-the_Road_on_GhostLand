@@ -15,7 +15,9 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-typedef enum { PLAYER=29, ELDER_R = 7, ELDER_L = 8, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
+typedef enum { PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
+
+
 
 class Player{
 public:
@@ -112,7 +114,7 @@ public:
 
 	void changePos() {
 		if (this->moveForward) {
-			if (this->bone) {
+			if (this->bone || !this->move) {
 				pos[2] -= LR_MOVE;
 			}
 			else {
@@ -126,7 +128,7 @@ public:
 
 		}
 		if (this->moveBack) {
-			if (this->bone) {
+			if (this->bone || !this->move) {
 				pos[2] += LR_MOVE;
 			}
 			else {
@@ -164,7 +166,7 @@ public:
 
 	//自動前進
 	void Progress() {
-		pos[2] -= v;
+		if(!bone && move) pos[2] -= v;
 	}
 
 	//停止
@@ -324,8 +326,8 @@ public:
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_yellow);
 			}
 			if (collision.isColision(r, p->pos)) {
-				if (p->bone) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
-				if (!p->cheat && !p->bone && p->status == GAME) {
+				if (p->bone || !p->move) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
+				if (!p->cheat && !p->bone && p->move && p->status == GAME) {
 					p->event = displayId;
 					p->status = DEAD;
 					PlaySound(NULL, NULL, SND_ASYNC);
@@ -351,6 +353,11 @@ public:
 										//x,y,z
 						glTranslated(0, -0.5, 0.1);
 						glScalef(1.8, 1.8, 1.8);
+					}
+					else if (displayId == ELDER_L || displayId  == ELDER_R) {
+						//x,y,z
+						glTranslated(0, 0.5, 0);
+						glScalef(1.5, 1.5, 1.5);
 					}
 					glCallList((GLuint)displayId);
 				}
@@ -420,11 +427,12 @@ public:
 	
 	void genObstaclePos() {
 		nowZ -= (rand() % posZ_Shift) + 6;
-
+		int randElder = 20;
+		int randCar = 25;
 		set<int> X;
 		int num = rand() % genNum;
-		int older = rand() % 30; //控制老奶奶出現的機率
-		int car = rand() % 20; //控制逆向車出現的機率
+		int older = rand() % randElder; //控制老奶奶出現的機率
+		int car = rand() % randCar; //控制逆向車出現的機率
 
 		if (num == 1 && older==0) { //老奶奶過馬路
 			int R = rand() % 2;
