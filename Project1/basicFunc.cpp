@@ -226,11 +226,11 @@ void keyboard(unsigned char key,int x,int y){
 	if(key=='y'){
 		if(isInExitMenu){
 			exit(0);
+		if(isInExitMenu && exitMenu.getScale()==exitMenu.getMaxScale()){
+			exitMenu.scaleSmall();
 		}
 	}
 	if(key=='n'){
-		if(isInExitMenu && exitMenu.getScale()==exitMenu.getMaxScale()){
-			exitMenu.scaleSmall();
 			isInExitMenu=GL_FALSE;
 		}
 	}
@@ -288,7 +288,7 @@ void keyboard(unsigned char key,int x,int y){
 	if(key=='f'){
 		//全螢幕
 		if(isFullScreen){
-			glutPositionWindow(500,200);
+			glutPositionWindow(0,0);
 			glutReshapeWindow(700, 700);
 		}
 		else{
@@ -310,8 +310,13 @@ void keyboard(unsigned char key,int x,int y){
 		}
 	}
 
-	if (key == 'c') { //無敵模式
+	//無敵模式
+	if (key == 'c') { 
 		p1.cheat = !p1.cheat;
+	}
+	//物體移動
+	if (key == 'm') {
+		p1.move = !p1.move;
 	}
 
 	glutPostRedisplay();
@@ -355,7 +360,7 @@ void timer5() {
 	aboutMenu.progress();
 
 	//player 自動移動
-	if (p1.status == GAME) {
+	if (p1.status == GAME && !p1.bone && !p1.cheat) {
 		p1.Progress();
 		printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
 	}
