@@ -27,9 +27,11 @@ public:
 	GLfloat shift = 0; //玩家與相機的位移
 	Status status = MAIN_MENU; //遊戲目前的狀態
 	TYPE event;
+	float minX, maxX;
+
 	bool cheat = false;
 	bool bone = false;
-	float minX, maxX;
+	bool move = true;
 
 	Player(float minX,float maxX){
 		memset(this->pos, 0, 3);
@@ -278,9 +280,14 @@ public:
 				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 				{
 					if (displayId == HOLE) {
-						glTranslated(0, -0.9, -0.1);
+						glTranslated(0, -0.5, -0.1);
 						glRotated(-90, 1, 0, 0);
 						
+					}
+					else if (displayId == CAR) {
+										//x,y,z
+						glTranslated(0, -0.5, 0.1);
+						glScalef(1.8, 1.8, 1.8);
 					}
 					glCallList((GLuint)displayId);
 				}
@@ -354,7 +361,7 @@ public:
 		set<int> X;
 		int num = rand() % genNum;
 		int older = rand() % 30; //控制老奶奶出現的機率
-		int car = rand() % 30; //控制逆向車出現的機率
+		int car = rand() % 20; //控制逆向車出現的機率
 
 		if (num == 1 && older==0) { //老奶奶過馬路
 			int R = rand() % 2;
@@ -415,7 +422,7 @@ public:
 		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
 		for (int i = ObStaclesPos.size()-1; i >= endIdx ; --i) {
 			
-			if (p->status == GAME) {
+			if (p->status == GAME && p->move) {
 				//老奶奶移動
 				if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i - endIdx <= 30) { //老奶奶左右移動
 					if (ObStaclesPos[i].x >= maxX) {
