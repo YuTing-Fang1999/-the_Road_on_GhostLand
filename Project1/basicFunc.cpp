@@ -355,7 +355,7 @@ void timer5() {
 	aboutMenu.progress();
 
 	//player 自動移動
-	if (p1.status == GAME) {
+	if (p1.status == GAME && !p1.bone && !p1.cheat) {
 		p1.Progress();
 		printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
 	}

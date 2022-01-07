@@ -60,23 +60,32 @@ public:
 	//player鍵盤功能
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
-
-			//速度
-			if (v + 0.002 < maxV) v += 0.002;
-			else v = maxV;
-			//相機位移
-			if (this->shift + 0.3 < 3) this->shift += 0.3;
-			else this->shift = 3;
-		}
-		else if (key == 's') {
-			if (v - 0.07 > minV) v -= 0.07;
-			else v = minV;
-
-			if (v > 0) {
-				if (this->shift - 0.1 > 0) this->shift -= 0.1;
-				else this->shift = 0;
+			if (this->bone || this->cheat) {
+				pos[2] -= LR_MOVE;
+			}
+			else {
+				//速度
+				if (v + 0.002 < maxV) v += 0.002;
+				else v = maxV;
+				//相機位移
+				if (this->shift + 0.3 < 3) this->shift += 0.3;
+				else this->shift = 3;
 			}
 			
+		}
+		else if (key == 's') {
+			if (this->bone || this->cheat) {
+				pos[2] += LR_MOVE;
+			}
+			else {
+				if (v - 0.07 > minV) v -= 0.07;
+				else v = minV;
+
+				if (v > 0) {
+					if (this->shift - 0.1 > 0) this->shift -= 0.1;
+					else this->shift = 0;
+				}
+			}
 		}
 		else if (key == 'a') {
 			if (this->pos[0] - LR_MOVE > this->minX)
@@ -211,13 +220,14 @@ public:
 
 class CollisionBall {
 public:
-	GLfloat myPos[3];
+	GLfloat myPos[3] = { 0 };
 
 	CollisionBall(GLfloat x, GLfloat y, GLfloat z) {
 		myPos[0] = x;
 		myPos[1] = y;
 		myPos[2] = z;
 	}
+
 	~CollisionBall() {}
 
 	GLfloat dist(GLfloat pos[3]) {
@@ -243,23 +253,23 @@ public:
 		GLfloat mat_dif_white[4] = { 1,1,1,1 };
 		GLfloat mat_dif_red[4] = { 1,0,0,1 };
 		
-		CollisionBall clision(x, y, z);
+		CollisionBall collision(x,y,z);
 		glPushMatrix();
 		{
 			if (p->bone) {
 				glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_yellow);
 			}
-
-			if (clision.isColision(r, p->pos)) {
-				if(p->bone) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
-				if (!p->cheat && !p->bone && p->status==GAME) {
+			if (collision.isColision(r, p->pos)) {
+				if (p->bone) glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_red);
+				if (!p->cheat && !p->bone && p->status == GAME) {
 					p->event = displayId;
 					p->status = DEAD;
 					PlaySound(NULL, NULL, SND_ASYNC);
 					PlaySound(TEXT("assets/music/湯姆貓慘叫聲.wav"), NULL, SND_ASYNC);
 				}
-				
+
 			}
+
 			glTranslatef(x, y, z);
 			if (p->bone) {
 				glutSolidCube(1);
@@ -267,15 +277,22 @@ public:
 			else {
 				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 				{
+					if (displayId == HOLE) {
+						glTranslated(0, -0.9, -0.1);
+						glRotated(-90, 1, 0, 0);
+						
+					}
 					glCallList((GLuint)displayId);
 				}
 				glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 			}
 			
 			
-			glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_white);
+
+			
 		}
 		glPopMatrix();
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_dif_white);
 	}
 };
 

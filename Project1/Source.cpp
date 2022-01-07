@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(30); 
+extern Timer myTimer(300); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 1000); 
 //進度條
