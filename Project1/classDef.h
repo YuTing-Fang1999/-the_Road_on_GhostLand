@@ -15,20 +15,44 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-typedef enum { ELDER_R = 7, ELDER_L = 8, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
+typedef enum { PLAYER=29, ELDER_R = 7, ELDER_L = 8, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
 
 class Player{
 public:
-	GLfloat pos[3];	//Position
-	GLfloat LR_MOVE = 1; //玩家每次移動左右的距離
-	GLfloat v = 0.01; //玩家移動速度
-	GLfloat maxV = 1; //玩家移動速度
-	GLfloat minV = 0.01; //玩家移動速度
-	GLfloat shift = 0; //玩家與相機的位移
-	Status status = MAIN_MENU; //遊戲目前的狀態
-	TYPE event;
-	float minX, maxX;
+	//遊戲目前的狀態
+	Status status = MAIN_MENU; 
+	//Position
+	GLfloat pos[3];	
 
+	//玩家移動速度
+	GLfloat v = 0.01; 
+	GLfloat maxV = 1; 
+	GLfloat minV = 0.01; 
+	//加速度
+	GLfloat fa = 0.0005; //往前的加速度
+	GLfloat ba = 0.001; //往後的加速度
+	GLfloat friction = 0.2; //摩擦力
+	//玩家左右移動的距離
+	GLfloat LR_MOVE = 0.05;
+	
+	//玩家與相機的位移
+	GLfloat shift = 0; 
+	GLfloat shift_forward = 0.05; 
+	GLfloat shift_backward = 0.06;
+
+	//玩家傾倒角度
+	GLfloat angle = 0;
+	GLfloat Angle_V = 0.5;
+	GLfloat Angle_MOVE = 0.4;
+
+	//遇到的事件
+	TYPE event;
+
+	//道路邊界
+	float minX, maxX;
+	//移動狀態
+	bool moveForward, moveBack, moveRight, moveLeft;
+	//作弊按鈕
 	bool cheat = false;
 	bool bone = false;
 	bool move = true;
@@ -53,8 +77,19 @@ public:
 		glPushMatrix();
 		{
 			glTranslatef(pos[0], pos[1], pos[2] - this->shift);
-			glScalef(1,2,1);
-			glutSolidCube(1);
+			if (this->bone) {
+				glScalef(1, 2, 1);
+				glutSolidCube(1);
+			}
+			else {
+				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+				{
+					glRotated(angle, 0, 0, 1);
+					glRotated(-90, 0, 1, 0);
+					glCallList((GLuint)PLAYER);
+				}
+				glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
+			}
 		}
 		glPopMatrix();
 	}
@@ -62,43 +97,69 @@ public:
 	//player鍵盤功能
 	void kb(unsigned char key, int x, int y) {
 		if (key == 'w') {
-			if (this->bone || this->cheat) {
+			moveForward = true;
+		}
+		else if (key == 's') {
+			moveBack = true;
+		}
+		else if (key == 'a') {
+			moveLeft = true;
+		}
+		else if (key == 'd') {
+			moveRight = true;
+		}
+	}
+
+	void changePos() {
+		if (this->moveForward) {
+			if (this->bone) {
 				pos[2] -= LR_MOVE;
 			}
 			else {
 				//速度
-				if (v + 0.002 < maxV) v += 0.002;
+				if (v + fa < maxV) v += fa;
 				else v = maxV;
 				//相機位移
-				if (this->shift + 0.3 < 3) this->shift += 0.3;
+				if (this->shift + shift_forward < 3) this->shift += shift_forward;
 				else this->shift = 3;
 			}
-			
+
 		}
-		else if (key == 's') {
-			if (this->bone || this->cheat) {
+		if (this->moveBack) {
+			if (this->bone) {
 				pos[2] += LR_MOVE;
 			}
 			else {
-				if (v - 0.07 > minV) v -= 0.07;
+				if (v - ba > minV) v -= ba;
 				else v = minV;
 
 				if (v > 0) {
-					if (this->shift - 0.1 > 0) this->shift -= 0.1;
+					if (this->shift - shift_backward > 0) this->shift -= shift_backward;
 					else this->shift = 0;
 				}
 			}
 		}
-		else if (key == 'a') {
+		if (this->moveLeft) {
 			if (this->pos[0] - LR_MOVE > this->minX)
 				pos[0] -= LR_MOVE;
 			else pos[0] = minX;
+
+			angle += (Angle_V + Angle_MOVE);
 		}
-		else if (key == 'd') {
+		if (this->moveRight) {
 			if (this->pos[0] + LR_MOVE < this->maxX)
 				pos[0] += LR_MOVE;
 			else pos[0] = maxX;
+
+			angle -= (Angle_V + Angle_MOVE);
 		}
+
+		//旋轉角度
+		if (angle - Angle_V > 0) angle -= Angle_V;
+		//else angle = 0;
+		
+		if (angle + Angle_V < 0) angle += Angle_V;
+		//else angle = 0;
 	}
 
 	//自動前進
@@ -108,6 +169,7 @@ public:
 
 	//停止
 	void playerStop(int finalPos) {
+		PlaySound(NULL, NULL, NULL);
 		this->pos[2] = finalPos;
 	}
 };
@@ -280,7 +342,8 @@ public:
 				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 				{
 					if (displayId == HOLE) {
-						glTranslated(0, -0.5, -0.1);
+									//x,y,z
+						glTranslated(0, -0.9, -0.1);
 						glRotated(-90, 1, 0, 0);
 						
 					}

@@ -318,6 +318,7 @@ int main(int argc,char **argv){
 
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+	glutKeyboardUpFunc(keyboardUp);
 	glutSpecialFunc(specialKb);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);

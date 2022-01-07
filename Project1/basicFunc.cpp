@@ -212,7 +212,23 @@ void initGame() {
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
 	//mciSendString(TEXT("play \"assets/music/逆向車.mp3 repeat\" "), NULL, 0, NULL);
 }
+void keyboardUp(unsigned char key, int x, int y) {
+	if (key == 'w') {
+		p1.moveForward = false;
+	}
+	else if (key == 's') {
+		p1.moveBack = false;
 
+	}
+	else if (key == 'a') {
+		p1.moveLeft = false;
+
+	}
+	else if (key == 'd') {
+		p1.moveRight = false;
+
+	}
+}
 void keyboard(unsigned char key,int x,int y){
 	//大寫全轉小寫
 	if(65<=key && key<=90) key+=32;
@@ -347,7 +363,8 @@ void timer1000() {
 }
 void timer20() {
 	//player的速度會因摩擦力慢慢減少
-	if (p1.v - 0.01 > p1.maxV) p1.v -= 0.01;
+	if (p1.v - p1.friction > p1.maxV) p1.v -= p1.friction;
+	//相機位移
 	if (p1.shift - 0.05 > 0) p1.shift -= 0.05;
 	else p1.shift = 0;
 }
@@ -359,8 +376,11 @@ void timer5() {
 	coverRGL.progress();
 	aboutMenu.progress();
 
+	//player 更換座標
+	p1.changePos();
+
 	//player 自動移動
-	if (p1.status == GAME && !p1.bone && !p1.cheat) {
+	if (p1.status == GAME && !p1.bone ) {
 		p1.Progress();
 		printf("\rpos.z = %f, pos.x=%f, STATUS:%d \t",p1.pos[2], p1.pos[0], p1.status);
 	}
