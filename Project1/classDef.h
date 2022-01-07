@@ -86,6 +86,7 @@ public:
 			else {
 				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 				{
+					glTranslated(0, 0.5, 0);
 					glRotated(angle, 0, 0, 1);
 					glRotated(-90, 0, 1, 0);
 					glCallList((GLuint)PLAYER);
@@ -238,10 +239,16 @@ public:
 			{
 				glTranslatef(p->pos[0], p->pos[1], p->pos[2]);
 				glColor3f(1, 1, 1);
-				char timer[50];
+				char timer[100];
 				int i = sprintf(timer, "TIME: %3d", this->nowTime);
 				if (p->cheat) {
-					sprintf(&timer[i], "\n\ncheat", NULL);
+					i += sprintf(&timer[i], " cheat", NULL);
+				}
+				if (p->bone) {
+					i += sprintf(&timer[i], " bone", NULL);
+				}
+				if (!p->move) {
+					i += sprintf(&timer[i], " freeze", NULL);
 				}
 				drawstr(-4, 7.5, timer);
 			}
