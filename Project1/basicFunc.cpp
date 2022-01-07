@@ -50,6 +50,9 @@ extern Imagx event_hole=Imagx();
 extern Imagx event_xross_to_R=Imagx();
 extern Imagx event_xross_to_L=Imagx();
 
+//背景
+extern Imagx bg_001=Imagx();
+
 //成就
 extern Imagx archiv_ad_board=Imagx();
 extern Imagx archiv_fire=Imagx();
@@ -200,6 +203,10 @@ void init(){
 	objlist.push(board_pawnshop.getDpIndex());
 	objlist.push(playerObj.getDpIndex());
 	objlist.push(car.getDpIndex());
+
+	//背景
+	bg_001=Imagx("assets/img/BG/background001.png",1,GL_TRUE);
+	imlist.push(bg_001.getDpIndex());
 
 	/* 對隨機產生障礙物設定亂數種子 */
 	srand(time(NULL));
@@ -444,7 +451,7 @@ void reshape(int w,int h){
 	glViewport(0,0,w,h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60,(GLfloat)w/(GLfloat)h,1,80);
+	gluPerspective(60,(GLfloat)w/(GLfloat)h,1,100);
 	glMatrixMode(GL_MODELVIEW);
 }
 

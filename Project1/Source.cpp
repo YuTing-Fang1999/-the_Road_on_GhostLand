@@ -25,7 +25,6 @@ extern RandomGenObStacles myRandGenObstacles(myGround.minX, myGround.maxX, 2, -1
 //玩家
 extern Player p1=Player(myGround.minX, myGround.maxX);
 
-
 //flag
 extern GLboolean listExchange;
 extern GLboolean hasShownArchiv;
@@ -55,6 +54,9 @@ extern Imagx event_fire;
 extern Imagx event_hole;
 extern Imagx event_xross_to_R;
 extern Imagx event_xross_to_L;
+
+//背景
+extern Imagx bg_001;
 
 //成就
 extern Imagx archiv_ad_board;
@@ -284,6 +286,19 @@ void drawEvent(Player* p) {
 	glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 }
 
+void drawBackground(GLfloat pos[]){
+	glPushMatrix();
+	{
+		glTranslatef(pos[0],pos[1],pos[2]);
+		glTranslatef(0,-5,-80);
+		glRotatef(-10.5,1,0,0);
+		static float ss=105;
+		glScalef(ss,ss,1);
+		bg_001.drawImg();
+	}
+	glPopMatrix();
+}
+
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -291,6 +306,7 @@ void display(){
 	p1.lookAt();
 	
 	//====================================
+	drawBackground(p1.pos);
 
 	switch (p1.status)
 	{
@@ -327,7 +343,6 @@ void display(){
 		default:
 			break;
 	}
-
 	switch (p1.status)
 	{
 		case END:
