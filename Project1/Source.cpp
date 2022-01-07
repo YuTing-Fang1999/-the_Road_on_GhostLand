@@ -28,6 +28,8 @@ extern Player p1=Player(myGround.minX, myGround.maxX);
 
 //flag
 extern GLboolean listExchange;
+extern GLboolean hasShownArchiv;
+Imagx* archiv_tmp;
 
 //圖片素材
 extern Imagx coverRGL;//local z = -1
@@ -221,10 +223,11 @@ void drawExitMenu(GLfloat pos[]){
 	glPopMatrix();
 }
 
-void drawRestartMenu(){
+void drawRestartMenu(GLfloat pos[]){
 	glPushMatrix();
 	{
 		glDisable(GL_DEPTH_TEST);
+		glTranslatef(pos[0],pos[1],pos[2]);
 		glTranslatef(4,-2,0);
 		glRotatef(-10,1,0,0);
 		restartMenu.drawImg();
@@ -233,6 +236,9 @@ void drawRestartMenu(){
 	glPopMatrix();
 }
 
+void drawArchiv(Imagx* archiv){
+	archiv->drawImg();
+}
 
 void drawEvent(Player* p) {
 	glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
@@ -240,8 +246,38 @@ void drawEvent(Player* p) {
 		glPushMatrix();
 		{
 			glTranslated(p->pos[0],p->pos[1],p->pos[2]);
-			//printf("event=%d\n", p->event);
-			glCallList(p->event);
+			glTranslatef(0,3.5,0);
+			glRotatef(-10,1,0,0);
+			glDisable(GL_DEPTH_TEST);
+			if(hasShownArchiv){
+				//has shown
+				drawArchiv(archiv_tmp);
+			}
+			else{
+				//does not show
+				hasShownArchiv = GL_TRUE;
+				switch (p->event)
+				{
+					case CAR:
+						archiv_tmp=&archiv_reverse_car;
+						break;
+					case FIRE:
+						archiv_tmp=&archiv_fire;
+						break;
+					case HOLE:
+						archiv_tmp=&archiv_road_hole;
+						break;
+					case ELDER_L:
+					case ELDER_R:
+						archiv_tmp=&archiv_xross_road;
+						break;
+					default:
+						printf("event:%d\n",p->event);
+						break;
+				}
+				archiv_tmp->popUpAnim(180);
+			}
+			glEnable(GL_DEPTH_TEST);
 		}
 		glPopMatrix();
 	}
@@ -269,19 +305,16 @@ void display(){
 		case DEAD:
 			drawGame();
 			drawEvent(&p1);
-			drawRestartMenu();
 			break;
 
 		case END:
 			drawGame();
 			drawEnd();
-			drawRestartMenu();
 			break;
 
 		case TIMEUP:
 			drawGame();
 			drawTimeUp();
-			drawRestartMenu();
 			break;
 
 		case MAIN_MENU:
@@ -290,6 +323,17 @@ void display(){
 
 		case DEBUG:
 			drawDebugView();
+			break;
+		default:
+			break;
+	}
+
+	switch (p1.status)
+	{
+		case END:
+		case DEAD:
+		case TIMEUP:
+			drawRestartMenu(p1.pos);
 			break;
 		default:
 			break;

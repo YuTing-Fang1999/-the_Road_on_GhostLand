@@ -21,6 +21,7 @@ extern RandomGenObStacles myRandGenObstacles;
 GLboolean isFullScreen=GL_FALSE;
 GLboolean isInExitMenu=GL_FALSE;
 extern GLboolean listExchange=GL_FALSE;
+extern GLboolean hasShownArchiv=GL_FALSE;
 
 //圖片素材
 //external variable需要初始化一個實體
@@ -85,7 +86,7 @@ void init(){
 	//載入圖片素材
 	mainMenu=Imagx("assets/img/menu/menu_main.png",2.5,GL_TRUE);
 	coverRGL=Imagx("assets/img/cover/cover_RGL_normal.png",2.8,GL_TRUE);coverRGL.cirleRotateAnim(GL_TRUE);
-	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(3.5);exitMenu.setEndTick(50);
+	exitMenu=Imagx("assets/img/menu/menu_exit.png",0,GL_TRUE);exitMenu.setMaxScale(2);exitMenu.setEndTick(50);
 	helpMenu=Imagx("assets/img/menu/menu_help.png",0,GL_TRUE);helpMenu.setMaxScale(4);
 	aboutMenu=Imagx("assets/img/menu/menu_about.png",0,GL_TRUE);aboutMenu.setMaxScale(4);
 	restartMenu=Imagx("assets/img/menu/menu_restart.png",2,GL_TRUE);
@@ -127,12 +128,24 @@ void init(){
 	imlist.push(event_xross_to_L.getDpIndex());
 
 	//成就
-	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",1,GL_TRUE);
-	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",1,GL_TRUE);
-	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",1,GL_TRUE);
-	archiv_xross_road=Imagx("assets/img/archiv/archiv_xross_road.png",1,GL_TRUE);
-	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",1,GL_TRUE);
-	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",1,GL_TRUE);
+	archiv_fire=Imagx("assets/img/archiv/archiv_fire.png",0,GL_TRUE);
+	archiv_fire.setMaxScale(4);
+	archiv_fire.cirleRotateAnim(GL_TRUE);
+	archiv_ad_board=Imagx("assets/img/archiv/archiv_ad_board.png",0,GL_TRUE);
+	archiv_ad_board.setMaxScale(4);
+	archiv_ad_board.cirleRotateAnim(GL_TRUE);
+	archiv_road_hole=Imagx("assets/img/archiv/archiv_road_hole.png",0,GL_TRUE);
+	archiv_road_hole.setMaxScale(4);
+	archiv_road_hole.cirleRotateAnim(GL_TRUE);
+	archiv_xross_road=Imagx("assets/img/archiv/archiv_xross_road.png",0,GL_TRUE);
+	archiv_xross_road.setMaxScale(4);
+	archiv_xross_road.cirleRotateAnim(GL_TRUE);
+	archiv_reverse_car=Imagx("assets/img/archiv/archiv_reverse_car.png",0,GL_TRUE);
+	archiv_reverse_car.setMaxScale(4);
+	archiv_reverse_car.cirleRotateAnim(GL_TRUE);
+	archiv_intersection_car=Imagx("assets/img/archiv/archiv_intersection_car.png",0,GL_TRUE);
+	archiv_intersection_car.setMaxScale(4);
+	archiv_intersection_car.cirleRotateAnim(GL_TRUE);
 	imlist.push(archiv_fire.getDpIndex());
 	imlist.push(archiv_ad_board.getDpIndex());
 	imlist.push(archiv_road_hole.getDpIndex());
@@ -211,6 +224,9 @@ void initGame() {
 	//音樂
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
 	//mciSendString(TEXT("play \"assets/music/逆向車.mp3 repeat\" "), NULL, 0, NULL);
+
+	//archiv shown init
+	hasShownArchiv=GL_FALSE;
 }
 void keyboardUp(unsigned char key, int x, int y) {
 	if (key == 'w') {
@@ -369,12 +385,24 @@ void timer20() {
 	else p1.shift = 0;
 }
 
-void timer5() {
-	//圖片素材
+void menuProgress(){
 	helpMenu.progress();
 	exitMenu.progress();
 	coverRGL.progress();
 	aboutMenu.progress();
+}
+
+void archivProgress(){
+	archiv_fire.progress();
+	archiv_ad_board.progress();
+	archiv_road_hole.progress();
+	archiv_xross_road.progress();
+	archiv_reverse_car.progress();
+}
+
+void timer5() {
+	menuProgress();
+	archivProgress();
 
 	//player 更換座標
 	p1.changePos();
