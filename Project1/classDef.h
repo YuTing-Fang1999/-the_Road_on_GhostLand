@@ -86,6 +86,7 @@ public:
 				glutSolidCube(1);
 			}
 			else {
+				glPushAttrib(GL_LIGHTING_BIT);
 				glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
 				{
 					glTranslated(0, 0.5, 0);
@@ -94,6 +95,7 @@ public:
 					glCallList((GLuint)PLAYER);
 				}
 				glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
+				glPopAttrib();
 			}
 		}
 		glPopMatrix();
@@ -240,7 +242,7 @@ public:
 			glPushMatrix();
 			{
 				glTranslatef(p->pos[0], p->pos[1], p->pos[2]);
-				glColor3f(1, 1, 1);
+				glColor3f(0, 0, 0);
 				char timer[100];
 				int i = sprintf(timer, "TIME: %3d", this->nowTime);
 				if (p->cheat) {
