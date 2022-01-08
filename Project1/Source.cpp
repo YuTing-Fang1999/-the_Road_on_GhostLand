@@ -15,7 +15,7 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(300); 
+extern Timer myTimer(10); 
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 60); 
 //進度條
@@ -418,7 +418,7 @@ void display(){
 			break;
 	}
 
-	drawDialog(p1.status,p1.pos,1);
+	drawDialog(p1.status,p1.pos,4);
 	drawRestartMenu(p1.status,p1.pos);
 	drawEvent(&p1);
 	drawExitMenu(p1.pos);
