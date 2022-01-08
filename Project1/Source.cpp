@@ -15,9 +15,9 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(3); 
+extern Timer myTimer(30); 
 //地板(minX, maxX, 路徑長度)
-extern Ground myGround(-2, 2, 60); 
+extern Ground myGround(-2, 2, 600); 
 //進度條
 extern ProgressBar myProgressBar(myGround.pathLen);
 //隨機產生障礙物(minX, maxX, genNum, intialPosZ, , posZ_Shift)
@@ -415,7 +415,7 @@ void display(){
 			break;
 	}
 
-	drawDialog(p1.status,p1.pos,1);
+	drawDialog(p1.status,p1.pos,p1.character);
 	drawRestartMenu(p1.status,p1.pos);
 	drawEvent(&p1);
 	drawExitMenu(p1.pos);
