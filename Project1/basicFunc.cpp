@@ -246,6 +246,7 @@ void idle(){
 void initGame() {
 	myTimer.nowTime = myTimer.time;
 	memset(p1.pos, 0, sizeof(p1.pos));
+	p1.event = INIT;
 	p1.v = 0.01;
 	p1.shift = 0;
 	//停止播放音樂

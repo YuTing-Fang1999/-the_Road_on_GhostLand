@@ -15,7 +15,7 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-typedef enum { PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
+typedef enum { INIT, PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
 
 
 
@@ -48,7 +48,7 @@ public:
 	GLfloat Angle_MOVE = 0.4;
 
 	//遇到的事件
-	TYPE event;
+	TYPE event = INIT;
 
 	//道路邊界
 	float minX, maxX;
