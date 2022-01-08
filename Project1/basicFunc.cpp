@@ -397,6 +397,23 @@ void keyboard(unsigned char key,int x,int y){
 		p1.move = !p1.move;
 	}
 
+	//腳色控制
+	if (key == '1') {
+		p1.character = 0;
+	}
+	if (key == '2') {
+		p1.character = 1;
+	}
+	if (key == '3') {
+		p1.character = 2;
+	}
+	if (key == '4') {
+		p1.character = 3;
+	}
+	if (key == '5') {
+		p1.character = 4;
+	}
+
 	glutPostRedisplay();
 }
 
