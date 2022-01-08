@@ -81,6 +81,12 @@ extern ObjectLoader board_small_cup;
 extern ObjectLoader board_pawnshop;
 extern ObjectLoader playerObj;
 extern ObjectLoader car;
+
+extern ObjectLoader house;
+extern ObjectLoader roof;
+extern ObjectLoader rainhide;
+extern ObjectLoader topfloor;
+
 extern ObjList objlist;
 
 extern Building b1;
@@ -109,7 +115,7 @@ void drawDebugView(){
 			imlist.draw();
 		}
 		else{
-			glRotatef(60,0,1,0);
+			glRotatef(20,0,1,0);
 			objlist.draw();
 		}
 	}
@@ -240,6 +246,33 @@ void drawStart() {
 	glPopMatrix();
 }
 
+void drawSeqBuilds(){
+	glPushMatrix();
+	{
+		for(int i=0;i<10;i++){
+			glPushMatrix();
+			{
+				glTranslatef(10,0,-80-i*4.5);
+				glRotatef(-60,0,1,0);
+				glScalef(2,2,2);
+				glCallList(house.getDpIndex());
+				if(i%2==0){
+					glCallList(roof.getDpIndex());
+				}
+				if(i%5==0){
+					glCallList(rainhide.getDpIndex());
+				}
+				if(i%7==0){
+					glCallList(topfloor.getDpIndex());
+				}
+			}
+			glPopMatrix();
+		}
+
+	}
+	glPopMatrix();
+}
+
 //遊戲運行畫面
 void drawGame() {
 
@@ -251,6 +284,7 @@ void drawGame() {
 
 	//建築
 	drawBuildings();
+	drawSeqBuilds();
 
 	//player
 	drawPlayer();
