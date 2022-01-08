@@ -77,6 +77,11 @@ extern ObjectLoader board_pawnshop=ObjectLoader();
 extern ObjectLoader playerObj=ObjectLoader();
 extern ObjectLoader car=ObjectLoader();
 
+extern ObjectLoader house=ObjectLoader();
+extern ObjectLoader roof=ObjectLoader();
+extern ObjectLoader rainhide=ObjectLoader();
+extern ObjectLoader topfloor=ObjectLoader();
+
 extern Building b1=Building();
 
 //list
@@ -211,6 +216,37 @@ void init(){
 	objlist.push(board_pawnshop.getDpIndex());
 	objlist.push(playerObj.getDpIndex());
 	objlist.push(car.getDpIndex());
+
+
+	house=ObjectLoader(
+		"assets/obj/building/house.obj",
+		NULL,
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
+	roof=ObjectLoader(
+		"assets/obj/building/roof.obj",
+		NULL,
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
+	rainhide=ObjectLoader(
+		"assets/obj/building/rainhide.obj",
+		NULL,
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
+	topfloor=ObjectLoader(
+		"assets/obj/building/topfloor.obj",
+		NULL,
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
+	objlist.push(house.getDpIndex());
+	objlist.push(roof.getDpIndex());
+	objlist.push(rainhide.getDpIndex());
+	objlist.push(topfloor.getDpIndex());
+
 
 
 	// 以下兩個要搬到前面排dpindex順序
