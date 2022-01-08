@@ -203,7 +203,8 @@ void drawDialog(Status s, GLfloat pos[],int id){
 	}
 
 	if(dialog!=NULL){
-		glPushAttrib(GL_LIGHTING_BIT);glPushMatrix();
+		glPushAttrib(GL_LIGHTING_BIT);
+		glPushMatrix();
 		{
 			glTranslatef(pos[0],pos[1],pos[2]);
 			glTranslatef(0,2,2);
@@ -224,7 +225,8 @@ void drawDialog(Status s, GLfloat pos[],int id){
 			}
 			glEnable(GL_DEPTH_TEST);
 		}
-		glPopAttrib();glPopMatrix();
+		glPopAttrib();
+		glPopMatrix();
 	}
 }
 
@@ -236,8 +238,10 @@ void drawStart() {
 	drawPlayer();
 	glPushMatrix();
 	{
+		glPushAttrib(GL_LIGHTING_BIT);
 		glTranslatef(0,-5,0);
 		building_test.drawObj(building_test.getDpIndex());//為了亮度
+		glPopAttrib();
 	}
 	glPopMatrix();
 }
@@ -396,6 +400,7 @@ void drawEvent(Player* p) {
 }
 
 void drawBackground(GLfloat pos[]){
+	glPushAttrib(GL_LIGHTING_BIT);
 	glPushMatrix();
 	{
 		glTranslatef(pos[0],pos[1],pos[2]);
@@ -420,6 +425,7 @@ void drawBackground(GLfloat pos[]){
 
 	}
 	glPopMatrix();
+	glPopAttrib();
 }
 
 void display(){
