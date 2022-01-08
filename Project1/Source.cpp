@@ -63,7 +63,8 @@ extern Imagx event_xross_to_R;
 extern Imagx event_xross_to_L;
 
 //背景
-extern Imagx bg_001;
+extern Imagx bg_color;
+extern Imagx bg_building;
 
 //成就
 extern Imagx archiv_ad_board;
@@ -196,7 +197,7 @@ void drawDialog(Status s, GLfloat pos[],int id){
 	}
 
 	if(dialog!=NULL){
-		glPushMatrix();
+		glPushAttrib(GL_LIGHTING_BIT);glPushMatrix();
 		{
 			glTranslatef(pos[0],pos[1],pos[2]);
 			glTranslatef(0,2,2);
@@ -217,7 +218,7 @@ void drawDialog(Status s, GLfloat pos[],int id){
 			}
 			glEnable(GL_DEPTH_TEST);
 		}
-		glPopMatrix();
+		glPopAttrib();glPopMatrix();
 	}
 }
 
@@ -367,8 +368,22 @@ void drawBackground(GLfloat pos[]){
 		glTranslatef(0,-5,-80);
 		glRotatef(-10.5,1,0,0);
 		static float ss=105;
-		glScalef(ss,ss,1);
-		bg_001.drawImg();
+
+		glPushMatrix();
+		{
+			glScalef(ss,ss,1);
+			bg_color.drawImg();
+		}
+		glPopMatrix();
+
+		glPushMatrix();
+		{
+			glTranslatef(0,10,0.001);
+			glScalef(ss-10,ss-10,1);
+			bg_building.drawImg();
+		}
+		glPopMatrix();
+
 	}
 	glPopMatrix();
 }

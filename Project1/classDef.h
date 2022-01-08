@@ -629,20 +629,36 @@ public:
 		glPushMatrix();
 		{
 			//glColor3ub(80, 127, 80);
-			glColor3ub(90, 95, 90);
+			
 			glTranslatef(0, 0, -100);
 			glRotatef(90, 1, 0, 0);
-			glScalef(w, h, 0);
 
 			glDisable(GL_LIGHTING);
 			{
-				glRectf(-1, 1, 1, -1);
+				glPushMatrix();
+				{
+					//road
+					glColor3ub(90, 95, 90);
+					glScalef(w, h, 0);
+					glRectf(-1, 1, 1, -1);
+				}
+				glPopMatrix();
+
+				glPushMatrix();
+				{
+					//grass
+					glColor3ub(120, 150, 120);
+					glTranslatef(0,0,0.001);
+					glScalef(h, h, 0);
+					glRectf(-1, 1, 1, -1);
+				}
+				glPopMatrix();
 			}
 			glEnable(GL_LIGHTING);
 		}
 		glPopMatrix();
 
-		//車道
+		//車道線
 		glPushMatrix();
 		{
 			glTranslatef(0, 0.001, -100);

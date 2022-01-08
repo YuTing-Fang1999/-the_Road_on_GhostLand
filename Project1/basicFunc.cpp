@@ -57,7 +57,8 @@ extern Imagx event_xross_to_R=Imagx();
 extern Imagx event_xross_to_L=Imagx();
 
 //背景
-extern Imagx bg_001=Imagx();
+extern Imagx bg_color=Imagx();
+extern Imagx bg_building=Imagx();
 
 //成就
 extern Imagx archiv_ad_board=Imagx();
@@ -214,8 +215,10 @@ void init(){
 
 	// 以下兩個要搬到前面排dpindex順序
 	//背景
-	bg_001=Imagx("assets/img/BG/background001.png",1,GL_TRUE);
-	imlist.push(bg_001.getDpIndex());
+	bg_color=Imagx("assets/img/BG/background_color.png",1,GL_TRUE);
+	bg_building=Imagx("assets/img/BG/background_building.png",1,GL_TRUE);
+	imlist.push(bg_color.getDpIndex());
+	imlist.push(bg_building.getDpIndex());
 	//text
 	text_succ=Imagx("assets/img/text/text_succ.png",4,GL_TRUE);
 	text_dead=Imagx("assets/img/text/text_dead.png",4,GL_TRUE);
@@ -269,6 +272,9 @@ void initGame() {
 	hasShownArchiv=GL_FALSE;
 }
 void keyboardUp(unsigned char key, int x, int y) {
+	//大寫全轉小寫
+	if(65<=key && key<=90) key+=32;
+
 	if (key == 'w') {
 		p1.moveForward = false;
 	}
