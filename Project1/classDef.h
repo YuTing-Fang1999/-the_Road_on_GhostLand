@@ -260,32 +260,85 @@ public:
 
 class Building{
 public:
-	GLfloat scl[3];
+	GLfloat scl[3]={1,1,1};
 	GLfloat pos[3]={0,0,0};
 	GLfloat mat_amb[4]={0.2,0.2,0.2,1};
 	GLfloat mat_dif[4]={0.8,0.7,0.7,1};
 	GLfloat mat_dif_w[4]={1,1,1,1};
 	GLfloat mat_nul[4]={0,0,0,0};
+	GLuint baseDpIndex=0;
+	GLuint buildDpIndex=0;
 
-	Building(GLfloat x,GLfloat y,GLfloat z){
+	Building(){}
+	~Building(){}
+
+	void setBaseDpIndex(GLuint dpindex){
+		baseDpIndex = dpindex;
+	}
+
+	void setScl(GLfloat x,GLfloat y,GLfloat z){
 		scl[0]=x;scl[1]=y;scl[2]=z;
 	}
-	~Building(){}
 
 	void setPos(GLfloat x,GLfloat y,GLfloat z){
 		pos[0]=x;pos[1]=y;pos[2]=z;
 	}
 
+	void compile(){
+		buildDpIndex = glGenLists(1);
+		glNewList(buildDpIndex,GL_COMPILE);
+		{
+			glPushMatrix();
+			{
+				glTranslatef(pos[0],pos[1],pos[2]);//model translate
+				glScalef(scl[0],scl[1],scl[2]);//model scale
+				glMatrixMode(GL_TEXTURE);
+				{
+					glPushMatrix();
+					{
+						glLoadIdentity();
+						glScalef(scl[0],scl[1],scl[2]);//tex scale
+						glCallList(baseDpIndex);
+					}
+					glPopMatrix();
+				}
+				glMatrixMode(GL_MODELVIEW);
+			}
+			glPopMatrix();
+		}
+		glEndList();
+	}
+
 	void drawBuilding(){
+		/*
+			glPushMatrix();
+			{
+				//glTranslatef(0,0,-70);
+				glTranslatef(pos[0],pos[1],pos[2]);
+				glScalef(scl[0],scl[1],scl[2]);
+				//glMaterialfv(GL_FRONT,GL_AMBIENT,mat_amb);
+			
+				glutSolidCube(1);
+				//glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_dif_w);
+			}
+			glPopMatrix();
+		*/
+		//glCallList(buildDpIndex);
 		glPushMatrix();
 		{
-			//glTranslatef(0,0,-70);
-			glTranslatef(pos[0],pos[1],pos[2]);
-			glScalef(scl[0],scl[1],scl[2]);
-			//glMaterialfv(GL_FRONT,GL_AMBIENT,mat_amb);
-			
-			glutSolidCube(1);
-			//glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_dif_w);
+			glTranslatef(pos[0],pos[1],pos[2]);//model translate
+			glScalef(scl[0],scl[1],scl[2]);//model scale
+			glMatrixMode(GL_TEXTURE);
+			{
+				glPushMatrix();
+				{
+					glLoadIdentity();
+					glScalef(scl[0],scl[1],scl[2]);//tex scale
+					glCallList(baseDpIndex);
+				}
+				glPopMatrix();
+			}
+			glMatrixMode(GL_MODELVIEW);
 		}
 		glPopMatrix();
 	}
