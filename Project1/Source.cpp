@@ -17,7 +17,7 @@
 //遊戲時長(秒)
 extern Timer myTimer(30); 
 //地板(minX, maxX, 路徑長度)
-extern Ground myGround(-2, 2, 600); 
+extern Ground myGround(-2, 2, 60); 
 //進度條
 extern ProgressBar myProgressBar(myGround.pathLen);
 //隨機產生障礙物(minX, maxX, genNum, intialPosZ, , posZ_Shift)
@@ -347,6 +347,9 @@ void drawEvent(Player* p) {
 						case ELDER_L:
 						case ELDER_R:
 							archiv_tmp=&archiv_xross_road;
+							break;
+						case INIT:
+							archiv_tmp = NULL;
 							break;
 						default:
 							printf("event:%d\n",p->event);

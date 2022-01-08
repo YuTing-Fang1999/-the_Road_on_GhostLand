@@ -15,7 +15,7 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-typedef enum { INIT, PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 } TYPE;
+enum TYPE { INIT, PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 };
 
 
 
