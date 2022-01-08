@@ -95,12 +95,16 @@ public:
 		list.push_back(id);
 	}
 	void draw(){
+		glPushAttrib(GL_LIGHTING_BIT);
+
 		glColor3ub(255, 255, 255);
 		drawstr(-1, -3, "[OBJ]DpIndex:%d", list[i]);
 
 		glEnable(GL_TEXTURE_2D);glEnable(GL_BLEND);
 		glCallList(list[i]);
 		glDisable(GL_TEXTURE_2D);glDisable(GL_BLEND);
+		glPopAttrib();
+
 	}
 	void specialKb(int key,int x,int y){
 		//printf("index:%d\n",list[index]);

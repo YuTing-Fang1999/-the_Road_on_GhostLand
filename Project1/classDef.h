@@ -513,16 +513,16 @@ public:
 					}
 
 					if (ObStaclesPos[i].moveR) {
-						ObStaclesPos[i].x += 0.01;
+						ObStaclesPos[i].x += 0.03;
 					}
 					else {
-						ObStaclesPos[i].x -= 0.01;
+						ObStaclesPos[i].x -= 0.03;
 					}
 				}
 
 				//逆向車移動
 				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { 
-					ObStaclesPos[i].z += 0.05;
+					ObStaclesPos[i].z += 0.1;
 					if (ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
 						mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
 				}
@@ -540,7 +540,7 @@ public:
 					if (ObStaclesPos[i].y >= 1.5) {
 						ObStaclesPos[i].moveUp = false;
 					}
-					if (ObStaclesPos[i].y <= 0.6) {
+					if (ObStaclesPos[i].y <= 0.8) {
 						ObStaclesPos[i].moveUp = true;
 					}
 
