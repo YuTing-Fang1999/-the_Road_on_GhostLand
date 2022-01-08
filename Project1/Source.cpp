@@ -15,7 +15,11 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
+<<<<<<< HEAD
 extern Timer myTimer(30); 
+=======
+extern Timer myTimer(10); 
+>>>>>>> 96d13de95bc308e5755224d6262a13b54d81bddc
 //地板(minX, maxX, 路徑長度)
 extern Ground myGround(-2, 2, 600); 
 //進度條
@@ -82,6 +86,8 @@ extern ObjectLoader playerObj;
 extern ObjectLoader car;
 extern ObjList objlist;
 
+extern Building b1;
+
 //遊戲除錯空間
 void drawDebugView(){
 	//stev測試用OBJ
@@ -106,6 +112,7 @@ void drawDebugView(){
 			imlist.draw();
 		}
 		else{
+			glRotatef(60,0,1,0);
 			objlist.draw();
 		}
 	}
@@ -415,7 +422,11 @@ void display(){
 			break;
 	}
 
+<<<<<<< HEAD
 	drawDialog(p1.status,p1.pos,p1.character);
+=======
+	drawDialog(p1.status,p1.pos,4);
+>>>>>>> 96d13de95bc308e5755224d6262a13b54d81bddc
 	drawRestartMenu(p1.status,p1.pos);
 	drawEvent(&p1);
 	drawExitMenu(p1.pos);
