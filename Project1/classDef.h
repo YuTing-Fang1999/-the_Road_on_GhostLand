@@ -262,18 +262,39 @@ public:
 
 class Building{
 public:
-	GLfloat scl[3];
+	GLfloat bScl[3]={1,1,1};
+	GLfloat scl[3]={1,1,1};
+	GLfloat rot[3]={0,0,0};
 	GLfloat pos[3]={0,0,0};
 	GLfloat mat_amb[4]={0.2,0.2,0.2,1};
 	GLfloat mat_dif[4]={0.8,0.7,0.7,1};
 	GLfloat mat_dif_w[4]={1,1,1,1};
 	GLfloat mat_nul[4]={0,0,0,0};
+	GLboolean usingTexRepeat=GL_TRUE;
+	GLuint baseDpIndex=0;
 
-	Building(GLfloat x,GLfloat y,GLfloat z){
-		scl[0]=x;scl[1]=y;scl[2]=z;
-	}
+	Building(){}
 	~Building(){}
 
+	void setUsingTexRepeat(GLboolean flag){
+		usingTexRepeat=flag;
+	}
+
+	void setBaseDpIndex(GLuint dpindex){
+		baseDpIndex = dpindex;
+	}
+
+	void setScl(GLfloat x,GLfloat y,GLfloat z){
+		scl[0]=x;scl[1]=y;scl[2]=z;
+	}
+
+	void setbScl(GLfloat x,GLfloat y,GLfloat z){
+		bScl[0]=x;bScl[1]=y;bScl[2]=z;
+	}
+
+	void setRot(GLfloat x,GLfloat y,GLfloat z){
+		rot[0]=x;rot[1]=y;rot[2]=z;
+	}
 	void setPos(GLfloat x,GLfloat y,GLfloat z){
 		pos[0]=x;pos[1]=y;pos[2]=z;
 	}
@@ -281,13 +302,42 @@ public:
 	void drawBuilding(){
 		glPushMatrix();
 		{
-			//glTranslatef(0,0,-70);
-			glTranslatef(pos[0],pos[1],pos[2]);
-			glScalef(scl[0],scl[1],scl[2]);
-			//glMaterialfv(GL_FRONT,GL_AMBIENT,mat_amb);
+			glTranslatef(pos[0],pos[1],pos[2]);//model translate
+			glRotatef(rot[1],0,1,0);//model rotate
+			glScalef(scl[0],scl[1],scl[2]);//model scale
+			if(usingTexRepeat){
+				glMatrixMode(GL_TEXTURE);
+				{
+					glPushMatrix();
+					{
+						glLoadIdentity();
+						glScalef(scl[0],scl[1],scl[2]);//tex scale
+
+						glMatrixMode(GL_MODELVIEW);
+						{
+							glPushMatrix();
+							{
+								glScalef(bScl[0],bScl[1],bScl[2]);
+								glCallList(baseDpIndex);
+							}
+							glPopMatrix();
+						}
+						glMatrixMode(GL_TEXTURE);
+						
+					}
+					glPopMatrix();
+				}
+				glMatrixMode(GL_MODELVIEW);
+			}
+			else{
+				glPushMatrix();
+				{
+					glScalef(bScl[0],bScl[1],bScl[2]);
+					glCallList(baseDpIndex);
+				}
+				glPopMatrix();
+			}
 			
-			glutSolidCube(1);
-			//glMaterialfv(GL_FRONT,GL_DIFFUSE,mat_dif_w);
 		}
 		glPopMatrix();
 	}

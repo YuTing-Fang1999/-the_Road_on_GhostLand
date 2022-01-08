@@ -82,6 +82,8 @@ extern ObjectLoader playerObj;
 extern ObjectLoader car;
 extern ObjList objlist;
 
+extern Building b1;
+
 //遊戲除錯空間
 void drawDebugView(){
 	//stev測試用OBJ
@@ -106,6 +108,7 @@ void drawDebugView(){
 			imlist.draw();
 		}
 		else{
+			glRotatef(60,0,1,0);
 			objlist.draw();
 		}
 	}

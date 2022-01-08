@@ -11,7 +11,6 @@
 #include "ObjectLoader.h"
 
 extern Player p1;
-Building b1(5, 10, 5);
 extern Timer myTimer;
 extern Ground myGround;
 extern ProgressBar myProgressBar;
@@ -76,6 +75,8 @@ extern ObjectLoader board_small_cup=ObjectLoader();
 extern ObjectLoader board_pawnshop=ObjectLoader();
 extern ObjectLoader playerObj=ObjectLoader();
 extern ObjectLoader car=ObjectLoader();
+
+extern Building b1=Building();
 
 //list
 extern ImagxList imlist=ImagxList();
@@ -233,7 +234,11 @@ void init(){
 	imlist.push(text_begin_teacher.getDpIndex());
 	imlist.push(text_timeup_teacher.getDpIndex());
 
-
+	b1.setBaseDpIndex(building_test.getDpIndex());
+	b1.setbScl(2,2,2);
+	b1.setScl(2,4,2);
+	b1.setRot(0,20,0);
+	b1.setPos(-15, 15, -70);
 
 	/* 對隨機產生障礙物設定亂數種子 */
 	srand(time(NULL));
@@ -510,7 +515,6 @@ void drawObstacles() {
 }
 
 void drawBuildings() {
-	b1.setPos(10, 1, -70);
 	b1.drawBuilding();
 }
 
