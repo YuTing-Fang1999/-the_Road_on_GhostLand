@@ -260,6 +260,7 @@ public:
 
 class Building{
 public:
+	GLfloat bScl[3]={1,1,1};
 	GLfloat scl[3]={1,1,1};
 	GLfloat rot[3]={0,0,0};
 	GLfloat pos[3]={0,0,0};
@@ -285,6 +286,10 @@ public:
 		scl[0]=x;scl[1]=y;scl[2]=z;
 	}
 
+	void setbScl(GLfloat x,GLfloat y,GLfloat z){
+		bScl[0]=x;bScl[1]=y;bScl[2]=z;
+	}
+
 	void setRot(GLfloat x,GLfloat y,GLfloat z){
 		rot[0]=x;rot[1]=y;rot[2]=z;
 	}
@@ -305,14 +310,30 @@ public:
 					{
 						glLoadIdentity();
 						glScalef(scl[0],scl[1],scl[2]);//tex scale
-						glCallList(baseDpIndex);
+
+						glMatrixMode(GL_MODELVIEW);
+						{
+							glPushMatrix();
+							{
+								glScalef(bScl[0],bScl[1],bScl[2]);
+								glCallList(baseDpIndex);
+							}
+							glPopMatrix();
+						}
+						glMatrixMode(GL_TEXTURE);
+						
 					}
 					glPopMatrix();
 				}
 				glMatrixMode(GL_MODELVIEW);
 			}
 			else{
-				glCallList(baseDpIndex);
+				glPushMatrix();
+				{
+					glScalef(bScl[0],bScl[1],bScl[2]);
+					glCallList(baseDpIndex);
+				}
+				glPopMatrix();
 			}
 			
 		}
