@@ -15,9 +15,10 @@
 using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
-enum TYPE { INIT, PLAYER=29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16 };
-
-
+enum TYPE {
+	INIT, BUILDING, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
+	HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34
+};
 
 class Player{
 public:
@@ -680,5 +681,86 @@ public:
 			glMatrixMode(GL_MODELVIEW);
 		}
 		glPopMatrix();
+	}
+};
+
+
+struct HousePos {
+	float x, y, z;
+	bool roof;
+	bool rainhide;
+	bool topfloor;
+
+	HousePos(float a, float b, float c, bool roof, bool rainhide, bool topfloor) {
+		x = a, y = b, z = c;
+		this->roof = roof;
+		this->rainhide = rainhide;
+		this->topfloor = topfloor;
+	}
+};
+
+class House {
+public:
+	static void drawHouse(float x, float y, float z, bool isRoof, bool isRainhide, bool isTopfloor) {
+		glPushMatrix();
+		{
+			glTranslated(x, y, z);
+			glRotatef(-60, 0, 1, 0);
+			glScalef(2, 2, 2);
+			glCallList(HOUSE);
+			if (isRoof) {
+				glCallList(ROOF);
+			}
+			if (isRainhide) {
+				glCallList(RAINHIDE);
+			}
+			if (isTopfloor) {
+				glCallList(TOPFLOOR);
+			}
+		}
+		glPopMatrix();
+	}
+};
+
+class RandomGenHouse {
+public:
+	bool gen = true;
+	int endIdx = 0; //畫到endIdx
+	int intialPosZ = -40; //障礙物的初始z座標
+	int nowZ; //目前的z座標
+	int posZ_Shift = 20; //每次生成完後Z位移的範圍
+	vector<HousePos> HousesPosVec;
+	RandomGenHouse(int i) {
+
+	}
+	void init() {
+		endIdx = 0;
+		nowZ = intialPosZ;
+		HousesPosVec.clear();
+		gen = true;
+	}
+
+
+	void genHousePos() {
+		nowZ -= rand() % posZ_Shift + 9;
+		HousesPosVec.push_back(HousePos(10, 0, nowZ, rand() % 2, rand() % 2, rand() % 2));
+	}
+
+	void drawHouse(Player* p, int pathLen) {
+		if (gen) genHousePos();
+		printf("size = %d\n", HousesPosVec.size());
+		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
+		for (int i = HousesPosVec.size() - 1; i >= endIdx; --i) {
+
+			House::drawHouse(HousesPosVec[i].x, HousesPosVec[i].y, HousesPosVec[i].z, HousesPosVec[i].roof, HousesPosVec[i].rainhide, HousesPosVec[i].topfloor);
+
+			if (HousesPosVec[i].z - p->pos[2] > 5) {
+				endIdx = i;
+				printf("endIdx=%d\n", endIdx);
+				break;
+			}
+			if (HousesPosVec[i].z < pathLen) gen = false;
+			if (p->status != GAME) gen = false;
+		}
 	}
 };

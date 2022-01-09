@@ -15,6 +15,7 @@ extern Timer myTimer;
 extern Ground myGround;
 extern ProgressBar myProgressBar;
 extern RandomGenObStacles myRandGenObstacles;
+extern RandomGenHouse myRandGenHouse;
 
 //status flag
 GLboolean isFullScreen=GL_FALSE;
@@ -299,6 +300,7 @@ void initGame() {
 	srand(time(NULL));
 
 	myRandGenObstacles.init();
+	myRandGenHouse.init();
 
 	//音樂
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);
@@ -558,6 +560,8 @@ void drawObstacles() {
 
 void drawBuildings() {
 	b1.drawBuilding();
+	myRandGenHouse.drawHouse(&p1, myProgressBar.pathLen);
+	//House::drawHouse(10, 0, -80, 0, 1, 1);
 }
 
 void drawPlayer() {
