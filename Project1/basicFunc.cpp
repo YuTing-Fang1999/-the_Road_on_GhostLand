@@ -441,6 +441,14 @@ void keyboard(unsigned char key,int x,int y){
 			p1.bone = !p1.bone;
 		}
 	}
+	if(key=='x'){
+		if(p1.status == MAIN_MENU){
+			p1.status = SCORE;
+		}
+		else if(p1.status == SCORE){
+			p1.status = MAIN_MENU;
+		}
+	}
 
 	//無敵模式
 	if (key == 'c') { 

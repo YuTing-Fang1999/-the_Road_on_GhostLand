@@ -14,7 +14,7 @@
 #include"Imagx.h"
 using namespace std;
 
-enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
+enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG ,SCORE };
 enum TYPE {
 	INIT, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
 	BUILDING = 26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34, ILLEGALFLOOR = 35,
@@ -905,7 +905,18 @@ public:
 		}	
 	}
 
-	void printData(){
+	void ShowData(){
+		static GLfloat yaxis=2;
+		glDisable(GL_LIGHTING);
+		{
+			glColor3ub(0,0,0);
+			drawstr(0,yaxis,"hole:\t\t%d",aData.road_hole);
+			drawstr(0,yaxis+0.5,"fire:\t\t%d",aData.road_fire);
+			drawstr(0,yaxis+1.0,"xross road:\t\t%d",aData.xcross_road);
+			drawstr(0,yaxis+1.5,"reverse car:\t\t%d",aData.reverse_car);
+		}
+		glEnable(GL_LIGHTING);
+
 		printf("++++++RGL++++++\n");
 		printf("reverse:%d\n",aData.reverse_car);
 		printf("hole:%d\n",aData.road_hole);
