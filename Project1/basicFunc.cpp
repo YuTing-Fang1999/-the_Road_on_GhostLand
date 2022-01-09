@@ -505,6 +505,7 @@ void archivProgress(){
 void timer5() {
 	menuProgress();
 	archivProgress();
+	myRandGenObstacles.changePos(&p1);
 
 	//player 更換座標
 	p1.changePos();
@@ -556,7 +557,7 @@ void drawGround(int w, int h) {
 }
 
 void drawObstacles() {
-	myRandGenObstacles.drawObstacle(&p1,myProgressBar.pathLen);
+	myRandGenObstacles.drawObstacle(&p1, myProgressBar.pathLen);
 }
 
 void drawBuildings() {

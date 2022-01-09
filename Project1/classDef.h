@@ -452,7 +452,7 @@ public:
 				else {
 					int fire = rand() % 2;
 					if (fire) {
-						Pos pos(x, 1, (float)nowZ, FIRE);
+						Pos pos(x, -1, (float)nowZ, FIRE);
 						pos.moveUp = rand() % 2;
 						ObStaclesPos.push_back(pos);
 					}
@@ -468,12 +468,11 @@ public:
 		
 	}
 
-	void drawObstacle(Player *p, int pathLen) {
-		if(gen) genObstaclePos();
-		/*printf("size = %d\n", ObStaclesPos.size());*/
-		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
-		for (int i = ObStaclesPos.size()-1; i >= endIdx ; --i) {
-			
+	void changePos(Player* p) {
+		float elderV = 0.1;
+		float carV = 0.3;
+		float fireV = 0.03;
+		for (int i = ObStaclesPos.size() - 1; i >= endIdx; --i) {
 			if (p->status == GAME && p->move) {
 				//老奶奶移動
 				if ((ObStaclesPos[i].type == ELDER_R || ObStaclesPos[i].type == ELDER_L) && i - endIdx <= 30) { //老奶奶左右移動
@@ -487,16 +486,16 @@ public:
 					}
 
 					if (ObStaclesPos[i].moveR) {
-						ObStaclesPos[i].x += 0.03;
+						ObStaclesPos[i].x += elderV;
 					}
 					else {
-						ObStaclesPos[i].x -= 0.03;
+						ObStaclesPos[i].x -= elderV;
 					}
 				}
 
 				//逆向車移動
-				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) { 
-					ObStaclesPos[i].z += 0.1;
+				if (ObStaclesPos[i].type == CAR && i - endIdx <= 30) {
+					ObStaclesPos[i].z += carV;
 					if (ObStaclesPos[i].z - p->pos[2] > -40 && ObStaclesPos[i].z - p->pos[2] < -39)
 						mciSendString(TEXT("play \"assets/music/逆向車.mp3\" "), NULL, 0, NULL);
 				}
@@ -511,21 +510,30 @@ public:
 
 				//火焰的移動
 				if (ObStaclesPos[i].type == FIRE && i - endIdx <= 30) {
-					if (ObStaclesPos[i].y >= 1.5) {
-						ObStaclesPos[i].moveUp = false;
-					}
-					if (ObStaclesPos[i].y <= 0.8) {
-						ObStaclesPos[i].moveUp = true;
-					}
+					if (ObStaclesPos[i].z - p->pos[2] > -70) {
+						if (ObStaclesPos[i].y >= 1.5) {
+							ObStaclesPos[i].moveUp = false;
+						}
+						if (ObStaclesPos[i].y <= 0.8) {
+							ObStaclesPos[i].moveUp = true;
+						}
 
-					if (ObStaclesPos[i].moveUp) {
-						ObStaclesPos[i].y += 0.005;
-					}
-					else {
-						ObStaclesPos[i].y -= 0.005;
+						if (ObStaclesPos[i].moveUp) {
+							ObStaclesPos[i].y += fireV;
+						}
+						else {
+							ObStaclesPos[i].y -= fireV;
+						}
 					}
 				}
 			}
+		}
+	}
+
+	void drawObstacle(Player *p, int pathLen) {
+		if(gen) genObstaclePos();
+		/*printf("size = %d\n", ObStaclesPos.size());*/
+		for (int i = ObStaclesPos.size()-1; i >= endIdx ; --i) {
 			Obstacles::drawObstacle(ObStaclesPos[i].x, ObStaclesPos[i].y, ObStaclesPos[i].z, 1.6, p, ObStaclesPos[i].type);
 
 			if (ObStaclesPos[i].z < pathLen) gen = false;
