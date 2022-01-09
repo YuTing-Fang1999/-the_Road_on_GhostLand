@@ -441,6 +441,10 @@ void drawBackground(GLfloat pos[]){
 	glPopAttrib();
 }
 
+void drawScoreBoard(){
+	gameArchiv.ShowData();
+}
+
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -481,6 +485,10 @@ void display(){
 
 		case DEBUG:
 			drawDebugView();
+			break;
+
+		case SCORE:
+			drawScoreBoard();
 			break;
 		default:
 			break;
