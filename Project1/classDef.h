@@ -791,7 +791,7 @@ public:
 		Building b1;
 		b1.setBaseDpIndex(BUILDING);
 		b1.setbScl(2, 2, 2);
-		b1.setScl(2, 4, 2);
+		b1.setScl(2, rand()%4+1, 2);
 		b1.setRot(0, 20, 0);
 		b1.setPos(-15, 15, nowZ);
 
