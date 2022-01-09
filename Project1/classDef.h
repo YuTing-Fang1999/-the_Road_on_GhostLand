@@ -845,3 +845,66 @@ public:
 		}
 	}
 };
+
+class GameArchiv{
+public:
+	typedef struct ArchivData{
+		char header[4];
+		int reverse_car;
+		int xcross_road;
+		int road_hole;
+		int road_fire;
+	}ArchivData;
+	ArchivData aData={"RGL",0,0,0,0};
+	FILE *archivLOG=NULL;
+
+	GameArchiv(){
+		archivLOG=fopen("archiv.rgl","rb+");
+		if(archivLOG==NULL){
+			archivLOG=fopen("archiv.rgl","wb+");
+		}
+		else{
+			fread(&aData,sizeof(ArchivData),1,archivLOG);
+		}
+	}
+	~GameArchiv(){}
+
+	void writeData(TYPE t){
+		rewind(archivLOG);
+
+		switch(t){
+			case ELDER_R:
+			case ELDER_L:
+				aData.xcross_road++;
+				break;
+			case CAR:
+				aData.reverse_car++;
+				break;
+			case FIRE:
+				aData.road_fire++;
+				break;
+			case HOLE:
+				aData.road_hole++;
+				break;
+			default:
+				break;
+		}
+
+		fwrite(&aData,sizeof(ArchivData),1,archivLOG);
+	}
+
+	void close(){
+		if(archivLOG!=NULL){
+			fclose(archivLOG);
+		}	
+	}
+
+	void printData(){
+		printf("++++++RGL++++++\n");
+		printf("reverse:%d\n",aData.reverse_car);
+		printf("hole:%d\n",aData.road_hole);
+		printf("fire:%d\n",aData.road_fire);
+		printf("xross:%d\n",aData.xcross_road);
+		printf("+++++++++++++++\n\n");
+	}
+};

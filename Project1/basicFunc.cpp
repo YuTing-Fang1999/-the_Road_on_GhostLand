@@ -90,6 +90,8 @@ extern Building b1=Building();
 extern ImagxList imlist=ImagxList();
 extern ObjList objlist=ObjList();
 
+extern GameArchiv gameArchiv=GameArchiv();
+
 void init(){
 	glClearColor(0.5,0.5,0.5,1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -342,6 +344,7 @@ void keyboard(unsigned char key,int x,int y){
 	}
 	if(key=='y'){
 		if(isInExitMenu){
+			gameArchiv.close();
 			exit(0);
 		if(isInExitMenu && exitMenu.getScale()==exitMenu.getMaxScale()){
 			exitMenu.scaleSmall();
@@ -368,6 +371,8 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == END) {
 			//TIMEUP跳轉頁面function
 			p1.status = GAME;
+
+			gameArchiv.writeData(p1.event);//紀錄遊戲數據
 			initGame();
 		}
 		if (p1.status == MAIN_MENU){
@@ -384,6 +389,8 @@ void keyboard(unsigned char key,int x,int y){
 			//回到主選單
 			memset(p1.pos, 0, sizeof(p1.pos));
 			p1.status = MAIN_MENU;
+
+			gameArchiv.writeData(p1.event);//紀錄遊戲數據
 		}
 	}
 	if(key=='h'){
