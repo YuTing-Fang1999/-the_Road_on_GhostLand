@@ -305,6 +305,8 @@ void drawGame() {
 
 	//glTranslated(3, 2, 0);
 	//glutSolidSphere(1, 100, 100);
+	myGround.drawFinal();
+
 }
 
 //遊戲結束畫面
