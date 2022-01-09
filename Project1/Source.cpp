@@ -15,9 +15,9 @@
 #include "ObjectLoader.h"
 
 //遊戲時長(秒)
-extern Timer myTimer(30); 
+extern Timer myTimer(50); 
 //地板(minX, maxX, 路徑長度)
-extern Ground myGround(-2, 2, 60); 
+extern Ground myGround(-2, 2, 500); 
 //進度條
 extern ProgressBar myProgressBar(myGround.pathLen);
 //隨機產生障礙物(minX, maxX, genNum, intialPosZ, , posZ_Shift)
@@ -92,6 +92,8 @@ extern ObjectLoader topfloor;
 extern ObjList objlist;
 
 extern Building b1;
+
+extern GameArchiv gameArchiv;
 
 //遊戲除錯空間
 void drawDebugView(){
