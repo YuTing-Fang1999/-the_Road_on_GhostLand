@@ -613,6 +613,10 @@ public:
 		}
 		glPopMatrix();
 
+		
+	}
+
+	void drawFinal() {
 		//終點線
 		glPushMatrix();
 		{
