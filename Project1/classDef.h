@@ -17,7 +17,8 @@ using namespace std;
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
 enum TYPE {
 	INIT, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
-	BUILDING=26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34
+	BUILDING = 26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34,
+	FINAL = 14
 };
 
 class Player{
@@ -178,6 +179,7 @@ public:
 	//停止
 	void playerStop(int finalPos) {
 		PlaySound(NULL, NULL, NULL);
+		this->shift = 0;
 		this->pos[2] = finalPos;
 	}
 };
@@ -558,6 +560,8 @@ public:
 		if (pathLen < 200) h = 200;
 		else h = pathLen;
 
+		
+
 		glPushMatrix();
 		{
 			//glColor3ub(80, 127, 80);
@@ -606,6 +610,20 @@ public:
 			}
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
+		}
+		glPopMatrix();
+
+		//終點線
+		glPushMatrix();
+		{
+			glTranslated(0, 4, -pathLen);
+			glColor4f(0, 0, 0, 1);
+			glEnable(GL_TEXTURE_2D); glEnable(GL_BLEND);
+			{
+				glScaled(5, 5, 5);
+				glCallList((GLuint)FINAL);
+			}
+			glDisable(GL_TEXTURE_2D); glDisable(GL_BLEND);
 		}
 		glPopMatrix();
 	}
