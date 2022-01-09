@@ -83,6 +83,7 @@ extern ObjectLoader house=ObjectLoader();
 extern ObjectLoader roof=ObjectLoader();
 extern ObjectLoader rainhide=ObjectLoader();
 extern ObjectLoader topfloor=ObjectLoader();
+extern ObjectLoader illegal_floor=ObjectLoader();
 
 extern Building b1=Building();
 
@@ -246,11 +247,17 @@ void init(){
 		GL_FALSE,
 		GLM_SMOOTH|GLM_MATERIAL
 	);
+	illegal_floor=ObjectLoader(
+		"assets/obj/building/illegal_floor.obj",
+		NULL,
+		GL_FALSE,
+		GLM_SMOOTH|GLM_MATERIAL
+	);
 	objlist.push(house.getDpIndex());
 	objlist.push(roof.getDpIndex());
 	objlist.push(rainhide.getDpIndex());
 	objlist.push(topfloor.getDpIndex());
-
+	objlist.push(illegal_floor.getDpIndex());
 
 
 	// 以下兩個要搬到前面排dpindex順序

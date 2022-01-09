@@ -88,6 +88,7 @@ extern ObjectLoader house;
 extern ObjectLoader roof;
 extern ObjectLoader rainhide;
 extern ObjectLoader topfloor;
+extern ObjectLoader illegal_floor;
 
 extern ObjList objlist;
 
@@ -268,6 +269,9 @@ void drawSeqBuilds(){
 				}
 				if(i%7==0){
 					glCallList(topfloor.getDpIndex());
+				}
+				if(i%5!=0 && i%7!=0 && i%11==0){
+					glCallList(illegal_floor.getDpIndex());
 				}
 			}
 			glPopMatrix();
