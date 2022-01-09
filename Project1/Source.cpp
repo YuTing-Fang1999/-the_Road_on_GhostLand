@@ -23,6 +23,7 @@ extern ProgressBar myProgressBar(myGround.pathLen);
 //隨機產生障礙物(minX, maxX, genNum, intialPosZ, , posZ_Shift)
 extern RandomGenObStacles myRandGenObstacles(myGround.minX, myGround.maxX, 2, -10, 3);
 extern RandomGenHouse myRandGenHouse(1);
+extern RandomGenBuilding myRandGenBuilding(1);
 //玩家
 extern Player p1=Player(myGround.minX, myGround.maxX);
 

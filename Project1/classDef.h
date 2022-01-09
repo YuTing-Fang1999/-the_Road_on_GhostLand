@@ -16,8 +16,8 @@ using namespace std;
 
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
 enum TYPE {
-	INIT, BUILDING, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
-	HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34
+	INIT, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
+	BUILDING=26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34
 };
 
 class Player{
@@ -263,88 +263,7 @@ public:
 	}
 };
 
-class Building{
-public:
-	GLfloat bScl[3]={1,1,1};
-	GLfloat scl[3]={1,1,1};
-	GLfloat rot[3]={0,0,0};
-	GLfloat pos[3]={0,0,0};
-	GLfloat mat_amb[4]={0.2,0.2,0.2,1};
-	GLfloat mat_dif[4]={0.8,0.7,0.7,1};
-	GLfloat mat_dif_w[4]={1,1,1,1};
-	GLfloat mat_nul[4]={0,0,0,0};
-	GLboolean usingTexRepeat=GL_TRUE;
-	GLuint baseDpIndex=0;
 
-	Building(){}
-	~Building(){}
-
-	void setUsingTexRepeat(GLboolean flag){
-		usingTexRepeat=flag;
-	}
-
-	void setBaseDpIndex(GLuint dpindex){
-		baseDpIndex = dpindex;
-	}
-
-	void setScl(GLfloat x,GLfloat y,GLfloat z){
-		scl[0]=x;scl[1]=y;scl[2]=z;
-	}
-
-	void setbScl(GLfloat x,GLfloat y,GLfloat z){
-		bScl[0]=x;bScl[1]=y;bScl[2]=z;
-	}
-
-	void setRot(GLfloat x,GLfloat y,GLfloat z){
-		rot[0]=x;rot[1]=y;rot[2]=z;
-	}
-	void setPos(GLfloat x,GLfloat y,GLfloat z){
-		pos[0]=x;pos[1]=y;pos[2]=z;
-	}
-
-	void drawBuilding(){
-		glPushMatrix();
-		{
-			glTranslatef(pos[0],pos[1],pos[2]);//model translate
-			glRotatef(rot[1],0,1,0);//model rotate
-			glScalef(scl[0],scl[1],scl[2]);//model scale
-			if(usingTexRepeat){
-				glMatrixMode(GL_TEXTURE);
-				{
-					glPushMatrix();
-					{
-						glLoadIdentity();
-						glScalef(scl[0],scl[1],scl[2]);//tex scale
-
-						glMatrixMode(GL_MODELVIEW);
-						{
-							glPushMatrix();
-							{
-								glScalef(bScl[0],bScl[1],bScl[2]);
-								glCallList(baseDpIndex);
-							}
-							glPopMatrix();
-						}
-						glMatrixMode(GL_TEXTURE);
-						
-					}
-					glPopMatrix();
-				}
-				glMatrixMode(GL_MODELVIEW);
-			}
-			else{
-				glPushMatrix();
-				{
-					glScalef(bScl[0],bScl[1],bScl[2]);
-					glCallList(baseDpIndex);
-				}
-				glPopMatrix();
-			}
-			
-		}
-		glPopMatrix();
-	}
-};
 
 class CollisionBall {
 public:
@@ -728,38 +647,170 @@ public:
 	int endIdx = 0; //畫到endIdx
 	int intialPosZ = -40; //障礙物的初始z座標
 	int nowZ; //目前的z座標
-	int posZ_Shift = 20; //每次生成完後Z位移的範圍
-	vector<HousePos> HousesPosVec;
+	int posZ_Shift = 30; //每次生成完後Z位移的範圍
+	vector<HousePos> BuildingPosVec;
 	RandomGenHouse(int i) {
 
 	}
 	void init() {
 		endIdx = 0;
 		nowZ = intialPosZ;
-		HousesPosVec.clear();
+		BuildingPosVec.clear();
 		gen = true;
 	}
 
 
 	void genHousePos() {
 		nowZ -= rand() % posZ_Shift + 9;
-		HousesPosVec.push_back(HousePos(10, 0, nowZ, rand() % 2, rand() % 2, rand() % 2));
+		BuildingPosVec.push_back(HousePos(10, 0, nowZ, rand() % 2, rand() % 2, rand() % 2));
 	}
 
 	void drawHouse(Player* p, int pathLen) {
 		if (gen) genHousePos();
-		printf("size = %d\n", HousesPosVec.size());
+		//printf("size = %d\n", BuildingPosVec.size());
 		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
-		for (int i = HousesPosVec.size() - 1; i >= endIdx; --i) {
+		for (int i = BuildingPosVec.size() - 1; i >= endIdx; --i) {
 
-			House::drawHouse(HousesPosVec[i].x, HousesPosVec[i].y, HousesPosVec[i].z, HousesPosVec[i].roof, HousesPosVec[i].rainhide, HousesPosVec[i].topfloor);
+			House::drawHouse(BuildingPosVec[i].x, BuildingPosVec[i].y, BuildingPosVec[i].z, BuildingPosVec[i].roof, BuildingPosVec[i].rainhide, BuildingPosVec[i].topfloor);
 
-			if (HousesPosVec[i].z - p->pos[2] > 5) {
+			if (BuildingPosVec[i].z - p->pos[2] > 5) {
 				endIdx = i;
 				printf("endIdx=%d\n", endIdx);
 				break;
 			}
-			if (HousesPosVec[i].z < pathLen) gen = false;
+			if (BuildingPosVec[i].z < pathLen) gen = false;
+			if (p->status != GAME) gen = false;
+		}
+	}
+};
+
+class Building {
+public:
+	GLfloat bScl[3] = { 1,1,1 };
+	GLfloat scl[3] = { 1,1,1 };
+	GLfloat rot[3] = { 0,0,0 };
+	GLfloat pos[3] = { 0,0,0 };
+	GLfloat mat_amb[4] = { 0.2,0.2,0.2,1 };
+	GLfloat mat_dif[4] = { 0.8,0.7,0.7,1 };
+	GLfloat mat_dif_w[4] = { 1,1,1,1 };
+	GLfloat mat_nul[4] = { 0,0,0,0 };
+	GLboolean usingTexRepeat = GL_TRUE;
+	GLuint baseDpIndex = BUILDING;
+
+	Building() {}
+	~Building() {}
+
+	void setUsingTexRepeat(GLboolean flag) {
+		usingTexRepeat = flag;
+	}
+
+	void setBaseDpIndex(GLuint dpindex) {
+		baseDpIndex = dpindex;
+	}
+
+	void setScl(GLfloat x, GLfloat y, GLfloat z) {
+		scl[0] = x; scl[1] = y; scl[2] = z;
+	}
+
+	void setbScl(GLfloat x, GLfloat y, GLfloat z) {
+		bScl[0] = x; bScl[1] = y; bScl[2] = z;
+	}
+
+	void setRot(GLfloat x, GLfloat y, GLfloat z) {
+		rot[0] = x; rot[1] = y; rot[2] = z;
+	}
+	void setPos(GLfloat x, GLfloat y, GLfloat z) {
+		pos[0] = x; pos[1] = y; pos[2] = z;
+	}
+
+	void drawBuilding() {
+		glPushMatrix();
+		{
+			glTranslatef(pos[0], pos[1], pos[2]);//model translate
+			glRotatef(rot[1], 0, 1, 0);//model rotate
+			glScalef(scl[0], scl[1], scl[2]);//model scale
+			if (usingTexRepeat) {
+				glMatrixMode(GL_TEXTURE);
+				{
+					glPushMatrix();
+					{
+						glLoadIdentity();
+						glScalef(scl[0], scl[1], scl[2]);//tex scale
+
+						glMatrixMode(GL_MODELVIEW);
+						{
+							glPushMatrix();
+							{
+								glScalef(bScl[0], bScl[1], bScl[2]);
+								glCallList(baseDpIndex);
+							}
+							glPopMatrix();
+						}
+						glMatrixMode(GL_TEXTURE);
+
+					}
+					glPopMatrix();
+				}
+				glMatrixMode(GL_MODELVIEW);
+			}
+			else {
+				glPushMatrix();
+				{
+					glScalef(bScl[0], bScl[1], bScl[2]);
+					glCallList(baseDpIndex);
+				}
+				glPopMatrix();
+			}
+
+		}
+		glPopMatrix();
+	}
+};
+
+class RandomGenBuilding {
+public:
+	bool gen = true;
+	int endIdx = 0; //畫到endIdx
+	int intialPosZ = -40; //障礙物的初始z座標
+	int nowZ; //目前的z座標
+	int posZ_Shift = 40; //每次生成完後Z位移的範圍
+	vector<Building> BuildingPosVec;
+	RandomGenBuilding(int i) {
+
+	}
+	void init() {
+		endIdx = 0;
+		nowZ = intialPosZ;
+		BuildingPosVec.clear();
+		gen = true;
+	}
+
+
+	void genBuildingPos() {
+		nowZ -= rand() % posZ_Shift + 30;
+		Building b1;
+		b1.setBaseDpIndex(BUILDING);
+		b1.setbScl(2, 2, 2);
+		b1.setScl(2, 4, 2);
+		b1.setRot(0, 20, 0);
+		b1.setPos(-15, 15, nowZ);
+
+		BuildingPosVec.push_back(b1);
+	}
+
+	void drawBuilding(Player* p, int pathLen) {
+		if (gen) genBuildingPos();
+		printf("size = %d\n", BuildingPosVec.size());
+		for (int i = BuildingPosVec.size() - 1; i >= endIdx; --i) {
+
+			BuildingPosVec[i].drawBuilding();
+
+			if (BuildingPosVec[i].pos[2] - p->pos[2] > 5) {
+				endIdx = i;
+				printf("endIdx=%d\n", endIdx);
+				break;
+			}
+			if (BuildingPosVec[i].pos[2] < pathLen) gen = false;
 			if (p->status != GAME) gen = false;
 		}
 	}

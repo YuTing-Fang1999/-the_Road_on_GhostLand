@@ -16,6 +16,7 @@ extern Ground myGround;
 extern ProgressBar myProgressBar;
 extern RandomGenObStacles myRandGenObstacles;
 extern RandomGenHouse myRandGenHouse;
+extern RandomGenBuilding myRandGenBuilding;
 
 //status flag
 GLboolean isFullScreen=GL_FALSE;
@@ -274,7 +275,7 @@ void init(){
 	imlist.push(text_begin_teacher.getDpIndex());
 	imlist.push(text_timeup_teacher.getDpIndex());
 
-	b1.setBaseDpIndex(building_test.getDpIndex());
+	b1.setBaseDpIndex(26);
 	b1.setbScl(2,2,2);
 	b1.setScl(2,4,2);
 	b1.setRot(0,20,0);
@@ -559,7 +560,8 @@ void drawObstacles() {
 }
 
 void drawBuildings() {
-	b1.drawBuilding();
+	myRandGenBuilding.drawBuilding(&p1, myProgressBar.pathLen);
+	//b1.drawBuilding();
 	myRandGenHouse.drawHouse(&p1, myProgressBar.pathLen);
 	//House::drawHouse(10, 0, -80, 0, 1, 1);
 }
