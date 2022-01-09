@@ -793,7 +793,7 @@ public:
 		b1.setbScl(2, 2, 2);
 		b1.setScl(2, rand()%4+1, 2);
 		b1.setRot(0, 20, 0);
-		b1.setPos(-15, 15, nowZ);
+		b1.setPos(-15, 0, nowZ);
 
 		BuildingPosVec.push_back(b1);
 	}
