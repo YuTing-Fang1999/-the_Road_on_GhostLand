@@ -17,7 +17,7 @@ using namespace std;
 enum Status { START, GAME, DEAD, TIMEUP, END, MAIN_MENU, DEBUG };
 enum TYPE {
 	INIT, PLAYER = 29, ELDER_R = 17, ELDER_L = 18, CAR = 30, FIRE = 15, HOLE = 16,
-	BUILDING = 26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34,
+	BUILDING = 26, HOUSE = 31, ROOF = 32, RAINHIDE = 33, TOPFLOOR = 34, ILLEGALFLOOR = 35,
 	FINAL = 14
 };
 
@@ -639,32 +639,38 @@ struct HousePos {
 	bool roof;
 	bool rainhide;
 	bool topfloor;
+	bool illegal_floor;
 
-	HousePos(float a, float b, float c, bool roof, bool rainhide, bool topfloor) {
+	HousePos(float a, float b, float c, bool rainhide, bool roof,  bool topfloor, bool illegal_floor) {
 		x = a, y = b, z = c;
 		this->roof = roof;
 		this->rainhide = rainhide;
 		this->topfloor = topfloor;
+		this->illegal_floor = illegal_floor;
 	}
 };
 
 class House {
 public:
-	static void drawHouse(float x, float y, float z, bool isRoof, bool isRainhide, bool isTopfloor) {
+	static void drawHouse(float x, float y, float z, bool isRainhide, bool isRoof, bool isTopfloor, bool isIllegalFloor) {
 		glPushMatrix();
 		{
 			glTranslated(x, y, z);
 			glRotatef(-60, 0, 1, 0);
 			glScalef(2, 2, 2);
 			glCallList(HOUSE);
-			if (isRoof) {
-				glCallList(ROOF);
-			}
+			
 			if (isRainhide) {
 				glCallList(RAINHIDE);
 			}
+			if (isRoof) {
+				glCallList(ROOF);
+			}
 			if (isTopfloor) {
 				glCallList(TOPFLOOR);
+			}
+			if (isIllegalFloor) {
+				glCallList(ILLEGALFLOOR);
 			}
 		}
 		glPopMatrix();
@@ -692,7 +698,8 @@ public:
 
 	void genHousePos() {
 		nowZ -= rand() % posZ_Shift + 9;
-		BuildingPosVec.push_back(HousePos(10, 0, nowZ, rand() % 2, rand() % 2, rand() % 2));
+		int a = rand() % 4;//0,1,2,3
+		BuildingPosVec.push_back(HousePos(10, 0, nowZ, rand() % 2, a==1, a==2, a==3));
 	}
 
 	void drawHouse(Player* p, int pathLen) {
@@ -701,7 +708,7 @@ public:
 		//for (int i = ObStaclesPos.size()-1; i >= 0; --i) {
 		for (int i = BuildingPosVec.size() - 1; i >= endIdx; --i) {
 
-			House::drawHouse(BuildingPosVec[i].x, BuildingPosVec[i].y, BuildingPosVec[i].z, BuildingPosVec[i].roof, BuildingPosVec[i].rainhide, BuildingPosVec[i].topfloor);
+			House::drawHouse(BuildingPosVec[i].x, BuildingPosVec[i].y, BuildingPosVec[i].z, BuildingPosVec[i].rainhide, BuildingPosVec[i].roof, BuildingPosVec[i].topfloor, BuildingPosVec[i].illegal_floor);
 
 			if (BuildingPosVec[i].z - p->pos[2] > 5) {
 				endIdx = i;
