@@ -304,6 +304,7 @@ void initGame() {
 
 	myRandGenObstacles.init();
 	myRandGenHouse.init();
+	myRandGenBuilding.init();
 
 	//音樂
 	PlaySound(TEXT("assets/music/game-bgm.wav"), NULL, SND_ASYNC | SND_LOOP);

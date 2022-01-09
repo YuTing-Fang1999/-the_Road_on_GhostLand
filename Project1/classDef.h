@@ -396,8 +396,8 @@ public:
 		this->nowZ = intialPosZ;
 		this->posZ_Shift = posZ_Shift;
 		this->gap = (this->maxX - this->minX) / (this->roadNum * 2);
-		printf("gap=%f\n", (this->maxX - this->minX) / (this->roadNum * 2));
-		printf("minX=%f,maxX=%f\n", this->minX,this->maxX);
+		//printf("gap=%f\n", (this->maxX - this->minX) / (this->roadNum * 2));
+		//printf("minX=%f,maxX=%f\n", this->minX,this->maxX);
 	}
 
 	void init() {
@@ -705,7 +705,7 @@ public:
 
 			if (BuildingPosVec[i].z - p->pos[2] > 5) {
 				endIdx = i;
-				printf("endIdx=%d\n", endIdx);
+				//printf("endIdx=%d\n", endIdx);
 				break;
 			}
 			if (BuildingPosVec[i].z < pathLen) gen = false;
@@ -830,14 +830,13 @@ public:
 
 	void drawBuilding(Player* p, int pathLen) {
 		if (gen) genBuildingPos();
-		printf("size = %d\n", BuildingPosVec.size());
+		//printf("size = %d\n", BuildingPosVec.size());
 		for (int i = BuildingPosVec.size() - 1; i >= endIdx; --i) {
 
 			BuildingPosVec[i].drawBuilding();
 
 			if (BuildingPosVec[i].pos[2] - p->pos[2] > 5) {
 				endIdx = i;
-				printf("endIdx=%d\n", endIdx);
 				break;
 			}
 			if (BuildingPosVec[i].pos[2] < pathLen) gen = false;
