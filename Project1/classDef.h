@@ -856,12 +856,18 @@ class GameArchiv{
 public:
 	typedef struct ArchivData{
 		char header[4];
-		int reverse_car;
-		int xcross_road;
+		char field[7][16];
+		int total;
+		int timeup;
+		int success;
 		int road_hole;
 		int road_fire;
+		int xcross_road;
+		int reverse_car;
 	}ArchivData;
-	ArchivData aData={"RGL",0,0,0,0};
+	ArchivData aData={	"RGL",
+						{"TOTAL","TIMEUP","SUCCESS","HOLE","FIRE","XCROSS ROAD","REVERSE CAR"},
+						0,0,0,0,0,0,0};
 	FILE *archivLOG=NULL;
 
 	GameArchiv(){
@@ -875,27 +881,42 @@ public:
 	}
 	~GameArchiv(){}
 
-	void writeData(TYPE t){
+	void writeData(Player *p){
 		rewind(archivLOG);
 
-		switch(t){
-			case ELDER_R:
-			case ELDER_L:
-				aData.xcross_road++;
+		switch(p->status){
+			case DEAD:
+				{
+					switch(p->event){
+					case ELDER_R:
+					case ELDER_L:
+						aData.xcross_road++;
+						break;
+					case CAR:
+						aData.reverse_car++;
+						break;
+					case FIRE:
+						aData.road_fire++;
+						break;
+					case HOLE:
+						aData.road_hole++;
+						break;
+					default:
+						break;
+					}
+				}
 				break;
-			case CAR:
-				aData.reverse_car++;
+			case END:
+				aData.success++;
 				break;
-			case FIRE:
-				aData.road_fire++;
-				break;
-			case HOLE:
-				aData.road_hole++;
+			case TIMEUP:
+				aData.timeup++;
 				break;
 			default:
 				break;
 		}
 
+		aData.total++;
 		fwrite(&aData,sizeof(ArchivData),1,archivLOG);
 	}
 
@@ -906,22 +927,17 @@ public:
 	}
 
 	void ShowData(){
-		static GLfloat yaxis=2;
+		static GLfloat yaxis=3;
 		glDisable(GL_LIGHTING);
 		{
-			glColor3ub(0,0,0);
-			drawstr(0,yaxis,"hole:\t\t%d",aData.road_hole);
-			drawstr(0,yaxis+0.5,"fire:\t\t%d",aData.road_fire);
-			drawstr(0,yaxis+1.0,"xross road:\t\t%d",aData.xcross_road);
-			drawstr(0,yaxis+1.5,"reverse car:\t\t%d",aData.reverse_car);
+			glColor3ub(255,0,0);
+			for(int i=0;i<7;i++){
+				drawstr(-2,yaxis-0.5*i,"%-16s",aData.field[i]);
+				drawstr(1 ,yaxis-0.5*i,":%4d",*(&aData.total + i));
+
+				if(i==0) glColor3ub(0,0,0);
+			}
 		}
 		glEnable(GL_LIGHTING);
-
-		printf("++++++RGL++++++\n");
-		printf("reverse:%d\n",aData.reverse_car);
-		printf("hole:%d\n",aData.road_hole);
-		printf("fire:%d\n",aData.road_fire);
-		printf("xross:%d\n",aData.xcross_road);
-		printf("+++++++++++++++\n\n");
 	}
 };

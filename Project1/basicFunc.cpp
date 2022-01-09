@@ -378,9 +378,9 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == DEAD   ||
 			p1.status == END) {
 			//TIMEUP跳轉頁面function
-			p1.status = GAME;
+			gameArchiv.writeData(&p1);//紀錄遊戲數據
 
-			gameArchiv.writeData(p1.event);//紀錄遊戲數據
+			p1.status = GAME;
 			initGame();
 		}
 		if (p1.status == MAIN_MENU){
@@ -395,10 +395,10 @@ void keyboard(unsigned char key,int x,int y){
 			p1.status == DEAD   ||
 			p1.status == END    ){
 			//回到主選單
+			gameArchiv.writeData(&p1);//紀錄遊戲數據
+
 			memset(p1.pos, 0, sizeof(p1.pos));
 			p1.status = MAIN_MENU;
-
-			gameArchiv.writeData(p1.event);//紀錄遊戲數據
 		}
 	}
 	if(key=='h'){
