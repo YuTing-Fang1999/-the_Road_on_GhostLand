@@ -8,7 +8,7 @@
 #include"basicFunc.h"
 #include"classDef.h"
 //開啟下面這行可以關掉console
-//#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 
 #include "glm.h"
 #include "Imagx.h"
@@ -510,7 +510,7 @@ int main(int argc,char **argv){
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH |GLUT_MULTISAMPLE);
 	glutInitWindowPosition(0,0);
 	glutInitWindowSize(700,700);
-	glutCreateWindow("TITLE");
+	glutCreateWindow("鬼島馬路RGL");
 	GLenum err = glewInit();
 	if( err != GLEW_OK){
 		printf("GLEW_ERROR\n");
