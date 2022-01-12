@@ -155,6 +155,9 @@
     <ClInclude Include="Imagx.h" />
     <ClInclude Include="stbi_image.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
