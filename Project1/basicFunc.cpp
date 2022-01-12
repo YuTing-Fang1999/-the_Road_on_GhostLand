@@ -295,7 +295,6 @@ void init(){
 }
 
 void idle(){	
-	glutPostRedisplay();
 }
 
 void initGame() {
@@ -491,25 +490,6 @@ void specialKb(int key,int x,int y){
 
 }
 
-void timer1000() {
-	if (p1.status == GAME) {
-		--myTimer.nowTime;
-		if (myTimer.nowTime <= 0) {
-			p1.status = TIMEUP;
-			//關掉音樂
-			PlaySound(NULL, NULL, NULL);
-		}
-	}
-	
-}
-void timer20() {
-	//player的速度會因摩擦力慢慢減少
-	if (p1.v - p1.friction > p1.maxV) p1.v -= p1.friction;
-	//相機位移
-	if (p1.shift - 0.05 > 0) p1.shift -= 0.05;
-	else p1.shift = 0;
-}
-
 void menuProgress(){
 	helpMenu.progress();
 	exitMenu.progress();
@@ -523,6 +503,25 @@ void archivProgress(){
 	archiv_road_hole.progress();
 	archiv_xross_road.progress();
 	archiv_reverse_car.progress();
+}
+
+void timer1000() {
+	if (p1.status == GAME) {
+		--myTimer.nowTime;
+		if (myTimer.nowTime <= 0) {
+			p1.status = TIMEUP;
+			//關掉音樂
+			PlaySound(NULL, NULL, NULL);
+		}
+	}
+
+}
+void timer20() {
+	//player的速度會因摩擦力慢慢減少
+	if (p1.v - p1.friction > p1.maxV) p1.v -= p1.friction;
+	//相機位移
+	if (p1.shift - 0.05 > 0) p1.shift -= 0.05;
+	else p1.shift = 0;
 }
 
 void timer5() {
