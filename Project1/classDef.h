@@ -61,7 +61,7 @@ public:
 	bool bone = false;
 	bool move = true;
 
-	int character = 4;
+	int character = 0;
 
 	Player(float minX,float maxX){
 		memset(this->pos, 0, 3);
