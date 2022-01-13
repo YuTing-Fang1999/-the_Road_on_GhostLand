@@ -471,7 +471,7 @@ public:
 	}
 
 	void changePos(Player* p) {
-		float elderV = 0.1;
+		float elderV = 0.05;
 		float carV = 0.3;
 		float fireV = 0.03;
 		for (int i = ObStaclesPos.size() - 1; i >= endIdx; --i) {
